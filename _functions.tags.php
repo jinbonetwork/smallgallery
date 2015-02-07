@@ -96,16 +96,33 @@ function _metabox($post=array(),$options=array()){
 	echo __metabox($post,$options);
 }
 
-function __heading($type=''){
-	$heading = '';
+function __heading_label($post){
 	$default = strtoupper('heading');
-	$index = strtoupper($default.'_'.$type);
-	$heading = defined($index)?constant($index):constant($default);
+	$in_format = strtoupper($default.'_'.$post->format);
+	$in_weight = strtoupper($in_format.'_'.$post->slide_weight);
+
+	if(defined($in_weight)){
+		$label = $in_weight;
+	}else if(defined($in_format)){
+		$label = $in_format;
+	}else if(defined($default)){
+		$label = $default;
+	}
+
+	return $label;
+}
+
+function _heading_label($post){
+	echo __heading_label($post);
+}
+
+function __heading($post){
+	$heading = isset($post->heading_label)?constant($post->heading_label):constant(__heading_label($post));
 	return $heading;
 }
 
-function _heading($type=''){
-	echo __heading($type);
+function _heading($post){
+	echo __heading($post);
 }
 
 function __photoswipe($options=array()){

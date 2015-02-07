@@ -1,32 +1,14 @@
 <?php
 
+add_filter('show_admin_bar', '__return_false');
+
 function on_init(){
 	add_theme_support('post-thumbnails');
 	add_theme_support('post-formats',array('standard','image'));
+
+	register_nav_menu('navigation',__('Navigation',TEXTDOMAIN));
 }
 add_action('init','on_init');
-
-
-function on_css_class($classes=array()){
-	global $post;
-
-	$classes[] = 'slide-weight-'.$post->slide_weight;
-	$classes[] = 'slide-animation-'.$post->slide_animation;
-	$classes[] = 'slide-title-'.$post->slide_title;
-	$classes[] = 'slide-content-'.$post->slide_content;
-	$classes[] = 'slide-author-'.$post->slide_author;
-	$classes[] = 'slide-date-'.$post->slide_date;
-	$classes[] = 'slide-category-'.$post->slide_category;
-	$classes[] = 'slide-tag-'.$post->slide_tag;
-
-	foreach(get_the_category($post->ID) as $category){
-		$classes[] = 'category-'.$category->category_nicename;
-	}
-
-	return $classes;
-}
-add_filter('post_class','on_css_class');
-add_filter('body_class','on_css_class');
 
 function on_add_meta_boxes($post){
 	$boxes = array(
@@ -69,20 +51,14 @@ function on_add_meta_boxes($post){
 						array(
 							'name' => 'slide_animation',
 							'type' => 'radio',
-							'label' => 'vertical',
+							'label' => 'corner_in',
 							'value' => 1,
 						),
 						array(
 							'name' => 'slide_animation',
 							'type' => 'radio',
-							'label' => 'corner_in',
-							'value' => 2,
-						),
-						array(
-							'name' => 'slide_animation',
-							'type' => 'radio',
 							'label' => 'corner_out',
-							'value' => 3,
+							'value' => 2,
 						),
 					),
 				),
@@ -236,7 +212,9 @@ function on_wp_enqueue_scripts(){
 	wp_enqueue_script('photoswipe',get_template_directory_uri().'/contrib/PhotoSwipe/dist/photoswipe.min.js',array('jquery'));
 	wp_enqueue_script('photoswipe-ui-default',get_template_directory_uri().'/contrib/PhotoSwipe/dist/photoswipe-ui-default.min.js',array('photoswipe'));
 
-	wp_enqueue_style('smallgallery',get_template_directory_uri().'/style.css',array('photoswipe'));
+	wp_enqueue_style('font-awesome',get_template_directory_uri().'/contrib/font-awesome/css/font-awesome.min.css');
+
+	wp_enqueue_style('smallgallery',get_template_directory_uri().'/less.php',array('photoswipe','font-awesome'));
 	wp_enqueue_script('smallgallery',get_template_directory_uri().'/script.js',array('jquery','photoswipe'));
 }
 add_action('wp_enqueue_scripts','on_wp_enqueue_scripts');
