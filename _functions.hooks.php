@@ -6,6 +6,10 @@ function on_init(){
 	add_theme_support('post-thumbnails');
 	add_theme_support('post-formats',array('standard','image'));
 
+	if(DEFAULT_POST_FORMAT){
+		update_option('default_post_format',DEFAULT_POST_FORMAT);
+	}
+
 	register_nav_menu('navigation',__('Navigation',TEXTDOMAIN));
 }
 add_action('init','on_init');
