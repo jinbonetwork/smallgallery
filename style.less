@@ -10,6 +10,33 @@ Text Domain: smallgallery
 */
 
 //-----------------------------------------------------------------------------
+//	Mixins and Rulsets
+//-----------------------------------------------------------------------------
+.transition(@args) {
+	transform: @args;
+	-webkit-transition: @args;
+	-moz-transition: @args;
+	-ms-transition: @args;
+	-o-transition: @args;
+}
+
+.transform(@args) {
+	transform: @args;
+	-webkit-transform: @args;
+	-moz-transform: @args;
+	-ms-transform: @args;
+	-o-transform: @args;
+}
+
+.animation(@args){
+	animation: @args;
+	-webkit-animation: @args;
+	-moz-animation: @args;
+	-ms-animation: @args;
+	-o-animation: @args;
+}
+
+//-----------------------------------------------------------------------------
 //	Layout
 //-----------------------------------------------------------------------------
 
@@ -34,7 +61,7 @@ body {
 #header,
 #navigation {
 	a {
-		transition: opacity 0.2s linear;
+		.transition(opacity 0.2s linear);
 		opacity: 0.3;
 
 		&:hover {
@@ -160,7 +187,7 @@ body {
 
 	ul.menu {
 		box-sizing: border-box;
-		transition: right 0.3s linear;
+		.transition(right 0.3s linear);
 		opacity: 1;
 		list-style: none;
 		position: absolute;
@@ -198,10 +225,22 @@ body {
 	z-index: 1;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%,-50%);
+	.transform(translate(-50%,-50%));
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+}
+
+#container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 100%;
+	height: 100%;
+	.transform(translate(-50%,-50%));
+}
+
+section.entry {
 }
 
 #control {
@@ -220,7 +259,7 @@ body {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%,-50%);
+		.transform(translate(-50%,-50%));
 		width: 100%;
 		height: 64px;
 		max-width: 480px;
@@ -284,24 +323,7 @@ body {
 }
 
 //-----------------------------------------------------------------------------
-//	Slides
-//-----------------------------------------------------------------------------
-
-#container {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 100%;
-	height: 100%;
-	transform: translate(-50%,-50%);
-}
-
-section.entry {
-	transition-property: all;
-}
-
-//-----------------------------------------------------------------------------
-//	Override (design)
+//	Override
 //-----------------------------------------------------------------------------
 
 body {
@@ -323,9 +345,12 @@ a:visited {
 	text-decoration: none;
 }
 
+//-----------------------------------------------------------------------------
+//	Slides
+//-----------------------------------------------------------------------------
+
 #container {
 	width: 80%;
-	height: 80%;
 }
 
 @media all and ( max-width: 640px ){
@@ -333,7 +358,6 @@ a:visited {
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 90%;
 		transform: none;
 	}
 }
@@ -348,27 +372,7 @@ section.entry {
 		left: 0%;
 	}
 
-	&.prev,
-	&.next {
-	}
-	
-	&.prev {
-		left: -100%;
-
-		&.fresh {
-			left: -200%;
-		}
-	}
-
-	&.next {
-		left: 100%;
-
-		&.fresh {
-			left: 200%;
-		}
-	}
-
-	.wrap {
+	& > .wrap {
 		overflow: hidden;
 		margin: 0 auto;
 	}
@@ -385,3 +389,59 @@ section.entry {
 		
 }
 
+//-----------------------------------------------------------------------------
+//	Animation
+//-----------------------------------------------------------------------------
+@keyframes horizontal-prev {
+	from {
+		.transform(translateX(-100%));
+	}
+	to {
+		.transform(translateX(0));
+	}
+}
+@-webkit-keyframes horizontal-prev {
+	from {
+		.transform(translateX(-100%));
+	}
+	to {
+		.transform(translateX(0));
+	}
+}
+@keyframes horizontal-next {
+	from {
+		.transform(translateX(100%));
+	}
+	to {
+		.transform(translateX(0));
+	}
+}
+@-webkit-keyframes horizontal-next {
+	from {
+		.transform(translateX(100%));
+	}
+	to {
+		.transform(translateX(0));
+	}
+}
+
+#container {
+	section.entry {
+
+		&.prev[data-animation='0'] {
+			left: -100%;
+
+			&.fresh {
+				.animation(horizontal-prev 1s linear);
+			}
+		}
+
+		&.next[data-animation='0'] {
+			left: 100%;
+
+			&.fresh {
+				.animation(horizontal-next 1s linear);
+			}
+		}
+	}
+}

@@ -5,6 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 	<title><?php wp_title(''); ?></title>
 	<style>
 		section.entry {
@@ -48,6 +49,8 @@
 			. '</ul><!--/.console-->'.PHP_EOL
 			. wp_nav_menu($navigation_options).PHP_EOL
 			. '</nav><!--/#navigation-->'.PHP_EOL;
+	}else{
+		$navigation = '';
 	}
 ?>
 	<style id="smallgallery-js">

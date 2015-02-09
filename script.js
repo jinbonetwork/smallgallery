@@ -27,9 +27,6 @@ jQuery(document).ready(function(e){
 		var _prev_source = $slideshow.current.attr('data-prev_permalink');
 		load(_next_source,'next');
 		load(_prev_source,'prev');
-
-		// calculate css
-		resize();
 	}
 
 	function init_flag($trigger){
@@ -51,13 +48,11 @@ jQuery(document).ready(function(e){
 	}
 
 	function resize(){
+		/*
 		$slideshow.style = {
 			entry: {
 				width: $container.width(),
 				height: $container.height()
-			},
-			cache: {
-				width: 'auto'
 			}
 		};
 		jQuery('section.entry').css($slideshow.style.entry);
@@ -67,6 +62,29 @@ jQuery(document).ready(function(e){
 		if($slideshow.prev){
 			$slideshow.prev.css($slideshow.style.cache);
 		}
+		*/
+
+		jQuery('section.entry').each(function(index){
+			var $entry = jQuery(this);
+			var $box = $entry.children('.wrap');
+			var $img = $entry.find('.feature img');
+
+			if($img.attr('width')/$img.attr('height')<$container.width()/$container.height()){
+				$img.css({
+					width: 'auto',
+					height: '100%',
+					maxWidth: 'none',
+					maxHeight: $container.height()
+				});
+			}else{
+				$img.css({
+					width: '100%',
+					height: 'auto',
+					maxWidth: $container.width(),
+					maxHeight: 'none'
+				});
+			}
+		});
 	}
 
 	function load(source,position){
@@ -94,7 +112,6 @@ jQuery(document).ready(function(e){
 							$container.append(_next);
 						break;
 					}
-					jQuery('section.fresh').removeClass('fresh');
 					console.log('_DATA LOADED: '+flag+' using '+source_filtered+' => #'+data.ID);
 				})
 				.error(function(data){
@@ -103,6 +120,7 @@ jQuery(document).ready(function(e){
 				.always(function(data){
 					console.log('END: load '+flag+' item -- '+source);
 					update_control();
+					resize();
 				});
 		}else{
 			console.log('ABORT: '+flag+' item already exists');
@@ -210,7 +228,7 @@ jQuery(document).ready(function(e){
 			// do animation
 
 			// reset classes
-			$slideshow.current = _current.removeClass('current prev next').addClass('current');
+			$slideshow.current = _current.removeClass('current prev next fresh').addClass('current');
 			if(_next){
 				$slideshow.next = _next.removeClass('current prev next').addClass('next');
 			}
@@ -224,6 +242,14 @@ jQuery(document).ready(function(e){
 			// init
 			init();
 		} // endif
+	});
+
+	jQuery('#container').on('swipeleft',function(e){
+		jQuery('#control .prev a').click();
+	});
+
+	jQuery('#container').on('swiperight',function(e){
+		jQuery('#control .next a').click();
 	});
 	
 	jQuery(window).on('resize',function(e){
