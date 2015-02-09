@@ -27,6 +27,46 @@ jQuery(document).ready(function(e){
 		var _prev_source = $slideshow.current.attr('data-prev_permalink');
 		load(_next_source,'next');
 		load(_prev_source,'prev');
+
+		// calculate css
+		resize();
+	}
+
+	function init_flag($trigger){
+		var $target = jQuery($trigger.attr('href'));
+		$trigger.flag = $trigger.attr('data-flag');
+		console.log($trigger.attr('id')+' => '+$target.attr('id')+' ('+$trigger.flag+')');
+
+		if($trigger.flag=='true'){
+			$target.removeClass($trigger.attr('data-flag-false-class')).addClass($trigger.attr('data-flag-true-class'));
+		}else{
+			$target.removeClass($trigger.attr('data-flag-true-class')).addClass($trigger.attr('data-flag-false-class'));
+		}
+	}
+
+	function init_flags(){
+		jQuery('[data-flag]').each(function(index){
+			init_flag(jQuery(this));
+		});
+	}
+
+	function resize(){
+		$slideshow.style = {
+			entry: {
+				width: $container.width(),
+				height: $container.height()
+			},
+			cache: {
+				width: 'auto'
+			}
+		};
+		jQuery('section.entry').css($slideshow.style.entry);
+		if($slideshow.next){
+			$slideshow.next.css($slideshow.style.cache);
+		}
+		if($slideshow.prev){
+			$slideshow.prev.css($slideshow.style.cache);
+		}
 	}
 
 	function load(source,position){
@@ -43,7 +83,7 @@ jQuery(document).ready(function(e){
 
 			jQuery.getJSON(source_filtered)
 				.done(function(data){
-					_markup = jQuery(data.filtered_post).removeClass('current').addClass(position);
+					_markup = jQuery(data.filtered_post).removeClass('current').addClass('fresh '+position);
 					switch(position){
 						case 'prev':
 							_prev = _markup.addClass('prev');
@@ -54,6 +94,7 @@ jQuery(document).ready(function(e){
 							$container.append(_next);
 						break;
 					}
+					jQuery('section.fresh').removeClass('fresh');
 					console.log('_DATA LOADED: '+flag+' using '+source_filtered+' => #'+data.ID);
 				})
 				.error(function(data){
@@ -137,49 +178,70 @@ jQuery(document).ready(function(e){
 		var _prev;
 		var _next;
 
-		// disable controls to prevent overhead
-		$control.prev.addClass('disabled');
-		console.log('CONTROL: [prev] button disabled');
-		$control.next.addClass('disabled');
-		console.log('CONTROL: [prev] button disabled');
+		if($box.hasClass('disabled')){
+			return;
+		}else{
+			// disable controls to prevent overhead
+			$control.prev.addClass('disabled');
+			console.log('CONTROL: [prev] button disabled');
+			$control.next.addClass('disabled');
+			console.log('CONTROL: [prev] button disabled');
 
-		// check trigger position
-		position = $box.hasClass('prev')?'prev':position;
-		position = $box.hasClass('next')?'next':position;
+			// check trigger position
+			position = $box.hasClass('prev')?'prev':position;
+			position = $box.hasClass('next')?'next':position;
 
-		// determine things to do
-		$slideshow.direction = position;
-		_current = $slideshow[position];
-		switch(position){
-			case 'prev':
-				_next = $slideshow.current;
-				$slideshow.animation = $slideshow.current.attr('data-animation');
-				$slideshow.garbage.push($slideshow.next.attr('data-ID'));
-			break;
-			case 'next':
-				_prev = $slideshow.current;
-				$slideshow.animation = $slideshow.next.attr('data-animation');
-				$slideshow.garbage.push($slideshow.prev.attr('data-ID'));
-			break;
-		}
+			// determine things to do
+			$slideshow.direction = position;
+			_current = $slideshow[position];
+			switch(position){
+				case 'prev':
+					_next = $slideshow.current;
+					$slideshow.animation = $slideshow.current.attr('data-animation');
+					$slideshow.garbage.push($slideshow.next.attr('data-ID'));
+				break;
+				case 'next':
+					_prev = $slideshow.current;
+					$slideshow.animation = $slideshow.next.attr('data-animation');
+					$slideshow.garbage.push($slideshow.prev.attr('data-ID'));
+				break;
+			}
 
-		// do animation
+			// do animation
 
-		// reset classes
-		$slideshow.current = _current.removeClass('current prev next').addClass('current');
-		if(_next){
-			$slideshow.next = _next.removeClass('current prev next').addClass('next');
-		}
-		if(_prev){
-			$slideshow.prev = _prev.removeClass('current prev next').addClass('prev');
-		}
+			// reset classes
+			$slideshow.current = _current.removeClass('current prev next').addClass('current');
+			if(_next){
+				$slideshow.next = _next.removeClass('current prev next').addClass('next');
+			}
+			if(_prev){
+				$slideshow.prev = _prev.removeClass('current prev next').addClass('prev');
+			}
 
-		// garbage collection
-		cleanup();
+			// garbage collection
+			cleanup();
 
-		// init
-		init();
+			// init
+			init();
+		} // endif
 	});
 	
+	jQuery(window).on('resize',function(e){
+		resize();
+	});
+
+	jQuery('.toggler').on('click',function(e){
+		e.preventDefault();
+		var $trigger = jQuery(this);
+		$trigger.flag = $trigger.attr('data-flag');
+		if($trigger.flag=='true'){
+			$trigger.attr('data-flag','false');
+		}else{
+			$trigger.attr('data-flag','true');
+		}
+		init_flag($trigger);
+	});
+
+	init_flags();
 	init();
 });

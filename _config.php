@@ -5,7 +5,7 @@ define('TEXTDOMAIN','smallgallery');
 define('TITLE_TEXT',esc_attr(get_option('blogname')));
 define('TITLE_SEPARATOR',' | ');
 
-define('SLIDE_ANIMATION_DURATION',1000);
+define('SLIDE_ANIMATION_DURATION',1000); // number of milliseconds
 define('SLIDE_ANIMATION_HORIZONTAL',0);
 define('SLIDE_ANIMATION_CORNER_IN',1);
 define('SLIDE_ANIMATION_CORNER_OUT',2);
@@ -28,5 +28,11 @@ define('DEFAULT_SLIDE_DATE',0);
 define('DEFAULT_SLIDE_CATEGORY',0);
 define('DEFAULT_SLIDE_TAG',0);
 define('DEFAULT_SLIDE_ANIMATION',SLIDE_ANIMATION_HORIZONTAL);
+
+define('DEFAULT_MENU_FLAG',false);
+define('DEFAULT_MENU_FLAG_STRING',DEFAULT_MENU_FLAG?'true':'false');
+define('DEFAULT_CAPTION_FLAG',false);
+define('DEFAULT_CAPTION_FLAG_STRING',DEFAULT_CAPTION_FLAG?'true':'false');
+
 
 ?>
