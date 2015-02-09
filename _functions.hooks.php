@@ -16,15 +16,14 @@ add_action('init','on_init');
 
 function on_add_meta_boxes($post){
 	$boxes = array(
-		array(
-			'id' => 'slide_properties',
+		'slide_properties' => array(
 			'label' => make_label('slide_properties'),
 			'callback' => '_metabox',
 			'post_type' => 'post',
 			'context' => 'side',
 			'priority' => 'core',
 			'fields' => array(
-				array(
+				'slide_weight' => array(
 					'name' => 'slide_weight',
 					'type' => 'radios',
 					'children' => array(
@@ -42,31 +41,13 @@ function on_add_meta_boxes($post){
 						),
 					),
 				),
-				array(
+				'slide_animation' => array(
 					'name' => 'slide_animation',
 					'type' => 'radios',
 					'children' => array(
-						array(
-							'name' => 'slide_animation',
-							'type' => 'radio',
-							'label' => 'horizontal',
-							'value' => 0,
-						),
-						array(
-							'name' => 'slide_animation',
-							'type' => 'radio',
-							'label' => 'corner_in',
-							'value' => 1,
-						),
-						array(
-							'name' => 'slide_animation',
-							'type' => 'radio',
-							'label' => 'corner_out',
-							'value' => 2,
-						),
 					),
 				),
-				array(
+				'slide_title' => array(
 					'name' => 'slide_title',
 					'type' => 'radios',
 					'children' => array(
@@ -84,7 +65,7 @@ function on_add_meta_boxes($post){
 						),
 					),
 				),
-				array(
+				'slide_content' => array(
 					'name' => 'slide_content',
 					'type' => 'radios',
 					'children' => array(
@@ -102,7 +83,7 @@ function on_add_meta_boxes($post){
 						),
 					),
 				),
-				array(
+				'slide_author' => array(
 					'name' => 'slide_author',
 					'type' => 'radios',
 					'children' => array(
@@ -120,7 +101,7 @@ function on_add_meta_boxes($post){
 						),
 					),
 				),
-				array(
+				'slide_date' => array(
 					'name' => 'slide_date',
 					'type' => 'radios',
 					'children' => array(
@@ -138,7 +119,7 @@ function on_add_meta_boxes($post){
 						),
 					),
 				),
-				array(
+				'slide_category' => array(
 					'name' => 'slide_category',
 					'type' => 'radios',
 					'children' => array(
@@ -156,7 +137,7 @@ function on_add_meta_boxes($post){
 						),
 					),
 				),
-				array(
+				'slide_tag' => array(
 					'name' => 'slide_tag',
 					'type' => 'radios',
 					'children' => array(
@@ -178,8 +159,18 @@ function on_add_meta_boxes($post){
 		),
 	);
 
-	foreach($boxes as $options){
-		add_meta_box($options['id'],$options['label'],$options['callback'],$options['post_type'],$options['context'],$options['priority'],$options); // $id, $title, $callback, $post_type, $context, $priority, $callback_args
+	$slide_animation_names = explode(':',SLIDE_ANIMATION_NAMES);
+	foreach($slide_animation_names as $index => $name){
+		$boxes['slide_properties']['fields']['slide_animation']['children'][] = array(
+			'name' => 'slide_animation',
+			'type' => 'radio',
+			'label' => $name,
+			'value' => $index,
+		);
+	}
+
+	foreach($boxes as $id => $options){
+		add_meta_box($id,$options['label'],$options['callback'],$options['post_type'],$options['context'],$options['priority'],$options); // $id, $title, $callback, $post_type, $context, $priority, $callback_args
 	}
 }
 add_action('add_meta_boxes','on_add_meta_boxes');

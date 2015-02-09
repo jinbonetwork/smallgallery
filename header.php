@@ -19,6 +19,9 @@
 				separator: '<?php echo TITLE_SEPARATOR; ?>'
 			},
 			animation: {
+				name: [
+					<?php echo "'".implode("','",explode(':',SLIDE_ANIMATION_NAMES))."'".PHP_EOL; ?>
+				],
 				duration: <?php echo SLIDE_ANIMATION_DURATION; ?>
 			}
 		};
@@ -58,11 +61,13 @@
 </head>
 <body id="body">
 <div id="smallgallery">
-	<header id="header">
-		<h1 class="site-title"><a href="<?php bloginfo('siteurl'); ?>"><span><?php bloginfo('title'); ?></span></a></h1>
-		<div class="site-description"><?php bloginfo('description'); ?></div><!--/.site-description-->
-	</header><!--/#header-->
-	<?php echo $navigation; ?>
+	<div id="header-and-navigation" class="autofade" data-autofade-default-opacity="0">
+		<header id="header">
+			<h1 class="site-title"><a href="<?php bloginfo('siteurl'); ?>"><span><?php bloginfo('title'); ?></span></a></h1>
+			<div class="site-description"><?php bloginfo('description'); ?></div><!--/.site-description-->
+		</header><!--/#header-->
+		<?php echo $navigation; ?>
+	</div><!--/#header-and-navigation-->
 	<article id="article">
 		<div id="container" class="entries wrap">
 

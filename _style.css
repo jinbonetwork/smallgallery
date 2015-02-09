@@ -1,3 +1,18 @@
+.autofade {
+  transform: opacity 0.5s linear;
+  -webkit-transition: opacity 0.5s linear;
+  -moz-transition: opacity 0.5s linear;
+  -ms-transition: opacity 0.5s linear;
+  -o-transition: opacity 0.5s linear;
+}
+.autofade[data-autofade-default-opacity="0"],
+.autofade.fadeout {
+  opacity: 0;
+}
+.autofade:hover,
+.autofade.fadein {
+  opacity: 1;
+}
 html,
 body {
   position: relative;
@@ -14,8 +29,7 @@ body {
   margin: 0;
   padding: 0;
 }
-#header a,
-#navigation a {
+#header-and-navigation a {
   transform: opacity 0.2s linear;
   -webkit-transition: opacity 0.2s linear;
   -moz-transition: opacity 0.2s linear;
@@ -23,8 +37,7 @@ body {
   -o-transition: opacity 0.2s linear;
   opacity: 0.3;
 }
-#header a:hover,
-#navigation a:hover {
+#header-and-navigation a:hover {
   opacity: 1;
 }
 #header {
@@ -267,15 +280,7 @@ a:visited {
   text-decoration: none;
 }
 #container {
-  width: 80%;
-}
-@media all and (max-width: 640px) {
-  #container {
-    top: 0;
-    left: 0;
-    width: 100%;
-    transform: none;
-  }
+  width: 60%;
 }
 section.entry {
   position: absolute;
@@ -298,6 +303,7 @@ section.entry .feature img {
 }
 @keyframes horizontal-prev {
   from {
+    opacity: 0;
     transform: translateX(-100%);
     -webkit-transform: translateX(-100%);
     -moz-transform: translateX(-100%);
@@ -305,6 +311,7 @@ section.entry .feature img {
     -o-transform: translateX(-100%);
   }
   to {
+    opacity: 1;
     transform: translateX(0);
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
@@ -314,6 +321,7 @@ section.entry .feature img {
 }
 @-webkit-keyframes horizontal-prev {
   from {
+    opacity: 0;
     transform: translateX(-100%);
     -webkit-transform: translateX(-100%);
     -moz-transform: translateX(-100%);
@@ -321,6 +329,7 @@ section.entry .feature img {
     -o-transform: translateX(-100%);
   }
   to {
+    opacity: 1;
     transform: translateX(0);
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
@@ -330,6 +339,7 @@ section.entry .feature img {
 }
 @keyframes horizontal-next {
   from {
+    opacity: 0;
     transform: translateX(100%);
     -webkit-transform: translateX(100%);
     -moz-transform: translateX(100%);
@@ -337,6 +347,7 @@ section.entry .feature img {
     -o-transform: translateX(100%);
   }
   to {
+    opacity: 1;
     transform: translateX(0);
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
@@ -346,6 +357,7 @@ section.entry .feature img {
 }
 @-webkit-keyframes horizontal-next {
   from {
+    opacity: 0;
     transform: translateX(100%);
     -webkit-transform: translateX(100%);
     -moz-transform: translateX(100%);
@@ -353,6 +365,7 @@ section.entry .feature img {
     -o-transform: translateX(100%);
   }
   to {
+    opacity: 1;
     transform: translateX(0);
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
@@ -360,23 +373,29 @@ section.entry .feature img {
     -o-transform: translateX(0);
   }
 }
-#container section.entry.prev[data-animation='0'] {
+#container section.entry.prev {
   left: -100%;
 }
-#container section.entry.prev[data-animation='0'].fresh {
+#container section.entry.prev.fresh {
   animation: horizontal-prev 1s linear;
   -webkit-animation: horizontal-prev 1s linear;
   -moz-animation: horizontal-prev 1s linear;
   -ms-animation: horizontal-prev 1s linear;
   -o-animation: horizontal-prev 1s linear;
 }
-#container section.entry.next[data-animation='0'] {
+#container section.entry.prev.expired {
+  left: -200%;
+}
+#container section.entry.next {
   left: 100%;
 }
-#container section.entry.next[data-animation='0'].fresh {
+#container section.entry.next.fresh {
   animation: horizontal-next 1s linear;
   -webkit-animation: horizontal-next 1s linear;
   -moz-animation: horizontal-next 1s linear;
   -ms-animation: horizontal-next 1s linear;
   -o-animation: horizontal-next 1s linear;
+}
+#container section.entry.next.expired {
+  left: 200%;
 }

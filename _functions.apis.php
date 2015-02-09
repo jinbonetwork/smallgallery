@@ -168,7 +168,7 @@ function build_control($post){
 
 	ob_start();
 	echo <<<EOT
-		<nav id="control">
+		<nav id="control" class="autofade" data-autofade-default-opacity="0">
 			<ul class="items">
 				<li class="item prev disabled"><a href="{$post->prev_permalink}"><span>{$prev_label}</span></a></li>
 				<li class="item next disabled"><a href="{$post->next_permalink}"><span>{$next_label}</span></a></li>

@@ -77,14 +77,14 @@ function _field($options=array()){
 
 function __metabox($post,$options=array()){
 	$properties = get_properties($post);
-	$options['args']['fields'][0]['children'][$properties['slide_weight']]['checked']='checked';
-	$options['args']['fields'][1]['children'][$properties['slide_animation']]['checked']='checked';
-	$options['args']['fields'][2]['children'][$properties['slide_title']]['checked']='checked';
-	$options['args']['fields'][3]['children'][$properties['slide_content']]['checked']='checked';
-	$options['args']['fields'][4]['children'][$properties['slide_author']]['checked']='checked';
-	$options['args']['fields'][5]['children'][$properties['slide_date']]['checked']='checked';
-	$options['args']['fields'][6]['children'][$properties['slide_category']]['checked']='checked';
-	$options['args']['fields'][7]['children'][$properties['slide_tag']]['checked']='checked';
+	$options['args']['fields']['slide_weight']['children'][$properties['slide_weight']]['checked']='checked';
+	$options['args']['fields']['slide_animation']['children'][$properties['slide_animation']]['checked']='checked';
+	$options['args']['fields']['slide_title']['children'][$properties['slide_title']]['checked']='checked';
+	$options['args']['fields']['slide_content']['children'][$properties['slide_content']]['checked']='checked';
+	$options['args']['fields']['slide_author']['children'][$properties['slide_author']]['checked']='checked';
+	$options['args']['fields']['slide_date']['children'][$properties['slide_date']]['checked']='checked';
+	$options['args']['fields']['slide_category']['children'][$properties['slide_category']]['checked']='checked';
+	$options['args']['fields']['slide_tag']['children'][$properties['slide_tag']]['checked']='checked';
 
 	wp_nonce_field($options['id'],$options['id'].'_nonce');
     foreach($options['args']['fields'] as $field){
