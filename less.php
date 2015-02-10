@@ -2,7 +2,7 @@
 define('DIR',dirname(__FILE__));
 define('LESS',DIR.'/contrib/lessphp/lessc.inc.php');
 define('SOURCE',DIR.'/style.less');
-define('OUTPUT',DIR.'/_style.css');
+define('OUTPUT',DIR.'/style.css');
 
 require_once dirname(__FILE__).'/contrib/lessphp/lessc.inc.php';
 $less = new lessc;
