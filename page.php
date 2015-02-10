@@ -1,11 +1,12 @@
 <?php
+define('CONTROL',false);
 get_header();
 if(have_posts()):
 	while(have_posts()):
 		the_post();
 		$post = rebuild_post($post);
 		echo <<<EOT
-<section id="entry-{$post->ID}" class="current {$post->class}">
+<section id="entry-{$post->ID}" class="current format-standard {$post->class}">
 	<div class="wrap">
 		{$post->div_feature}
 		{$post->div_title}

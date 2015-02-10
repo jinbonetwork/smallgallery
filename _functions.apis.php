@@ -136,6 +136,31 @@ function rebuild_post($post){
 	return $post;
 }
 
+function build_feedback($message){
+	$markup = '';
+
+	define('CONTROL',false);
+	ob_start();
+	echo <<<EOT
+<section class="{$message->context} {$message->type} entry format-standard current">
+	<div class="wrap">
+		<h1 class="title">{$message->title}</h1>
+		<div class="description">{$message->description}</div>
+		{$message->links}
+	</div>
+</section>
+
+EOT;
+	$markup = ob_get_contents();
+	ob_end_clean();
+
+	return $markup;
+}
+
+function get_feedback($message){
+	echo build_feedback($message);
+}
+
 function build_post($post){
 	$markup = '';
 	ob_start();
@@ -143,14 +168,20 @@ function build_post($post){
 <section id="entry-{$post->ID}" class="current {$post->class}" data-ID="{$post->ID}" data-title="{$post->alt_title}" data-permalink="{$post->permalink}" data-animation="{$post->slide_animation}" data-prev_permalink="{$post->prev_permalink}" data-next_permalink="{$post->next_permalink}">
 	<div class="wrap">
 		{$post->div_feature}
-		{$post->div_title}
-		{$post->div_content}
-		{$post->div_author}
-		{$post->div_date}
-		{$post->div_category}
-		{$post->div_tag}
+		<div class="label">
+			{$post->div_author}
+		</div><!--/.label-->
+		<div class="caption">
+			{$post->div_title}
+			{$post->div_content}
+			{$post->div_date}
+			{$post->div_category}
+			{$post->div_tag}
+		</div><!--/.caption-->
 	</div>
-</section><!--/#entry-{$post->ID}-->
+	<!--/#entry-{$post->ID}-->
+</section>
+
 EOT;
 	$markup = ob_get_contents();
 	ob_end_clean();

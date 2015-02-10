@@ -66,16 +66,38 @@ function resize(){
 		var $box = $entry.children('.wrap');
 		var $img = $entry.find('.feature img');
 
-		if($img.attr('width')/$img.attr('height')<$container.width()/$container.height()){
-			$img.css({
-				width: 'auto',
-				height: $container.height()
-			});
-		}else{
-			$img.css({
-				width: $container.width(),
-				height: 'auto'
-			});
+		$box.availableWidth = $entry.width();
+		$box.availableHeight = $entry.height();
+
+		var padding = $smallgallery.padding.replace(/(\%|px)$/,'');
+
+		if($smallgallery.padding.search(/\%$/)>0){
+			$box.availableWidth = $box.availableWidth-(($entry.width()/padding)*2);
+			$box.availableHeight = $box.availableHeight-(($entry.height()/padding)*2);
+		}
+		if($smallgallery.padding.search(/px$/)>0){
+			$box.availableWidth = $box.availableWidth-(padding*2);
+			$box.availableHeight = $box.availableHeight-(padding*2);
+		}
+
+		$box.css({
+			width: $box.availableWidth,
+			height: $box.availableHeight
+		});
+
+		if($img.length){
+			if($img.attr('width')/$img.attr('height')<$box.width()/$box.height()){
+				$img.css({
+					width: 'auto',
+					height: $box.height()
+				});
+			}else{
+				$img.css({
+					width: $box.width(),
+					height: 'auto'
+				});
+			}
+			$box.width($img.width());
 		}
 	});
 }
