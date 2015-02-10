@@ -84,24 +84,29 @@ function resize(){
 			$box.availableHeight = $box.availableHeight-(padding*2);
 		}
 
-		$box.css({
-			width: $box.availableWidth,
-			height: $box.availableHeight
-		});
-
 		if($img.length){
-			if($img.attr('width')/$img.attr('height')<$box.width()/$box.height()){
+			$img.ratio = $img.attr('width')/$img.attr('height');
+			$box.ratio = $box.availableWidth/$box.availableHeight;
+			if($img.ratio<$box.ratio){
 				$img.css({
-					width: 'auto',
-					height: $box.height()
+					width: $img.attr('width')*$box.availableHeight/$img.attr('height'),
+					height: $box.availableHeight
 				});
 			}else{
 				$img.css({
-					width: $box.width(),
-					height: 'auto'
+					width: $box.availableWidth,
+					height: $img.attr('height')*$box.availableWidth/$img.attr('width')
 				});
 			}
-			$box.width($img.width());
+			$box.css({
+				width: $img.width(),
+				height: $box.availableHeight
+			});
+		}else{
+			$box.css({
+				width: $box.availableWidth,
+				height: $box.availableHeight
+			});
 		}
 	});
 }
@@ -216,6 +221,41 @@ function cleanup(){
 	}
 }
 
+function fullscreen(flag){
+	var element = document.documentElement;
+	if(flag){
+		if(element.requestFullscreen) {
+			element.requestFullscreen();
+		} else if(element.mozRequestFullScreen) {
+			element.mozRequestFullScreen();
+		} else if(element.webkitRequestFullscreen) {
+			element.webkitRequestFullscreen();
+		} else if(element.msRequestFullscreen) {
+			element.msRequestFullscreen();
+		}
+	}else{
+		if(document.exitFullscreen) {
+			document.exitFullscreen();
+		} else if(document.mozCancelFullScreen) {
+			document.mozCancelFullScreen();
+		} else if(document.webkitExitFullscreen) {
+			document.webkitExitFullscreen();
+		}
+	}
+}
+
+function fullscreenchange(){
+	//var is_fullscreen = window.fullScreenApi.isFullScreen();
+	var is_fullscreen = !window.screenTop&&!window.screenY; // fallback
+	var $trigger = jQuery('#toggle-fullscreen');
+
+	if(is_fullscreen){
+	}else{
+		$trigger.attr('data-flag','false');
+		init_flag($trigger);
+	}
+}
+
 jQuery(document).ready(function(e){
 	$container = jQuery('#container');
 	$control = jQuery('#control');
@@ -304,14 +344,25 @@ jQuery(document).ready(function(e){
 	jQuery('.toggler').on('click',function(e){
 		e.preventDefault();
 		var $trigger = jQuery(this);
-		$trigger.flag = $trigger.attr('data-flag');
-		if($trigger.flag=='true'){
+		var flag = null;
+
+		if($trigger.attr('data-flag')=='true'){
 			$trigger.attr('data-flag','false');
+			flag = false;
 		}else{
 			$trigger.attr('data-flag','true');
+			flag = true;
 		}
 		init_flag($trigger);
+
+		if($trigger.attr('id')=='toggle-fullscreen'){
+			fullscreen(flag);
+		}
 	});
+
+	jQuery(document).on('fullscreenchange',function(e){fullscreenchange();});
+	jQuery(document).on('webkitfullscreenchange',function(e){fullscreenchange();});
+	jQuery(document).on('mozfullscreenchange',function(e){fullscreenchange();});
 
 	init_flags();
 	init();

@@ -173,8 +173,9 @@ function build_post($post){
 		</div><!--/.label-->
 		<div class="caption">
 			{$post->div_title}
-			{$post->div_content}
+			{$post->div_author}
 			{$post->div_date}
+			{$post->div_content}
 			{$post->div_category}
 			{$post->div_tag}
 		</div><!--/.caption-->
