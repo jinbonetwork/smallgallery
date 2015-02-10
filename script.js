@@ -1,4 +1,4 @@
-console.log = function(){};
+//console.log = function(){};
 
 var $container = {};
 var $control = {};
@@ -21,9 +21,13 @@ function init(){
 
 	// load prev/next entries
 	var _next_source = $slideshow.current.attr('data-next_permalink');
+	if(_next_source){
+		load(_next_source,'next');
+	}
 	var _prev_source = $slideshow.current.attr('data-prev_permalink');
-	load(_next_source,'next');
-	load(_prev_source,'prev');
+	if(_prev_source){
+		load(_prev_source,'prev');
+	}
 }
 
 function init_flag($trigger){
@@ -174,21 +178,30 @@ function update_control(){
 }
 
 function update_history(){
+	if(!$slideshow.current.attr('data-permalink')){
+		return;
+	}
+
+	var currentURL = document.location.href;
 	var historyHTML = '<!DOCTYPE html><html>'+jQuery('html').html()+'</html>';
 	var historyTitle = $slideshow.current.attr('data-title')+$smallgallery.title.separator+$smallgallery.title.text;
 	var historyURL = $slideshow.current.attr('data-permalink');
 
-	window.history.pushState(
-		{
-			'html': historyHTML,
-			'pageTitle': historyTitle
-		},
-		historyTitle,
-		historyURL
-	);
-	document.title = historyTitle; // fallback
-
-	console.log('HISTORY: '+historyTitle+' => '+historyURL);
+	console.log('HISTORY: check '+currentURL+' (current) => '+historyURL+' (update)');
+	if(currentURL!=historyURL){
+		window.history.pushState(
+			{
+				'html': historyHTML,
+				'pageTitle': historyTitle
+			},
+			historyTitle,
+			historyURL
+		);
+		document.title = historyTitle; // fallback
+		console.log('HISTORY: (updated) '+historyTitle+' -- '+currentURL+' => '+historyURL);
+	}else{
+		console.log('HISTORY: (unchanged) '+historyTitle+' -- '+currentURL+' => '+historyURL);
+	}
 }
 
 function cleanup(){
