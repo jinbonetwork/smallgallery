@@ -7,6 +7,7 @@ define('OUTPUT',DIR.'/style.css');
 require_once dirname(__FILE__).'/contrib/lessphp/lessc.inc.php';
 $less = new lessc;
 try{
+	$less->setPreserveComments(true);
 	$less->checkedCompile(SOURCE,OUTPUT);
 	$content = file_get_contents(OUTPUT);
 }catch(exception $e){
