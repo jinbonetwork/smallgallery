@@ -51,6 +51,16 @@ else:
 		endif;
 		
 		get_header();
+		rewind_posts();
+
+		$entries = array();
+		while(have_posts()):
+			the_post();
+			$entry = get_post();
+			$entries[] = $entry;
+		endwhile;
+		$message->links = build_archives($entries);
+
 		get_feedback($message);
 		get_footer();
 	else:

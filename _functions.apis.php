@@ -71,6 +71,8 @@ function rebuild_post($post){
 		$post->format = 'standard';
 	}
 
+	$post->edit_link = current_user_can('edit_post',$post->ID)?get_edit_post_link($post->ID):'';
+
 	$properties = get_properties($post);
 	$post->slide_weight = $properties['slide_weight'];
 	$post->slide_animation = $properties['slide_animation'];
@@ -133,52 +135,71 @@ function rebuild_post($post){
 	$post->div_category = ($post->slide_category?"<div class='category'>{$post->filtered_category}</div>":'').'<!--/.category-->';
 	$post->div_tag = ($post->slide_tag?"<div class='tag'>{$post->filtered_tag}</div>":'').'<!--/.tag-->';
 
+	$post->caption_title = $post->slide_title==1?$post->div_title:'';
+	$post->caption_content = $post->slide_content==1?$post->div_content:'';
+	$post->caption_author = $post->slide_author==1?$post->div_author:'';
+	$post->caption_date = $post->slide_date==1?$post->div_date:'';
+	$post->caption_category = $post->slide_category==1?$post->div_category:'';
+	$post->caption_tag = $post->slide_tag==1?$post->div_tag:'';
+
+	$post->popup_title = $post->slide_title==2?$post->div_title:'';
+	$post->popup_content = $post->slide_content==2?$post->div_content:'';
+	$post->popup_author = $post->slide_author==2?$post->div_author:'';
+	$post->popup_date = $post->slide_date==2?$post->div_date:'';
+	$post->popup_category = $post->slide_category==2?$post->div_category:'';
+	$post->popup_tag = $post->slide_tag==2?$post->div_tag:'';
+
 	return $post;
-}
-
-function build_feedback($message){
-	$markup = '';
-
-	define('CONTROL',false);
-	ob_start();
-	echo <<<EOT
-<section class="{$message->context} {$message->type} entry format-standard current">
-	<div class="wrap">
-		<h1 class="title">{$message->title}</h1>
-		<div class="description">{$message->description}</div>
-		{$message->links}
-	</div>
-</section>
-
-EOT;
-	$markup = ob_get_contents();
-	ob_end_clean();
-
-	return $markup;
-}
-
-function get_feedback($message){
-	echo build_feedback($message);
 }
 
 function build_post($post){
 	$markup = '';
+	$caption = '';
+	$popup = '';
+
+	if($post->popup_title||$post->popup_content||$post->popup_author||$post->popup_date||$post->popup_category||$post->popup_tag){
+		ob_start();
+		echo <<<EOT
+			<div id="entry-{$post->ID}-popup" class="popup">
+				{$post->popup_title}
+				{$post->popup_author}
+				{$post->popup_date}
+				{$post->popup_content}
+				{$post->popup_category}
+				{$post->popup_tag}
+			</div><!--/#entry-{$post->ID}-popup-->
+EOT;
+		$popup = ob_get_contents();
+		ob_end_clean();
+	}
+
+	if($post->caption_title||$post->caption_content||$post->caption_author||$post->caption_date||$post->caption_category||$post->caption_tag){
+		$popup_switch = $post->format=='image'&&$popup?"<div class='popup_switch'><a href='#entry-{$post->ID}-popup'><span>".__('Read more',TEXTDOMAIN)."</span></a></div>":'';
+		$edit_link = $post->edit_link?"<div class='edit_link'><a href='{$post->edit_link}'><span>".__('Edit this post',TEXTDOMAIN)."</span></a></div>":''; 
+		ob_start();
+		echo <<<EOT
+			<div id="entry-{$post->ID}-caption" class="caption">
+				{$popup_switch}
+				{$edit_link}
+				{$post->caption_title}
+				{$post->caption_author}
+				{$post->caption_date}
+				{$post->caption_content}
+				{$post->caption_category}
+				{$post->caption_tag}
+			</div><!--/#entry-{$post->ID}-caption-->
+EOT;
+		$caption = ob_get_contents();
+		ob_end_clean();
+	}
+
 	ob_start();
 	echo <<<EOT
 <section id="entry-{$post->ID}" class="current {$post->class}" data-ID="{$post->ID}" data-title="{$post->alt_title}" data-permalink="{$post->permalink}" data-animation="{$post->slide_animation}" data-prev_permalink="{$post->prev_permalink}" data-next_permalink="{$post->next_permalink}">
 	<div class="wrap">
 		{$post->div_feature}
-		<div class="label">
-			{$post->div_author}
-		</div><!--/.label-->
-		<div class="caption">
-			{$post->div_title}
-			{$post->div_author}
-			{$post->div_date}
-			{$post->div_content}
-			{$post->div_category}
-			{$post->div_tag}
-		</div><!--/.caption-->
+		{$caption}
+		{$popup}
 	</div>
 	<!--/#entry-{$post->ID}-->
 </section>
@@ -212,6 +233,47 @@ EOT;
 
 	define('CONTROL',$control);
 	return $control;
+}
+
+function build_archives($entries){
+	$markup = '';
+
+	$items = array();
+	foreach($entries as $entry):
+		$entry = rebuild_post($entry);
+		$entry->feature = has_post_thumbnail($entry->ID)?get_the_post_thumbnail($entry->ID,'thumbnail',array('alt'=>$entry->alt_title)):"<img src='".DEFAULT_POST_THUMBNAIL."' alt='{$entry->alt_title}'>";
+		$items[] = "<li id='thumbnail-{$entry->ID}' class='item'><a href='{$entry->permalink}'>{$entry->feature}</a></li>".PHP_EOL;
+	endforeach;
+
+	$markup = implode(PHP_EOL,$items);
+	$markup = "<ul class='thumbnail-archives items'>{$markup}</ul>".PHP_EOL;
+
+	return $markup;
+}
+
+function build_feedback($message){
+	$markup = '';
+
+	define('CONTROL',false);
+	ob_start();
+	echo <<<EOT
+<section class="{$message->context} {$message->type} entry format-standard current">
+	<div class="wrap">
+		<h1 class="title">{$message->title}</h1>
+		<div class="description">{$message->description}</div>
+		{$message->links}
+	</div>
+</section>
+
+EOT;
+	$markup = ob_get_contents();
+	ob_end_clean();
+
+	return $markup;
+}
+
+function get_feedback($message){
+	echo build_feedback($message);
 }
 
 ?>

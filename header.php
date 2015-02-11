@@ -58,7 +58,7 @@
 	}
 ?>
 </head>
-<body id="body">
+<body id="body" <?php body_class(); ?>>
 <div id="smallgallery">
 	<div id="header-and-navigation" class="autofade" data-autofade-default-opacity="0">
 		<header id="header">

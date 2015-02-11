@@ -22,7 +22,6 @@ function __field($options=array()){
 	case 'text':
 	case 'password':
 	case 'hidden':
-	default:
 		$markup = <<<EOT
 <p>
 	<{$heading}><label for="{$name}">{$label}</label></{$heading}>

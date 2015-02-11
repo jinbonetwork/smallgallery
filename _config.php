@@ -18,6 +18,7 @@ define('HEADING_IMAGE_0','h3');
 define('HEADING_IMAGE_1','h1');
 
 define('DEFAULT_POST_FORMAT','image'); // set false to make configurable
+define('DEFAULT_POST_THUMBNAIL',get_stylesheet_directory_uri().'/images/default-post-thumbnail.png');
 
 define('DEFAULT_SLIDE_WEIGHT',0);
 define('DEFAULT_SLIDE_TITLE',0);

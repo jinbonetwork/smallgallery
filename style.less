@@ -12,6 +12,7 @@ Text Domain: smallgallery
 //-----------------------------------------------------------------------------
 //	Mixins, Rulsets, General classes
 //-----------------------------------------------------------------------------
+@slide-width: 70%;
 @ui-height: 40px;
 @ui-font-size: 18px;
 
@@ -355,8 +356,12 @@ a:visited {
 //-----------------------------------------------------------------------------
 
 #container {
-	width: 70%;
+	body.single &,
+	body.home & {
+		width: @slide-width;
+	}
 }
+
 @media all and ( max-width: 640px ) {
 	#container {
 		width: 100%;
@@ -396,14 +401,41 @@ section.entry {
 		.label {
 		}
 	}
+
+	&.format-image {
+		& > .wrap {
+			
+			.popup {
+				display: none;
+			}
+		}
+	}
 }
 
-section.entry.format-image {
+//-----------------------------------------------------------------------------
+//	Archives
+//-----------------------------------------------------------------------------
+section.entry.archive {
 
 	& > .wrap {
-		
-		.caption {
-			display: none;
+		max-width: @slide-width;
+
+		ul.thumbnail-archives {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+
+			li.item {
+				float: left;
+
+				a {
+					display: block;
+
+					img {
+						display: block;
+					}
+				}
+			}
 		}
 	}
 }

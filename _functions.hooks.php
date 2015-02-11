@@ -14,6 +14,37 @@ function on_init(){
 }
 add_action('init','on_init');
 
+function on_wp_enqueue_scripts(){
+	wp_enqueue_style('font-awesome',get_template_directory_uri().'/contrib/font-awesome/css/font-awesome.min.css');
+
+	wp_enqueue_style('fancybox',get_template_directory_uri().'/contrib/fancybox/source/jquery.fancybox.css');
+	wp_enqueue_script('fancybox',get_template_directory_uri().'/contrib/fancybox/source/jquery.fancybox.pack.js',array('jquery'));
+
+	wp_enqueue_style('smallgallery',get_template_directory_uri().'/less.php',array('font-awesome'));
+	wp_enqueue_script('smallgallery',get_template_directory_uri().'/script.js',array('jquery','fancybox'));
+}
+add_action('wp_enqueue_scripts','on_wp_enqueue_scripts');
+
+function shortcode_thumbnail_archives($options=array()){
+	$markup = '';
+
+	$defaults = array(
+		'posts_per_page' => -1,
+		'size' => 'thumbnail',
+		'category' => false,
+		'tag' => false,
+		'author' => false,
+		'ids' => false,
+	);
+	$options = shortcode_atts($defaults,$options);
+
+	$entries = get_posts($options);
+	$markup = !empty($entries)?build_archives($entries):'';
+
+	return $markup;
+}
+add_shortcode('thumbnail_archives','shortcode_thumbnail_archives');
+
 function on_add_meta_boxes($post){
 	$boxes = array(
 		'slide_properties' => array(
@@ -30,13 +61,13 @@ function on_add_meta_boxes($post){
 						array(
 							'name' => 'slide_weight',
 							'type' => 'radio',
-							'label' => 'default',
+							'label' => 'default slide',
 							'value' => 0,
 						),
 						array(
 							'name' => 'slide_weight',
 							'type' => 'radio',
-							'label' => 'cover',
+							'label' => 'cover slide',
 							'value' => 1,
 						),
 					),
@@ -54,14 +85,20 @@ function on_add_meta_boxes($post){
 						array(
 							'name' => 'slide_title',
 							'type' => 'radio',
-							'label' => 'hide_title',
+							'label' => 'hidden',
 							'value' => 0,
 						),
 						array(
 							'name' => 'slide_title',
 							'type' => 'radio',
-							'label' => 'show_title',
+							'label' => 'caption',
 							'value' => 1,
+						),
+						array(
+							'name' => 'slide_title',
+							'type' => 'radio',
+							'label' => 'popup',
+							'value' => 2,
 						),
 					),
 				),
@@ -72,14 +109,20 @@ function on_add_meta_boxes($post){
 						array(
 							'name' => 'slide_content',
 							'type' => 'radio',
-							'label' => 'hide_content',
+							'label' => 'hidden',
 							'value' => 0,
 						),
 						array(
 							'name' => 'slide_content',
 							'type' => 'radio',
-							'label' => 'show_content',
+							'label' => 'caption',
 							'value' => 1,
+						),
+						array(
+							'name' => 'slide_content',
+							'type' => 'radio',
+							'label' => 'popup',
+							'value' => 2,
 						),
 					),
 				),
@@ -90,14 +133,20 @@ function on_add_meta_boxes($post){
 						array(
 							'name' => 'slide_author',
 							'type' => 'radio',
-							'label' => 'hide_author',
+							'label' => 'hidden',
 							'value' => 0,
 						),
 						array(
 							'name' => 'slide_author',
 							'type' => 'radio',
-							'label' => 'show_author',
+							'label' => 'caption',
 							'value' => 1,
+						),
+						array(
+							'name' => 'slide_author',
+							'type' => 'radio',
+							'label' => 'popup',
+							'value' => 2,
 						),
 					),
 				),
@@ -108,14 +157,20 @@ function on_add_meta_boxes($post){
 						array(
 							'name' => 'slide_date',
 							'type' => 'radio',
-							'label' => 'hide_date',
+							'label' => 'hidden',
 							'value' => 0,
 						),
 						array(
 							'name' => 'slide_date',
 							'type' => 'radio',
-							'label' => 'show_date',
+							'label' => 'caption',
 							'value' => 1,
+						),
+						array(
+							'name' => 'slide_date',
+							'type' => 'radio',
+							'label' => 'popup',
+							'value' => 2,
 						),
 					),
 				),
@@ -126,14 +181,20 @@ function on_add_meta_boxes($post){
 						array(
 							'name' => 'slide_category',
 							'type' => 'radio',
-							'label' => 'hide_category',
+							'label' => 'hidden',
 							'value' => 0,
 						),
 						array(
 							'name' => 'slide_category',
 							'type' => 'radio',
-							'label' => 'show_category',
+							'label' => 'caption',
 							'value' => 1,
+						),
+						array(
+							'name' => 'slide_category',
+							'type' => 'radio',
+							'label' => 'popup',
+							'value' => 2,
 						),
 					),
 				),
@@ -144,14 +205,20 @@ function on_add_meta_boxes($post){
 						array(
 							'name' => 'slide_tag',
 							'type' => 'radio',
-							'label' => 'hide_tag',
+							'label' => 'hidden',
 							'value' => 0,
 						),
 						array(
 							'name' => 'slide_tag',
 							'type' => 'radio',
-							'label' => 'show_tag',
+							'label' => 'caption',
 							'value' => 1,
+						),
+						array(
+							'name' => 'slide_tag',
+							'type' => 'radio',
+							'label' => 'popup',
+							'value' => 2,
 						),
 					),
 				),
@@ -200,16 +267,5 @@ function on_save_post($post_id){
 	$wpdb->update($wpdb->posts,array('menu_order'=>$menu_order),array('ID'=>$post_id),array('%d'),array('%d'));
 }
 add_action('save_post','on_save_post');
-
-function on_wp_enqueue_scripts(){
-	wp_enqueue_style('font-awesome',get_template_directory_uri().'/contrib/font-awesome/css/font-awesome.min.css');
-
-	wp_enqueue_style('fancybox',get_template_directory_uri().'/contrib/fancybox/source/jquery.fancybox.css');
-	wp_enqueue_script('fancybox',get_template_directory_uri().'/contrib/fancybox/source/jquery.fancybox.pack.js',array('jquery'));
-
-	wp_enqueue_style('smallgallery',get_template_directory_uri().'/less.php',array('font-awesome'));
-	wp_enqueue_script('smallgallery',get_template_directory_uri().'/script.js',array('jquery','fancybox'));
-}
-add_action('wp_enqueue_scripts','on_wp_enqueue_scripts');
 
 ?>

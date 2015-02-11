@@ -1,4 +1,4 @@
-//console.log = function(){};
+console.log = function(){};
 
 var $container = {};
 var $control = {};
@@ -120,22 +120,22 @@ function load(source,position){
 		console.log('_SOURCE FILTERED: '+flag+' using '+source+' => '+source_filtered);
 
 		var _markup;
-		var _prev;
-		var _next;
+		var _object;
 
 		jQuery.getJSON(source_filtered)
 			.done(function(data){
 				_markup = jQuery(data.filtered_post).removeClass('current').addClass('fresh '+position);
 				switch(position){
 					case 'prev':
-						_prev = _markup.addClass('prev');
-						$container.prepend(_prev);
+						_object = _markup.addClass('prev');
+						$container.prepend(_object);
 					break;
 					case 'next':
-						_next = _markup.addClass('next');
-						$container.append(_next);
+						_object = _markup.addClass('next');
+						$container.append(_object);
 					break;
 				}
+				bind_entry_events(_object.attr('id'));
 				console.log('_DATA LOADED: '+flag+' using '+source_filtered+' => #'+data.ID);
 			})
 			.error(function(data){
@@ -149,6 +149,28 @@ function load(source,position){
 	}else{
 		console.log('ABORT: '+flag+' item already exists');
 	}
+}
+
+function bind_entry_events(id){
+	id = id || jQuery('section.entry.format-image.current').attr('id');
+	var $this = jQuery('section.entry.format-image#'+id);
+
+	$this.find('.popup_switch a').on('click',function(e){
+		e.preventDefault();
+		var $trigger = jQuery(this);
+		var $content = jQuery($trigger.attr('href')).clone();
+		var $popup;
+
+		$content.attr('id',$content.attr('id')+'-content');
+		$popup = jQuery('<div></div>').append($content).html();
+
+		jQuery.fancybox.open({
+			type: 'html',
+			width: 800,
+			height: 600,
+			content: $popup
+		});
+	});
 }
 
 function update_control(){
@@ -259,9 +281,8 @@ function fullscreenchange(){
 jQuery(document).ready(function(e){
 	$container = jQuery('#container');
 	$control = jQuery('#control');
-		$control.prev = $control.find('li.prev');
-		$control.next = $control.find('li.next');
-
+	$control.prev = $control.find('li.prev');
+	$control.next = $control.find('li.next');
 
 	jQuery('#control a').on('click',function(e){
 		e.preventDefault();
@@ -329,14 +350,6 @@ jQuery(document).ready(function(e){
 		} // endif
 	});
 
-	jQuery('#container').on('swipeleft',function(e){
-		jQuery('#control .prev a').click();
-	});
-
-	jQuery('#container').on('swiperight',function(e){
-		jQuery('#control .next a').click();
-	});
-	
 	jQuery(window).on('resize',function(e){
 		resize();
 	});
@@ -364,6 +377,15 @@ jQuery(document).ready(function(e){
 	jQuery(document).on('webkitfullscreenchange',function(e){fullscreenchange();});
 	jQuery(document).on('mozfullscreenchange',function(e){fullscreenchange();});
 
+	jQuery('#container').on('swipeleft',function(e){
+		jQuery('#control .prev a').click();
+	});
+
+	jQuery('#container').on('swiperight',function(e){
+		jQuery('#control .next a').click();
+	});
+
+	bind_entry_events();
 	init_flags();
 	init();
 });
