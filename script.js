@@ -267,16 +267,23 @@ function fullscreen(flag){
 }
 
 function fullscreenchange(){
-	//var is_fullscreen = window.fullScreenApi.isFullScreen();
-	var is_fullscreen = !window.screenTop&&!window.screenY; // fallback
 	var $trigger = jQuery('#toggle-fullscreen');
 
-	if(is_fullscreen){
+	if(is_fullscreen()){
+		$trigger.attr('data-flag','true');
 	}else{
 		$trigger.attr('data-flag','false');
-		init_flag($trigger);
 	}
+	init_flag($trigger);
 }
+
+function is_fullscreen(){
+	//var is_fullscreen = window.fullScreenApi.isFullScreen();
+	var is_fullscreen = !window.screenTop&&!window.screenY; // fallback
+
+	return is_fullscreen;
+}
+	
 
 jQuery(document).ready(function(e){
 	$container = jQuery('#container');
@@ -377,13 +384,34 @@ jQuery(document).ready(function(e){
 	jQuery(document).on('webkitfullscreenchange',function(e){fullscreenchange();});
 	jQuery(document).on('mozfullscreenchange',function(e){fullscreenchange();});
 
-	jQuery('#container').on('swipeleft',function(e){
+	jQuery(document).on('swipeleft',function(e){
 		jQuery('#control .prev a').click();
 	});
 
-	jQuery('#container').on('swiperight',function(e){
+	jQuery(document).on('swiperight',function(e){
 		jQuery('#control .next a').click();
 	});
+
+	jQuery(document).keydown(function(e){
+		switch(e.which){
+			case 37: // left
+				jQuery('#control .prev a').click();
+			break;
+			case 39: // right
+				jQuery('#control .next a').click();
+			break;
+			case 38: // up
+			case 40: // down
+				jQuery('#toggle-navigation').click();
+			break;
+		}
+	});
+
+	if(is_fullscreen()){
+		jQuery('#toggle-fullscreen').attr('data-flag','true');
+	}else{
+		jQuery('#toggle-fullscreen').attr('data-flag','false');
+	}
 
 	bind_entry_events();
 	init_flags();

@@ -4,14 +4,35 @@ define('LESS',DIR.'/contrib/lessphp/lessc.inc.php');
 define('SOURCE',DIR.'/style.less');
 define('OUTPUT',DIR.'/style.css');
 
-require_once dirname(__FILE__).'/contrib/lessphp/lessc.inc.php';
-$less = new lessc;
-try{
-	$less->setPreserveComments(true);
-	$less->checkedCompile(SOURCE,OUTPUT);
+if(DEBUG||!file_exists(OUTPUT)||filemtime(SOURCE)>filemtime(OUTPUT)){
+	define('WP_USE_THEMES', false);
+
+	//require_once dirname(__FILE__).'/../../../wp-blog-header.php'; // 404 header failure
+	require_once dirname(__FILE__).'/../../../wp-config.php';
+	$wp->register_globals();
+	$wp->send_headers();
+
+	require_once dirname(__FILE__).'/contrib/lessphp/lessc.inc.php';
+	$less = new lessc;
+	try{
+		$less->setVariables(array(
+			'slide-animation-duration' => SLIDE_ANIMATION_DURATION,
+			'slide-animation-timing' => SLIDE_ANIMATION_TIMING,
+			'ui-animation-duration' => UI_ANIMATION_DURATION,
+			'ui-animation-timing' => UI_ANIMATION_TIMING,
+		));
+		$less->setPreserveComments(true);
+		if(DEBUG){
+			$less->compileFile(SOURCE,OUTPUT);
+		}else{
+			$less->checkedCompile(SOURCE,OUTPUT);
+		}
+		$content = file_get_contents(OUTPUT);
+	}catch(exception $e){
+		$content = $e->getMessage();
+	}
+}else{
 	$content = file_get_contents(OUTPUT);
-}catch(exception $e){
-	$content = $e->getMessage();
 }
 
 header('Content-type:text/css;charset=UTF-8');

@@ -12,7 +12,7 @@ Text Domain: smallgallery
 //-----------------------------------------------------------------------------
 //	Mixins, Rulsets, General classes
 //-----------------------------------------------------------------------------
-@slide-width: 70%;
+@slide-width: 50%;
 @ui-height: 40px;
 @ui-font-size: 18px;
 
@@ -67,7 +67,7 @@ body {
 #navigation,
 #control {
 	a {
-		.transition(opacity 0.2s linear);
+		.transition(opacity @ui-animation-duration @ui-animation-timing);
 		opacity: 0.3;
 
 		&:hover {
@@ -193,7 +193,7 @@ body {
 
 	ul.menu {
 		box-sizing: border-box;
-		.transition(right 0.3s linear);
+		.transition(right @ui-animation-duration @ui-animation-timing);
 		opacity: 1;
 		list-style: none;
 		position: absolute;
@@ -491,7 +491,7 @@ section.entry.archive {
 			left: -100%;
 
 			&.fresh {
-				.animation(horizontal-prev 1s linear);
+				.animation(horizontal-prev @slide-animation-duration @slide-animation-timing);
 			}
 
 			&.expired {
@@ -503,7 +503,7 @@ section.entry.archive {
 			left: 100%;
 
 			&.fresh {
-				.animation(horizontal-next 1s linear);
+				.animation(horizontal-next @slide-animation-duration @slide-animation-timing);
 			}
 
 			&.expired {

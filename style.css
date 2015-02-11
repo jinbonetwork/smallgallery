@@ -27,11 +27,11 @@ body {
 #header a,
 #navigation a,
 #control a {
-  transform: opacity 0.2s linear;
-  -webkit-transition: opacity 0.2s linear;
-  -moz-transition: opacity 0.2s linear;
-  -ms-transition: opacity 0.2s linear;
-  -o-transition: opacity 0.2s linear;
+  transform: opacity 300 linear;
+  -webkit-transition: opacity 300 linear;
+  -moz-transition: opacity 300 linear;
+  -ms-transition: opacity 300 linear;
+  -o-transition: opacity 300 linear;
   opacity: 0.3;
 }
 #header a:hover,
@@ -138,11 +138,11 @@ body {
 }
 #navigation ul.menu {
   box-sizing: border-box;
-  transform: right 0.3s linear;
-  -webkit-transition: right 0.3s linear;
-  -moz-transition: right 0.3s linear;
-  -ms-transition: right 0.3s linear;
-  -o-transition: right 0.3s linear;
+  transform: right 300 linear;
+  -webkit-transition: right 300 linear;
+  -moz-transition: right 300 linear;
+  -ms-transition: right 300 linear;
+  -o-transition: right 300 linear;
   opacity: 1;
   list-style: none;
   position: absolute;
@@ -286,7 +286,7 @@ a:visited {
 }
 body.single #container,
 body.home #container {
-  width: 70%;
+  width: 50%;
 }
 @media all and (max-width: 640px) {
   #container {
@@ -325,7 +325,7 @@ section.entry.format-image > .wrap .popup {
   display: none;
 }
 section.entry.archive > .wrap {
-  max-width: 70%;
+  max-width: 50%;
 }
 section.entry.archive > .wrap ul.thumbnail-archives {
   list-style: none;
@@ -417,11 +417,11 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a img {
   left: -100%;
 }
 #container section.entry.prev.fresh {
-  animation: horizontal-prev 1s linear;
-  -webkit-animation: horizontal-prev 1s linear;
-  -moz-animation: horizontal-prev 1s linear;
-  -ms-animation: horizontal-prev 1s linear;
-  -o-animation: horizontal-prev 1s linear;
+  animation: horizontal-prev 500 linear;
+  -webkit-animation: horizontal-prev 500 linear;
+  -moz-animation: horizontal-prev 500 linear;
+  -ms-animation: horizontal-prev 500 linear;
+  -o-animation: horizontal-prev 500 linear;
 }
 #container section.entry.prev.expired {
   left: -200%;
@@ -430,11 +430,11 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a img {
   left: 100%;
 }
 #container section.entry.next.fresh {
-  animation: horizontal-next 1s linear;
-  -webkit-animation: horizontal-next 1s linear;
-  -moz-animation: horizontal-next 1s linear;
-  -ms-animation: horizontal-next 1s linear;
-  -o-animation: horizontal-next 1s linear;
+  animation: horizontal-next 500 linear;
+  -webkit-animation: horizontal-next 500 linear;
+  -moz-animation: horizontal-next 500 linear;
+  -ms-animation: horizontal-next 500 linear;
+  -o-animation: horizontal-next 500 linear;
 }
 #container section.entry.next.expired {
   left: 200%;
