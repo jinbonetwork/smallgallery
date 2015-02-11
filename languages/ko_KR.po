@@ -1,0 +1,55 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: smallgallery\n"
+"POT-Creation-Date: 2015-02-11 10:02+0900\n"
+"PO-Revision-Date: 2015-02-11 10:43+0900\n"
+"Last-Translator: 진보네트워크센터 <jinbonetwork@gmail.com>\n"
+"Language-Team: jinbonet <jinbonetwork@gmail.com>\n"
+"Language: ko_KR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.7.4\n"
+
+msgid "Navigation"
+msgstr "메뉴"
+
+msgid "Toggle navigation"
+msgstr "메뉴"
+
+msgid "Fullscreen"
+msgstr "전체화면"
+
+msgid "Gallery is empty."
+msgstr "빈 갤러리입니다."
+
+msgid "Archive is empty."
+msgstr "빈 페이지입니다."
+
+msgid "Previous slide"
+msgstr "이전 슬라이드"
+
+msgid "Next slide"
+msgstr "다음 슬라이드"
+
+msgid "Read more"
+msgstr "더 보기"
+
+msgid "Edit this slide"
+msgstr "이 슬라이드 고치기"
+
+msgid "Edit this page"
+msgstr "이 페이지 고치기"
+
+msgid "Email"
+msgstr "전자편지"
+
+msgid "Homepage"
+msgstr "홈페이지"
+
+msgid "About"
+msgstr "소개"
+
+msgid "Powered by <a href=\"http://jinbo.net\"><span>Jinbo.net</span></a>"
+msgstr "<a href=\"http://jinbo.net\"><span>진보넷</span></a>에서 만듦"

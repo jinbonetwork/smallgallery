@@ -71,7 +71,8 @@ function rebuild_post($post){
 		$post->format = 'standard';
 	}
 
-	$post->edit_link = current_user_can('edit_post',$post->ID)?get_edit_post_link($post->ID):'';
+	$post->post_type_label = $post->post_type=='post'?'slide':$post->post_type;
+	$post->edit_link = current_user_can('edit_'.$post->post_type,$post->ID)?get_edit_post_link($post->ID):'';
 
 	$properties = get_properties($post);
 	$post->slide_weight = $properties['slide_weight'];
@@ -127,6 +128,7 @@ function rebuild_post($post){
 
 	$post->alt_title = esc_attr(strip_tags($post->filtered_title));
 
+	$post->div_edit_link = ($post->edit_link?"<div class='edit_link'><a href='{$post->edit_link}'><span>".__("Edit this {$post->post_type_label}",TEXTDOMAIN)."</span></a></div><!--/.edit_link-->":'');
 	$post->div_feature = ($post->slide_feature?"<div class='feature'>{$post->filtered_feature}</div>":'').'<!--/.feature-->';
 	$post->div_title = ($post->slide_title?"<{$post->heading} class='title'>{$post->filtered_title}</{$post->heading}>":'').'<!--/.title-->';
 	$post->div_content = ($post->slide_content?"<div class='content'>{$post->filtered_content}</div>":'').'<!--/.content-->';
@@ -175,12 +177,11 @@ EOT;
 
 	if($post->caption_title||$post->caption_content||$post->caption_author||$post->caption_date||$post->caption_category||$post->caption_tag){
 		$popup_switch = $post->format=='image'&&$popup?"<div class='popup_switch'><a href='#entry-{$post->ID}-popup'><span>".__('Read more',TEXTDOMAIN)."</span></a></div>":'';
-		$edit_link = $post->edit_link?"<div class='edit_link'><a href='{$post->edit_link}'><span>".__('Edit this post',TEXTDOMAIN)."</span></a></div>":''; 
 		ob_start();
 		echo <<<EOT
 			<div id="entry-{$post->ID}-caption" class="caption">
 				{$popup_switch}
-				{$edit_link}
+				{$post->div_edit_link}
 				{$post->caption_title}
 				{$post->caption_author}
 				{$post->caption_date}

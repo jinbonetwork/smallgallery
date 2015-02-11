@@ -14,6 +14,11 @@ function on_init(){
 }
 add_action('init','on_init');
 
+function on_after_theme_setup(){
+	load_theme_textdomain(TEXTDOMAIN,get_template_directory().'/languages');
+}
+add_action('after_setup_theme', 'on_after_theme_setup');
+
 function on_wp_enqueue_scripts(){
 	wp_enqueue_style('font-awesome',get_template_directory_uri().'/contrib/font-awesome/css/font-awesome.min.css');
 
