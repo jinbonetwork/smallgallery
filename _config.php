@@ -6,11 +6,11 @@ define('TITLE_TEXT',esc_attr(get_option('blogname')));
 define('TITLE_SEPARATOR',' | ');
 
 define('SLIDE_PADDING','10%');
-define('SLIDE_ANIMATION_DURATION',500); // number of milliseconds
+define('SLIDE_ANIMATION_DURATION','600ms');
 define('SLIDE_ANIMATION_TIMING','linear');
 define('SLIDE_ANIMATION_NAMES','horizontal:corner_in:corner_out');
 
-define('UI_ANIMATION_DURATION',300); // number of milliseconds
+define('UI_ANIMATION_DURATION','300ms');
 define('UI_ANIMATION_TIMING','linear');
 
 define('HEADING','h1');

@@ -7,11 +7,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 	<title><?php wp_title(''); ?></title>
-	<style>
-		section.entry {
-			transition-duration: <?php echo SLIDE_ANIMATION_DURATION; ?>ms;
-		}
-	</style>
 	<script>
 		var $smallgallery = {
 			title: {
@@ -20,10 +15,8 @@
 			},
 			padding: '<?php echo SLIDE_PADDING; ?>',
 			animation: {
-				name: [
-					<?php echo "'".implode("','",explode(':',SLIDE_ANIMATION_NAMES))."'".PHP_EOL; ?>
-				],
-				duration: <?php echo SLIDE_ANIMATION_DURATION; ?>
+				name: [<?php echo "'".implode("','",explode(':',SLIDE_ANIMATION_NAMES))."'".PHP_EOL; ?>],
+				duration: '<?php echo SLIDE_ANIMATION_DURATION; ?>'
 			}
 		};
 	</script>
