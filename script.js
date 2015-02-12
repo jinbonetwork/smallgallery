@@ -88,26 +88,15 @@ function resize(){
 			$img.ratio = $img.attr('width')/$img.attr('height');
 			$box.ratio = $box.availableWidth/$box.availableHeight;
 			if($img.ratio<$box.ratio){
-				$img.css({
-					width: $img.attr('width')*$box.availableHeight/$img.attr('height'),
-					height: $box.availableHeight
-				});
+				$box.availableWidth = $img.attr('width')*$box.availableHeight/$img.attr('height');
 			}else{
-				$img.css({
-					width: $box.availableWidth,
-					height: $img.attr('height')*$box.availableWidth/$img.attr('width')
-				});
+				$box.availableHeight = $img.attr('height')*$box.availableWidth/$img.attr('width');
 			}
-			$box.css({
-				width: $img.width(),
-				height: $box.availableHeight
-			});
-		}else{
-			$box.css({
-				width: $box.availableWidth,
-				height: $box.availableHeight
-			});
 		}
+		$box.css({
+			width: $box.availableWidth,
+			height: $box.availableHeight
+		});
 	});
 }
 

@@ -8,6 +8,35 @@ License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: smallgallery
 */
+/*
+@slide-padding
+@slide-animation-duration
+@slide-animation-timing
+@ui-animation-duration
+@ui-animation-timing
+@text-padding
+*/
+body {
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: "Apple SD Gothic Neo", "AppleGothic", "NanumGothic", "Malgun Gothic", "Dotum", "Gulim", sans-serif;
+  font-size: 0.95em;
+  line-height: 1.8;
+}
+body * {
+  font-family: inherit;
+  margin: 0;
+  padding: 0;
+}
+a,
+a:link,
+a:active,
+a:hover,
+a:visited {
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
 html,
 body {
   position: relative;
@@ -32,7 +61,8 @@ body {
   -moz-transition: opacity 300ms linear;
   -ms-transition: opacity 300ms linear;
   -o-transition: opacity 300ms linear;
-  opacity: 0.3;
+  color: #FFFFFF;
+  opacity: 0.7;
 }
 #header a:hover,
 #navigation a:hover,
@@ -43,7 +73,7 @@ body {
   position: absolute;
   z-index: 4;
   top: 0;
-  left: 36px;
+  left: 40px;
   width: auto;
   height: 40px;
   line-height: 40px;
@@ -51,7 +81,7 @@ body {
 #header h1.site-title {
   margin: 0;
   padding: 0;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: normal;
 }
 #header .site-description {
@@ -78,7 +108,7 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.6);
 }
 #navigation ul.console li.item {
   margin: 0;
@@ -96,21 +126,21 @@ body {
   display: none;
 }
 #navigation ul.console li.item a#toggle-navigation:after {
-  content: '\F0C9';
+  content: '\F0CA';
   font-family: 'FontAwesome';
   display: block;
   width: 40px;
   height: 40px;
   text-align: center;
   line-height: 40px;
-  font-size: 18px;
+  font-size: 14px;
   color: #FFFFFF;
 }
 #navigation ul.console li.item a#toggle-navigation[data-flag='true']:after {
   content: '\F00D';
 }
 #navigation ul.console li.item a#toggle-navigation[data-flag='false']:after {
-  content: '\F0C9';
+  content: '\F0CA';
 }
 #navigation ul.console li.item a#toggle-fullscreen {
   position: absolute;
@@ -122,7 +152,7 @@ body {
   margin: 0;
   padding: 0 0.5em;
   line-height: 40px;
-  font-size: 18px;
+  font-size: 14px;
 }
 #navigation ul.console li.item a#toggle-fullscreen:before {
   content: '\F046';
@@ -148,9 +178,9 @@ body {
   position: absolute;
   z-index: 1;
   top: 0;
-  right: -460px;
+  right: -420px;
   display: block;
-  width: 460px;
+  width: 420px;
   height: 100%;
   margin: 0;
   padding: 50px 0 0 0;
@@ -159,13 +189,14 @@ body {
 #navigation ul.menu li.menu-item {
   display: block;
   margin: 0;
-  padding: 0;
+  padding: 7px 0;
+  border-bottom: 1px solid #919191;
 }
 #navigation ul.menu li.menu-item a {
   display: block;
   margin: 0;
   padding: 0.3em 0.6em;
-  font-size: 18px;
+  font-size: 14px;
 }
 #navigation ul.menu.disabled {
   right: 0;
@@ -185,16 +216,24 @@ body {
   overflow: hidden;
 }
 #container {
+  box-sizing: border-box;
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100%;
+  width: 60%;
   height: 100%;
+  border-top: 40px solid transparent;
+  border-bottom: 120px solid transparent;
   transform: translate(-50%,-50%);
   -webkit-transform: translate(-50%,-50%);
   -moz-transform: translate(-50%,-50%);
   -ms-transform: translate(-50%,-50%);
   -o-transform: translate(-50%,-50%);
+}
+@media all and (max-width: 640px) {
+  #container {
+    width: 100% !important;
+  }
 }
 #control {
   position: absolute;
@@ -203,7 +242,8 @@ body {
   left: 0;
   display: block;
   width: 100%;
-  height: 40px;
+  height: 120px;
+  background-color: #FFFFFF;
 }
 #control ul.items {
   list-style: none;
@@ -242,7 +282,7 @@ body {
   height: 40px;
   text-align: center;
   line-height: 40px;
-  font-size: 18px;
+  font-size: 14px;
   font-family: 'FontAwesome';
 }
 #control ul.items li.item.prev {
@@ -260,45 +300,17 @@ body {
 #footer {
   display: none;
 }
-body {
-  background-color: #000000;
-  color: #FFFFFF;
-  font-family: "Source Sans Pro", Helvetica, Arial, "Apple SD Gothic Neo", "AppleGothic", "Segoe UI", "Meiryo", "Malgun Gothic", "NanumGothic", Verdana, Tahoma, "Dotum", "Gulim", sans-serif;
-}
-body * {
-  font-family: inherit;
-}
-a,
-a:link,
-a:active,
-a:hover,
-a:visited {
-  color: inherit;
-  text-decoration: none;
-  outline: none;
-}
-body.single #container,
-body.home #container {
-  width: 50%;
-}
-@media all and (max-width: 640px) {
-  #container {
-    width: 100% !important;
-  }
-}
 section.entry {
   position: absolute;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
-section.entry.format-standard {
-  overflow-y: auto;
-}
 section.entry.current {
   left: 0%;
 }
 section.entry > .wrap {
+  box-sizing: border-box;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -308,17 +320,123 @@ section.entry > .wrap {
   -ms-transform: translate(-50%,-50%);
   -o-transform: translate(-50%,-50%);
 }
+section.entry > .wrap .feature {
+  position: relative;
+  z-index: 2;
+}
 section.entry > .wrap .feature img {
   display: block;
   width: auto;
   height: 80%;
   max-height: 100%;
 }
+section.entry > .wrap .edit_link {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 0;
+}
+section.entry > .wrap .edit_link a {
+  opacity: 0.3;
+  transform: all 300ms linear;
+  -webkit-transition: all 300ms linear;
+  -moz-transition: all 300ms linear;
+  -ms-transition: all 300ms linear;
+  -o-transition: all 300ms linear;
+  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  position: relative;
+  top: -24px;
+  display: block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  font-size: 24px;
+}
+section.entry > .wrap .edit_link a:hover {
+  opacity: 1;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+}
+section.entry > .wrap .edit_link a:after {
+  content: '\F013';
+  font-family: 'FontAwesome';
+  display: block;
+  width: inherit;
+  height: inherit;
+  text-align: center;
+  line-height: inherit;
+  font-size: inherit;
+}
+section.entry > .wrap .edit_link a span {
+  display: none;
+}
+section.entry.format-standard {
+  overflow-y: auto;
+}
 section.entry.format-image > .wrap .popup {
   display: none;
 }
+section.entry.format-image .feature img {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 15px;
+  border: 20px solid #000000;
+  box-shadow: 0 0 5px rgba(0,0,0,0.9);
+}
+section.entry.format-image .caption {
+  margin-top: 20px;
+}
+section.entry.format-image .caption div.author a {
+  display: inline-block;
+  min-width: 80px;
+  padding: 4px 8px;
+  color: #FFFFFF;
+  font-size: 12px;
+  background: #3A383D;
+}
+section.entry.format-standard > .wrap {
+  padding: 20px;
+}
+section.entry.format-standard > .wrap .title {
+  font-family: "NanumMyeongjo", "Apple SD Gothic Neo", "AppleGothic", "NanumGothic", "Malgun Gothic", "Dotum", "Gulim", sans-serif;
+  font-size: 1.6em;
+  margin-bottom: 50px;
+}
+section.entry.format-standard > .wrap .content {
+  column-count: 2;
+  column-gap: 40px;
+  -webkit-column-count: 2;
+  -webkit-column-gap: 40px;
+  -moz-column-count: 2;
+  -moz-column-gap: 40px;
+}
+section.entry.format-standard > .wrap .content p {
+  margin-bottom: 20px;
+  text-align: justify;
+}
+section.entry.format-standard > .wrap .content ul {
+  font-family: "NanumMyeongjo", "Apple SD Gothic Neo", "AppleGothic", "NanumGothic", "Malgun Gothic", "Dotum", "Gulim", sans-serif;
+  font-size: 0.9em;
+  color: #636363;
+  padding-top: 10px;
+  margin-top: 20px;
+  list-style: none;
+  border-top: 1px solid #3A383D;
+}
 section.entry.archive > .wrap {
-  max-width: 50%;
+  max-width: 60%;
+}
+section.entry.archive > .wrap div.description {
+  display: none;
 }
 section.entry.archive > .wrap ul.thumbnail-archives {
   list-style: none;
@@ -431,4 +549,31 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a img {
 }
 #container section.entry.next.expired {
   left: 200%;
+}
+::-webkit-scrollbar {
+  width: 0.5em;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb {
+  background-color: red;
+  outline: 1px solid slategrey;
+}
+#control {
+  background: #707172 url(images/floor.jpg) repeat-x top left;
+}
+section.entry.slide-weight-1 > .wrap > .popup > .title {
+  font-family: "NanumMyeongjo", "Apple SD Gothic Neo", "AppleGothic", "NanumGothic", "Malgun Gothic", "Dotum", "Gulim", sans-serif;
+  font-size: 2.2em;
+  line-height: 1.2;
+  margin-bottom: 100px;
+}
+section.entry.slide-weight-1 > .wrap > .caption > .author a {
+  display: inline-block;
+  background: #3A383D;
+  color: #FFFFFF;
+  font-size: 0.7em;
+  font-weight: normal;
+  line-height: 1.1;
 }

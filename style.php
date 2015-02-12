@@ -16,10 +16,12 @@ if(DEBUG||!file_exists(OUTPUT)||filemtime(SOURCE)>filemtime(OUTPUT)){
 	$less = new lessc;
 	try{
 		$less->setVariables(array(
-			'slide-animation-duration' => SLIDE_ANIMATION_DURATION,
+			'slide-padding' => SLIDE_PADDING,
+			'slide-animation-duration' => SLIDE_ANIMATION_DURATION.'ms',
 			'slide-animation-timing' => SLIDE_ANIMATION_TIMING,
-			'ui-animation-duration' => UI_ANIMATION_DURATION,
+			'ui-animation-duration' => UI_ANIMATION_DURATION.'ms',
 			'ui-animation-timing' => UI_ANIMATION_TIMING,
+			'text-padding' => TEXT_PADDING,
 		));
 		$less->setPreserveComments(true);
 		if(DEBUG){

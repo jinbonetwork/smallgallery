@@ -25,7 +25,7 @@ function on_wp_enqueue_scripts(){
 	wp_enqueue_style('fancybox',get_template_directory_uri().'/contrib/fancybox/source/jquery.fancybox.css');
 	wp_enqueue_script('fancybox',get_template_directory_uri().'/contrib/fancybox/source/jquery.fancybox.pack.js',array('jquery'));
 
-	wp_enqueue_style('smallgallery',get_template_directory_uri().'/less.php',array('font-awesome'));
+	wp_enqueue_style('smallgallery',get_template_directory_uri().'/style.php',array('font-awesome'));
 	wp_enqueue_script('smallgallery',get_template_directory_uri().'/script.js',array('jquery','fancybox'));
 }
 add_action('wp_enqueue_scripts','on_wp_enqueue_scripts');
