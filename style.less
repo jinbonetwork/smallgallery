@@ -24,6 +24,8 @@ Text Domain: smallgallery
 //-----------------------------------------------------------------------------
 //	Mixins, Rulsets, General classes
 //-----------------------------------------------------------------------------
+@narrow-width-point: 960px;
+@responsive-width-point: 640px;
 @slide-width: 60%;
 @ui-menu-height: 40px;
 @ui-control-height: 120px;
@@ -292,13 +294,24 @@ body {
 	border-top: @ui-menu-height solid transparent;
 	border-bottom: @ui-control-height solid transparent;
 	.transform(translate(-50%,-50%));
-}
 
-@media all and ( max-width: 640px ) {
-	#container {
-		width: 100% !important;
+	body.archive &,
+	body.page & {
+		width: 100%;
+		border-bottom: 0 none;
 	}
 }
+@media all and ( max-width: @responsive-width-point ) {
+	#container {
+		width: 100%;
+	}
+}
+@media all and ( max-height: @responsive-width-point ) {
+	#container {
+		border-bottom: 0 none;
+	}
+}
+
 
 #control {
 	position: absolute;
@@ -373,6 +386,11 @@ body {
 		}
 	}
 }
+@media all and ( max-height: @responsive-width-point ) {
+	#control {
+		display: none;
+	}
+}
 
 #footer {
 	display: none;
@@ -417,6 +435,7 @@ section.entry {
 			top: 0;
 			right: 0;
 
+
 			a {
 				opacity: 0.3;
 				.transition(all @ui-animation-duration @ui-animation-timing);
@@ -452,10 +471,6 @@ section.entry {
 		}
 	}
 
-	&.format-standard {
-		overflow-y: auto;
-	}
-
 	&.format-image {
 
 		& > .wrap {
@@ -463,33 +478,33 @@ section.entry {
 			.popup {
 				display: none;
 			}
-		}
 
-		.feature {
+			.feature {
 
-			img {
-				box-sizing: border-box;
-				display: block;
-				width: 100%;
-				height: auto;
-				padding: 15px;
-				border: 20px solid #000000;
-				box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
+				img {
+					box-sizing: border-box;
+					display: block;
+					width: 100%;
+					height: auto;
+					padding: 15px;
+					border: 20px solid #000000;
+					box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
+				}
 			}
-		}
 
-		.caption {
-			margin-top: 20px;
-			
-			div.author {
+			.caption {
+				margin-top: 20px;
 				
-				a {
-					display: inline-block;
-					min-width: 80px;
-					padding: 4px 8px;
-					color: #FFFFFF;
-					font-size: 12px;
-					background: #3A383D;
+				div.author {
+					
+					a {
+						display: inline-block;
+						min-width: 80px;
+						padding: 4px 8px;
+						color: #FFFFFF;
+						font-size: 12px;
+						background: #3A383D;
+					}
 				}
 			}
 		}
@@ -498,7 +513,6 @@ section.entry {
 	&.format-standard {
 
 		& > .wrap {
-			padding: @text-padding;
 
 			.title {
 				font-family: @serif;
@@ -527,6 +541,35 @@ section.entry {
 					margin-top: 20px;
 					list-style: none;
 					border-top: 1px solid #3A383D;
+				}
+			}
+		}
+
+		&.post {
+
+			& > .wrap {
+				overflow-y: auto;
+				padding: @text-padding;
+				box-shadow: 0 0 10px rgba(0,0,0,0.2);
+			}
+		}
+
+		&.page {
+			overflow-y: auto;
+		}
+	}
+}
+@media all and ( max-width: @narrow-width-point ){
+	section.entry {
+
+		&.format-standard {
+
+			& > .wrap {
+
+				.content {
+					column-count: 1;
+					-webkit-column-count: 1;
+					-moz-column-count: 1;
 				}
 			}
 		}
@@ -601,33 +644,31 @@ section.entry.archive {
 	}
 }
 
-#container { // default animation: horizontal(0)
-	section.entry {
-		transition-duration: @slide-animation-duration;
-		.transform(translateZ(0));
+section.entry {
+	transition-duration: @slide-animation-duration;
+	.transform(translateZ(0));
 
-		&.prev {
-			left: -100%;
+	&.prev {
+		left: -100%;
 
-			&.fresh {
-				.animation(horizontal-prev @slide-animation-duration @slide-animation-timing);
-			}
-
-			&.expired {
-				left: -200%;
-			}
+		&.fresh {
+			.animation(horizontal-prev @slide-animation-duration @slide-animation-timing);
 		}
 
-		&.next {
-			left: 100%;
+		&.expired {
+			left: -200%;
+		}
+	}
 
-			&.fresh {
-				.animation(horizontal-next @slide-animation-duration @slide-animation-timing);
-			}
+	&.next {
+		left: 100%;
 
-			&.expired {
-				left: 200%;
-			}
+		&.fresh {
+			.animation(horizontal-next @slide-animation-duration @slide-animation-timing);
+		}
+
+		&.expired {
+			left: 200%;
 		}
 	}
 }

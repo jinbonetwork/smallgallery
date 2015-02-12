@@ -4,7 +4,7 @@ define('LESS',DIR.'/contrib/lessphp/lessc.inc.php');
 define('SOURCE',DIR.'/style.less');
 define('OUTPUT',DIR.'/style.css');
 
-if(DEBUG||!file_exists(OUTPUT)||filemtime(SOURCE)>filemtime(OUTPUT)){
+if(DEBUG_CSS||!file_exists(OUTPUT)||filemtime(SOURCE)>filemtime(OUTPUT)){
 	define('WP_USE_THEMES', false);
 
 	//require_once dirname(__FILE__).'/../../../wp-blog-header.php'; // 404 header failure
@@ -24,7 +24,7 @@ if(DEBUG||!file_exists(OUTPUT)||filemtime(SOURCE)>filemtime(OUTPUT)){
 			'text-padding' => TEXT_PADDING,
 		));
 		$less->setPreserveComments(true);
-		if(DEBUG){
+		if(DEBUG_CSS){
 			$less->compileFile(SOURCE,OUTPUT);
 		}else{
 			$less->checkedCompile(SOURCE,OUTPUT);

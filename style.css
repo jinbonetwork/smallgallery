@@ -230,9 +230,19 @@ body {
   -ms-transform: translate(-50%,-50%);
   -o-transform: translate(-50%,-50%);
 }
+body.archive #container,
+body.page #container {
+  width: 100%;
+  border-bottom: 0 none;
+}
 @media all and (max-width: 640px) {
   #container {
-    width: 100% !important;
+    width: 100%;
+  }
+}
+@media all and (max-height: 640px) {
+  #container {
+    border-bottom: 0 none;
   }
 }
 #control {
@@ -296,6 +306,11 @@ body {
 }
 #control ul.items li.item.next a:before {
   content: '\F061';
+}
+@media all and (max-height: 640px) {
+  #control {
+    display: none;
+  }
 }
 #footer {
   display: none;
@@ -377,13 +392,10 @@ section.entry > .wrap .edit_link a:after {
 section.entry > .wrap .edit_link a span {
   display: none;
 }
-section.entry.format-standard {
-  overflow-y: auto;
-}
 section.entry.format-image > .wrap .popup {
   display: none;
 }
-section.entry.format-image .feature img {
+section.entry.format-image > .wrap .feature img {
   box-sizing: border-box;
   display: block;
   width: 100%;
@@ -392,19 +404,16 @@ section.entry.format-image .feature img {
   border: 20px solid #000000;
   box-shadow: 0 0 5px rgba(0,0,0,0.9);
 }
-section.entry.format-image .caption {
+section.entry.format-image > .wrap .caption {
   margin-top: 20px;
 }
-section.entry.format-image .caption div.author a {
+section.entry.format-image > .wrap .caption div.author a {
   display: inline-block;
   min-width: 80px;
   padding: 4px 8px;
   color: #FFFFFF;
   font-size: 12px;
   background: #3A383D;
-}
-section.entry.format-standard > .wrap {
-  padding: 20px;
 }
 section.entry.format-standard > .wrap .title {
   font-family: "NanumMyeongjo", "Apple SD Gothic Neo", "AppleGothic", "NanumGothic", "Malgun Gothic", "Dotum", "Gulim", sans-serif;
@@ -431,6 +440,21 @@ section.entry.format-standard > .wrap .content ul {
   margin-top: 20px;
   list-style: none;
   border-top: 1px solid #3A383D;
+}
+section.entry.format-standard.post > .wrap {
+  overflow-y: auto;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+section.entry.format-standard.page {
+  overflow-y: auto;
+}
+@media all and (max-width: 960px) {
+  section.entry.format-standard > .wrap .content {
+    column-count: 1;
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+  }
 }
 section.entry.archive > .wrap {
   max-width: 60%;
@@ -516,7 +540,7 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a img {
     -o-transform: translateX(0);
   }
 }
-#container section.entry {
+section.entry {
   transition-duration: 600ms;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
@@ -524,30 +548,30 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a img {
   -ms-transform: translateZ(0);
   -o-transform: translateZ(0);
 }
-#container section.entry.prev {
+section.entry.prev {
   left: -100%;
 }
-#container section.entry.prev.fresh {
+section.entry.prev.fresh {
   animation: horizontal-prev 600ms linear;
   -webkit-animation: horizontal-prev 600ms linear;
   -moz-animation: horizontal-prev 600ms linear;
   -ms-animation: horizontal-prev 600ms linear;
   -o-animation: horizontal-prev 600ms linear;
 }
-#container section.entry.prev.expired {
+section.entry.prev.expired {
   left: -200%;
 }
-#container section.entry.next {
+section.entry.next {
   left: 100%;
 }
-#container section.entry.next.fresh {
+section.entry.next.fresh {
   animation: horizontal-next 600ms linear;
   -webkit-animation: horizontal-next 600ms linear;
   -moz-animation: horizontal-next 600ms linear;
   -ms-animation: horizontal-next 600ms linear;
   -o-animation: horizontal-next 600ms linear;
 }
-#container section.entry.next.expired {
+section.entry.next.expired {
   left: 200%;
 }
 ::-webkit-scrollbar {

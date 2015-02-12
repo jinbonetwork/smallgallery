@@ -1,5 +1,3 @@
-console.log = function(){};
-
 var $container = {};
 var $control = {};
 var $slideshow = {
@@ -48,24 +46,17 @@ function init_flags(){
 	});
 }
 
-function resize(){
-	/*
-	$slideshow.style = {
-		entry: {
-			width: $container.width(),
-			height: $container.height()
-		}
-	};
-	jQuery('section.entry').css($slideshow.style.entry);
-	if($slideshow.next){
-		$slideshow.next.css($slideshow.style.cache);
-	}
-	if($slideshow.prev){
-		$slideshow.prev.css($slideshow.style.cache);
-	}
-	*/
+function resize(position){
+	position = position || '';
+    position = 'section.entry'+(position!=''?'.'+position:'');
 
-	jQuery('section.entry').each(function(index){
+    var flag = '['+position+']';
+    var padding = $smallgallery.padding;
+    var padnum = $smallgallery.padding.replace(/(\%|px)$/,'');
+
+    console.log('RESIZE: redrawing '+flag);
+
+	jQuery(position).each(function(index){
 		var $entry = jQuery(this);
 		var $box = $entry.children('.wrap');
 		var $img = $entry.find('.feature img');
@@ -73,15 +64,13 @@ function resize(){
 		$box.availableWidth = $entry.width();
 		$box.availableHeight = $entry.height();
 
-		var padding = $smallgallery.padding.replace(/(\%|px)$/,'');
-
-		if($smallgallery.padding.search(/\%$/)>0){
-			$box.availableWidth = $box.availableWidth-(($entry.width()/padding)*2);
-			$box.availableHeight = $box.availableHeight-(($entry.height()/padding)*2);
+		if(padding.search(/\%$/)>0){
+			$box.availableWidth = $box.availableWidth-(($entry.width()/padnum)*2);
+			$box.availableHeight = $box.availableHeight-(($entry.height()/padnum)*2);
 		}
-		if($smallgallery.padding.search(/px$/)>0){
-			$box.availableWidth = $box.availableWidth-(padding*2);
-			$box.availableHeight = $box.availableHeight-(padding*2);
+		if(padding.search(/px$/)>0){
+			$box.availableWidth = $box.availableWidth-(padnum*2);
+			$box.availableHeight = $box.availableHeight-(padnum*2);
 		}
 
 		if($img.length){
@@ -93,10 +82,13 @@ function resize(){
 				$box.availableHeight = $img.attr('height')*$box.availableWidth/$img.attr('width');
 			}
 		}
+
+        console.log('RESIZE: '+flag+' => available resolution is '+$box.availableWidth+'x'+$box.availableHeight);
 		$box.css({
 			width: $box.availableWidth,
 			height: $box.availableHeight
 		});
+		console.log('RESIZE: '+flag+' => content resolution is '+$box.width()+'x'+$box.height());
 	});
 }
 
@@ -133,7 +125,7 @@ function load(source,position){
 			.always(function(data){
 				console.log('END: load '+flag+' item -- '+source);
 				update_control();
-				resize();
+				resize(position);
 			});
 	}else{
 		console.log('ABORT: '+flag+' item already exists');
@@ -373,28 +365,60 @@ jQuery(document).ready(function(e){
 	jQuery(document).on('webkitfullscreenchange',function(e){fullscreenchange();});
 	jQuery(document).on('mozfullscreenchange',function(e){fullscreenchange();});
 
-	jQuery(document).on('swipeleft',function(e){
-		jQuery('#control .prev a').click();
+	jQuery('#container').swipe({
+		swipe:function(e,direction,distance,duration,fingerCount,fingerData){
+			switch(direction){
+				case 'right':
+					jQuery('#control .prev a').click();
+				break;
+				case 'left':
+					jQuery('#control .next a').click();
+				break;
+			}
+		},
+		threadhold: 75
 	});
+    jQuery(document).keydown(function(e){
+        var domain = e.target;
+        var pressed = e.charCode || e.keyCode || e.which;
+        var is_popup = jQuery('.popup-content').length?true:false;
 
-	jQuery(document).on('swiperight',function(e){
-		jQuery('#control .next a').click();
-	});
+        if(domain=='input'||domain=='textarea'){
+            return;
+        }
 
-	jQuery(document).keydown(function(e){
-		switch(e.which){
-			case 37: // left
-				jQuery('#control .prev a').click();
-			break;
-			case 39: // right
-				jQuery('#control .next a').click();
-			break;
-			case 38: // up
-			case 40: // down
-				jQuery('#toggle-navigation').click();
-			break;
-		}
-	});
+        console.log('KEY PRESSED: #'+pressed);
+
+        switch(pressed){
+            case 37: // left
+                if(!is_popup){
+                    jQuery('#control .prev a').click();
+                }
+            break;
+            case 39: // right
+                if(!is_popup){
+                    jQuery('#control .next a').click();
+                }
+            break;
+            case 38: // up
+            break;
+            case 40: // down
+            break;
+            case 70: // f
+                jQuery('#toggle-fullscreen').click();
+            break;
+            case 80: // p
+                if(is_popup){
+                    jQuery.fancybox.close();
+                }else{
+                    jQuery('section.entry.current .popup_switch a').click();
+                }
+            break;
+            case 27: // esc
+                return false;
+            break;
+        }
+    });
 
 	if(is_fullscreen()){
 		jQuery('#toggle-fullscreen').attr('data-flag','true');
@@ -402,6 +426,7 @@ jQuery(document).ready(function(e){
 		jQuery('#toggle-fullscreen').attr('data-flag','false');
 	}
 
+	resize();
 	bind_entry_events();
 	init_flags();
 	init();

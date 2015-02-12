@@ -8,6 +8,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 	<title><?php wp_title(''); ?></title>
 	<script>
+        <?php if(!DEBUG_SCRIPT){ ?>console.log = function(){};<?php } ?>
 		var $smallgallery = {
 			title: {
 				text: '<?php echo TITLE_TEXT; ?>',

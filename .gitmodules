@@ -10,3 +10,6 @@
 [submodule "contrib/fancybox"]
 	path = contrib/fancybox
 	url = https://github.com/fancyapps/fancyBox.git
+[submodule "contrib/touchswipe"]
+	path = contrib/touchswipe
+	url = https://github.com/jinbonetwork/TouchSwipe-Jquery-Plugin.git
