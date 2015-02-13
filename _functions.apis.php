@@ -48,20 +48,38 @@ function rebuild_post($post){
 	$post->permalink = get_permalink($post->ID);
 
 	if($post->post_type=='post'){
+		$post->pprev_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_date < '{$post->post_date}' ORDER BY post_date DESC LIMIT 1,1");
 		$post->prev_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_date < '{$post->post_date}' ORDER BY post_date DESC LIMIT 1");
-		if(!$post->prev_ID){
+		if(!$post->pprev_ID&&$post->prev_ID){
+			$post->pprev_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 1");
+		}else if(!$post->pprev_ID&&!$post->prev_ID){
+			$post->pprev_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 1,1");
 			$post->prev_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date DESC LIMIT 1");
 		}
 		$post->next_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_date > '{$post->post_date}' ORDER BY post_date ASC LIMIT 1");
-		if(!$post->next_ID){
+		$post->nnext_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_date > '{$post->post_date}' ORDER BY post_date ASC LIMIT 1,1");
+		if($post->next_ID&&!$post->nnext_ID){
+			$post->nnext_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date ASC LIMIT 1");
+		}else if(!$post->next_ID&&!$post->nnext_ID){
 			$post->next_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date ASC LIMIT 1");
+			$post->nnext_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' ORDER BY post_date ASC LIMIT 1,1");
 		}
 	}
+
+	if($post->pprev_ID){
+		$post->pprev_permalink = get_permalink($post->pprev_ID);
+	}
+
 	if($post->prev_ID){
 		$post->prev_permalink = get_permalink($post->prev_ID);
 	}
+
 	if($post->next_ID){
 		$post->next_permalink = get_permalink($post->next_ID);
+	}
+
+	if($post->nnext_ID){
+		$post->nnext_permalink = get_permalink($post->nnext_ID);
 	}
 
 	$post->categories = get_the_category($post->ID);
@@ -196,7 +214,7 @@ EOT;
 
 	ob_start();
 	echo <<<EOT
-<section id="entry-{$post->ID}" class="current {$post->class}" data-ID="{$post->ID}" data-title="{$post->alt_title}" data-permalink="{$post->permalink}" data-animation="{$post->slide_animation}" data-prev_permalink="{$post->prev_permalink}" data-next_permalink="{$post->next_permalink}">
+<section id="entry-{$post->ID}" class="current {$post->class}" data-ID="{$post->ID}" data-title="{$post->alt_title}" data-permalink="{$post->permalink}" data-animation="{$post->slide_animation}" data-pprev_permalink="{$post->pprev_permalink}" data-prev_permalink="{$post->prev_permalink}" data-next_permalink="{$post->next_permalink}" data-nnext_permalink="{$post->nnext_permalink}">
 	<div class="wrap">
 		{$post->div_feature}
 		{$caption}
@@ -224,8 +242,8 @@ function build_control($post){
 	echo <<<EOT
 		<nav id="control" class="autofade" data-autofade-default-opacity="0">
 			<ul class="items">
-				<li class="item prev disabled"><a href="{$post->prev_permalink}"><span>{$prev_label}</span></a></li>
-				<li class="item next disabled"><a href="{$post->next_permalink}"><span>{$next_label}</span></a></li>
+				<li class="item prev disabled" data-position="prev"><a href="{$post->prev_permalink}"><span>{$prev_label}</span></a></li>
+				<li class="item next disabled" data-position="next"><a href="{$post->next_permalink}"><span>{$next_label}</span></a></li>
 			</ul>
 		</nav><!--/#control-->
 EOT;

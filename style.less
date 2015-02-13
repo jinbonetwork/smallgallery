@@ -336,6 +336,7 @@ body {
 		padding: 0;
 
 		li.item {
+			.transition(all @ui-animation-duration @ui-animation-timing);
 			position: absolute;
 			top: 0;
 			display: block;
@@ -382,6 +383,10 @@ body {
 						content: '\F061';
 					}
 				}
+			}
+
+			&.disabled {
+				opacity: 0.3;
 			}
 		}
 	}
@@ -554,7 +559,8 @@ section.entry {
 			}
 		}
 
-		&.page {
+		&.page,
+		&.archive {
 			overflow-y: auto;
 		}
 	}
@@ -613,40 +619,52 @@ section.entry.archive {
 //-----------------------------------------------------------------------------
 @keyframes horizontal-prev {
 	from {
-		.transform(translateX(-100%));
+		opacity: 0;
 	}
 	to {
-		.transform(translateX(0));
+		opacity: 1;
 	}
 }
 @-webkit-keyframes horizontal-prev {
 	from {
-		.transform(translateX(-100%));
+		opacity: 0;
 	}
 	to {
-		.transform(translateX(0));
+		opacity: 1;
 	}
 }
 @keyframes horizontal-next {
 	from {
-		.transform(translateX(100%));
+		opacity: 0;
 	}
 	to {
-		.transform(translateX(0));
+		opacity: 1;
 	}
 }
 @-webkit-keyframes horizontal-next {
 	from {
-		.transform(translateX(100%));
+		opacity: 0;
 	}
 	to {
-		.transform(translateX(0));
+		opacity: 1;
 	}
 }
 
 section.entry {
 	transition-duration: @slide-animation-duration;
 	.transform(translateZ(0));
+
+	&.pprev {
+		opacity: 0;
+		left: -200%;
+
+		&.fresh {
+		}
+
+		&.expired {
+			left: -300%;
+		}
+	}
 
 	&.prev {
 		left: -100%;
@@ -669,6 +687,18 @@ section.entry {
 
 		&.expired {
 			left: 200%;
+		}
+	}
+
+	&.nnext {
+		opacity: 0;
+		left: 200%;
+
+		&.fresh {
+		}
+
+		&.expired {
+			left: 300%;
 		}
 	}
 }

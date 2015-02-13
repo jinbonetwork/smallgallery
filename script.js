@@ -2,8 +2,10 @@ var $container = {};
 var $control = {};
 var $slideshow = {
 	current: null,
+	pprev: null,
 	prev: null,
 	next: null,
+	nnext: null,
 	direction: null,
 	animation: null,
 	garbage: []
@@ -19,12 +21,21 @@ function init(){
 
 	// load prev/next entries
 	var _next_source = $slideshow.current.attr('data-next_permalink');
+	var _prev_source = $slideshow.current.attr('data-prev_permalink');
+	var _nnext_source = $slideshow.current.attr('data-nnext_permalink');
+	var _pprev_source = $slideshow.current.attr('data-pprev_permalink');
+
 	if(_next_source){
 		load(_next_source,'next');
 	}
-	var _prev_source = $slideshow.current.attr('data-prev_permalink');
 	if(_prev_source){
 		load(_prev_source,'prev');
+	}
+	if(_nnext_source){
+		load(_nnext_source,'nnext');
+	}
+	if(_pprev_source){
+		load(_pprev_source,'pprev');
 	}
 }
 
@@ -59,11 +70,14 @@ function resize(position){
 	jQuery(position).each(function(index){
 		var $entry = jQuery(this);
 		var $box = $entry.children('.wrap');
-		var $img = $entry.find('.feature img');
+		var $feature = $box.find('.feature');
+		var $img = $feature.find('img');
 
+		// get default size
 		$box.availableWidth = $entry.width();
 		$box.availableHeight = $entry.height();
 
+		// adjust size with given padding value
 		if(padding.search(/\%$/)>0){
 			$box.availableWidth = $box.availableWidth-(($entry.width()/padnum)*2);
 			$box.availableHeight = $box.availableHeight-(($entry.height()/padnum)*2);
@@ -73,20 +87,38 @@ function resize(position){
 			$box.availableHeight = $box.availableHeight-(padnum*2);
 		}
 
+		// consider feature image size
 		if($img.length){
-			$img.ratio = $img.attr('width')/$img.attr('height');
+			console.log('RESIZE: '+flag+' has a featured image => '+$feature.width()+'x'+$feature.height());
+
+			// check natural size of image
+			$feature.givenWidth = $feature.width();
+			$feature.givenHeight = $feature.height();
+
+			// check aspect ratios of image and container
+			$feature.ratio = $feature.givenWidth/$feature.givenHeight;
 			$box.ratio = $box.availableWidth/$box.availableHeight;
-			if($img.ratio<$box.ratio){
-				$box.availableWidth = $img.attr('width')*$box.availableHeight/$img.attr('height');
+
+			if($feature.ratio>$box.ratio){
+				// if image is wider, limit it's width
+				$feature.availableWidth = $box.availableWidth;
+				$feature.availableHeight = $feature.givenHeight*$feature.availableWidth/$feature.givenWidth;
 			}else{
-				$box.availableHeight = $img.attr('height')*$box.availableWidth/$img.attr('width');
+				// if container is wider, limit image's height
+				$feature.availableHeight = $box.availableHeight;
+				$feature.availableWidth = $feature.givenWidth*$feature.availableHeight/$feature.givenHeight;
 			}
+			$box.availableWidth = $feature.availableWidth;
+			$box.availableHeight = $feature.availableHeight;
 		}
 
+		// apply calculated size
         console.log('RESIZE: '+flag+' => available resolution is '+$box.availableWidth+'x'+$box.availableHeight);
 		$box.css({
 			width: $box.availableWidth,
-			height: $box.availableHeight
+			//height: $img.length?'auto':$box.availableHeight,
+			height: 'auto',
+			maxHeight: $img.length?$entry.height():$box.availableHeight
 		});
 		console.log('RESIZE: '+flag+' => content resolution is '+$box.width()+'x'+$box.height());
 	});
@@ -101,29 +133,29 @@ function load(source,position){
 		console.log('_SOURCE FILTERED: '+flag+' using '+source+' => '+source_filtered);
 
 		var _markup;
-		var _object;
-
 		jQuery.getJSON(source_filtered)
 			.done(function(data){
+				console.log('_DATA LOADED: '+flag+' using '+source_filtered+' => #'+data.ID);
+
 				_markup = jQuery(data.filtered_post).removeClass('current').addClass('fresh '+position);
 				switch(position){
+					case 'pprev':
 					case 'prev':
-						_object = _markup.addClass('prev');
-						$container.prepend(_object);
+						$container.prepend(_markup);
 					break;
+					case 'nnext':
 					case 'next':
-						_object = _markup.addClass('next');
-						$container.append(_object);
+						$container.append(_markup);
 					break;
 				}
-				bind_entry_events(_object.attr('id'));
-				console.log('_DATA LOADED: '+flag+' using '+source_filtered+' => #'+data.ID);
+				bind_entry_events(_markup.attr('id'));
 			})
 			.error(function(data){
 				console.log('_ERROR: '+flag+' using '+source+' => '+data);
 			})
 			.always(function(data){
 				console.log('END: load '+flag+' item -- '+source);
+
 				update_control();
 				resize(position);
 			});
@@ -155,8 +187,10 @@ function bind_entry_events(id){
 }
 
 function update_control(){
+	var _pprev_permalink = $slideshow.current.attr('data-pprev_permalink');
 	var _prev_permalink = $slideshow.current.attr('data-prev_permalink');
 	var _next_permalink = $slideshow.current.attr('data-next_permalink');
+	var _nnext_permalink = $slideshow.current.attr('data-nnext_permalink');
 
 	// update control buttons
 	if($control.prev.find('a').attr('href')!=_prev_permalink){
@@ -169,19 +203,30 @@ function update_control(){
 	}
 
 	// check prev/next entries and enable control buttons
-	$slideshow.prev = jQuery('[data-permalink="'+_prev_permalink+'"]');
 	$slideshow.next = jQuery('[data-permalink="'+_next_permalink+'"]');
+	if($slideshow.next.length){
+		console.log('ENTRY: new [next] => #'+$slideshow.next.attr('data-ID'));
+
+		$control.next.removeClass('disabled');
+		console.log('CONTROL: [next] button enabled');
+	}
+
+	$slideshow.prev = jQuery('[data-permalink="'+_prev_permalink+'"]');
 	if($slideshow.prev.length){
 		console.log('ENTRY: new [prev] => #'+$slideshow.prev.attr('data-ID'));
 
 		$control.prev.removeClass('disabled');
 		console.log('CONTROL: [prev] button enabled');
 	}
-	if($slideshow.next.length){
-		console.log('ENTRY: new [next] => #'+$slideshow.next.attr('data-ID'));
 
-		$control.next.removeClass('disabled');
-		console.log('CONTROL: [next] button enabled');
+	$slideshow.nnext = jQuery('[data-permalink="'+_nnext_permalink+'"]');
+	if($slideshow.nnext.length){
+		console.log('ENTRY: new [nnext] => #'+$slideshow.nnext.attr('data-ID'));
+	}
+
+	$slideshow.pprev = jQuery('[data-permalink="'+_pprev_permalink+'"]');
+	if($slideshow.pprev.length){
+		console.log('ENTRY: new [pprev] => #'+$slideshow.pprev.attr('data-ID'));
 	}
 }
 
@@ -265,7 +310,6 @@ function is_fullscreen(){
 	return is_fullscreen;
 }
 	
-
 jQuery(document).ready(function(e){
 	$container = jQuery('#container');
 	$control = jQuery('#control');
@@ -276,10 +320,12 @@ jQuery(document).ready(function(e){
 		e.preventDefault();
 		var $trigger = jQuery(this);
 		var $box = $trigger.closest('li');
-		var position;
+		var position = $box.attr('data-position');
 		var _current;
-		var _prev;
 		var _next;
+		var _prev;
+		var _nnext;
+		var _pprev;
 		var _garbage;
 
 		if($box.hasClass('disabled')){
@@ -291,23 +337,23 @@ jQuery(document).ready(function(e){
 			$control.next.addClass('disabled');
 			console.log('CONTROL: [prev] button disabled');
 
-			// check trigger position
-			position = $box.hasClass('prev')?'prev':position;
-			position = $box.hasClass('next')?'next':position;
-
 			// determine things to do
 			$slideshow.direction = position;
 			_current = $slideshow[position];
 			switch(position){
 				case 'prev':
-					_next = $slideshow.current;
 					$slideshow.animation = $smallgallery.animation.name[$slideshow.current.attr('data-animation')];
-					_garbage = $slideshow.next.addClass('expired').attr('data-ID');
+					_prev = $slideshow.pprev;
+					_nnext = $slideshow.next;
+					_next = $slideshow.current;
+					_garbage = $slideshow.nnext.addClass('expired').attr('data-ID');
 				break;
 				case 'next':
-					_prev = $slideshow.current;
 					$slideshow.animation = $smallgallery.animation.name[$slideshow.next.attr('data-animation')];
-					_garbage = $slideshow.prev.addClass('expired').attr('data-ID');
+					_next = $slideshow.nnext;
+					_pprev = $slideshow.prev;
+					_prev = $slideshow.current;
+					_garbage = $slideshow.pprev.addClass('expired').attr('data-ID');
 				break;
 				default:
 					_garbage = null;
@@ -325,12 +371,19 @@ jQuery(document).ready(function(e){
 			}
 
 			// reset classes
-			$slideshow.current = _current.removeClass('current prev next fresh').addClass('current');
+			var classes_to_remove = 'pprev prev current next nnext';
+			$slideshow.current = _current.removeClass(classes_to_remove+' fresh').addClass('current');
 			if(_next){
-				$slideshow.next = _next.removeClass('current prev next').addClass('next');
+				$slideshow.next = _next.removeClass(classes_to_remove).addClass('next');
 			}
 			if(_prev){
-				$slideshow.prev = _prev.removeClass('current prev next').addClass('prev');
+				$slideshow.prev = _prev.removeClass(classes_to_remove).addClass('prev');
+			}
+			if(_nnext){
+				$slideshow.nnext = _nnext.removeClass(classes_to_remove).addClass('nnext');
+			}
+			if(_pprev){
+				$slideshow.pprev = _pprev.removeClass(classes_to_remove).addClass('pprev');
 			}
 
 			// init

@@ -1,6 +1,3 @@
-[submodule "contrib/PhotoSwipe"]
-	path = contrib/PhotoSwipe
-	url = https://github.com/dimsemenov/PhotoSwipe.git
 [submodule "contrib/lessphp"]
 	path = contrib/lessphp
 	url = https://github.com/leafo/lessphp.git
