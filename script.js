@@ -438,8 +438,12 @@ jQuery(document).ready(function(e){
 				case 'left':
 					jQuery('#control .next a').click();
 				break;
+				default:
+					return;
+				break;
 			}
 		},
+		allowPageScroll: 'vertical',
 		threadhold: 75
 	});
     jQuery(document).keydown(function(e){
