@@ -1,7 +1,7 @@
 <?php
 // Developmental
 define('DEBUG_CSS',true);
-define('DEBUG_SCRIPT',true);
+define('DEBUG_SCRIPT',false);
 define('TEXTDOMAIN','smallgallery');
 
 // Sitewide

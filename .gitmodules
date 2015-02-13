@@ -10,3 +10,6 @@
 [submodule "contrib/touchswipe"]
 	path = contrib/touchswipe
 	url = https://github.com/jinbonetwork/TouchSwipe-Jquery-Plugin.git
+[submodule "contrib/imagesloaded"]
+	path = contrib/imagesloaded
+	url = https://github.com/desandro/imagesloaded.git

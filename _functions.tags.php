@@ -124,13 +124,4 @@ function _heading($post){
 	echo __heading($post);
 }
 
-function __photoswipe($options=array()){
-	$markup = '';
-	return $markup;
-}
-
-function _photoswipe($options=array()){
-	echo __photoswipe($options);
-}
-
 ?>

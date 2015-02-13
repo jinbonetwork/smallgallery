@@ -1,11 +1,13 @@
 var $container = {};
 var $control = {};
 var $slideshow = {
-	current: null,
-	pprev: null,
-	prev: null,
-	next: null,
-	nnext: null,
+	position: {
+		current: null,
+		pprev: null,
+		prev: null,
+		next: null,
+		nnext: null,
+	},
 	direction: null,
 	animation: null,
 	garbage: []
@@ -14,16 +16,16 @@ var $slideshow = {
 function init(){
 
 	// check current entry
-	$slideshow.current = jQuery('.entry.current');
+	$slideshow.position.current = jQuery('.entry.current');
 
 	// update browser informations
 	update_history();
 
 	// load prev/next entries
-	var _next_source = $slideshow.current.attr('data-next_permalink');
-	var _prev_source = $slideshow.current.attr('data-prev_permalink');
-	var _nnext_source = $slideshow.current.attr('data-nnext_permalink');
-	var _pprev_source = $slideshow.current.attr('data-pprev_permalink');
+	var _next_source = $slideshow.position.current.attr('data-next_permalink');
+	var _prev_source = $slideshow.position.current.attr('data-prev_permalink');
+	var _nnext_source = $slideshow.position.current.attr('data-nnext_permalink');
+	var _pprev_source = $slideshow.position.current.attr('data-pprev_permalink');
 
 	if(_next_source){
 		load(_next_source,'next');
@@ -57,15 +59,16 @@ function init_flags(){
 	});
 }
 
-function resize(position){
+function resize(position,context){
 	position = position || '';
     position = 'section.entry'+(position!=''?'.'+position:'');
+    context = context || '';
 
     var flag = '['+position+']';
     var padding = $smallgallery.padding;
     var padnum = $smallgallery.padding.replace(/(\%|px)$/,'');
 
-    console.log('RESIZE: redrawing '+flag);
+    console.log('RESIZE: redrawing '+flag+(context?' ('+context+')':''));
 
 	jQuery(position).each(function(index){
 		var $entry = jQuery(this);
@@ -166,7 +169,11 @@ function load(source,position){
 
 function bind_entry_events(id){
 	id = id || jQuery('section.entry.format-image.current').attr('id');
-	var $this = jQuery('section.entry.format-image#'+id);
+	var $this = jQuery('#'+id);
+
+	$this.imagesLoaded(function(e){
+		resize($this.attr('data-position'),'imagesLoaded');
+	});
 
 	$this.find('.popup_switch a').on('click',function(e){
 		e.preventDefault();
@@ -184,13 +191,14 @@ function bind_entry_events(id){
 			content: $popup
 		});
 	});
+
 }
 
 function update_control(){
-	var _pprev_permalink = $slideshow.current.attr('data-pprev_permalink');
-	var _prev_permalink = $slideshow.current.attr('data-prev_permalink');
-	var _next_permalink = $slideshow.current.attr('data-next_permalink');
-	var _nnext_permalink = $slideshow.current.attr('data-nnext_permalink');
+	var _pprev_permalink = $slideshow.position.current.attr('data-pprev_permalink');
+	var _prev_permalink = $slideshow.position.current.attr('data-prev_permalink');
+	var _next_permalink = $slideshow.position.current.attr('data-next_permalink');
+	var _nnext_permalink = $slideshow.position.current.attr('data-nnext_permalink');
 
 	// update control buttons
 	if($control.prev.find('a').attr('href')!=_prev_permalink){
@@ -203,42 +211,42 @@ function update_control(){
 	}
 
 	// check prev/next entries and enable control buttons
-	$slideshow.next = jQuery('[data-permalink="'+_next_permalink+'"]');
-	if($slideshow.next.length){
-		console.log('ENTRY: new [next] => #'+$slideshow.next.attr('data-ID'));
+	$slideshow.position.next = jQuery('[data-permalink="'+_next_permalink+'"]');
+	if($slideshow.position.next.length){
+		console.log('ENTRY: new [next] => #'+$slideshow.position.next.attr('data-ID'));
 
 		$control.next.removeClass('disabled');
 		console.log('CONTROL: [next] button enabled');
 	}
 
-	$slideshow.prev = jQuery('[data-permalink="'+_prev_permalink+'"]');
-	if($slideshow.prev.length){
-		console.log('ENTRY: new [prev] => #'+$slideshow.prev.attr('data-ID'));
+	$slideshow.position.prev = jQuery('[data-permalink="'+_prev_permalink+'"]');
+	if($slideshow.position.prev.length){
+		console.log('ENTRY: new [prev] => #'+$slideshow.position.prev.attr('data-ID'));
 
 		$control.prev.removeClass('disabled');
 		console.log('CONTROL: [prev] button enabled');
 	}
 
-	$slideshow.nnext = jQuery('[data-permalink="'+_nnext_permalink+'"]');
-	if($slideshow.nnext.length){
-		console.log('ENTRY: new [nnext] => #'+$slideshow.nnext.attr('data-ID'));
+	$slideshow.position.nnext = jQuery('[data-permalink="'+_nnext_permalink+'"]');
+	if($slideshow.position.nnext.length){
+		console.log('ENTRY: new [nnext] => #'+$slideshow.position.nnext.attr('data-ID'));
 	}
 
-	$slideshow.pprev = jQuery('[data-permalink="'+_pprev_permalink+'"]');
-	if($slideshow.pprev.length){
-		console.log('ENTRY: new [pprev] => #'+$slideshow.pprev.attr('data-ID'));
+	$slideshow.position.pprev = jQuery('[data-permalink="'+_pprev_permalink+'"]');
+	if($slideshow.position.pprev.length){
+		console.log('ENTRY: new [pprev] => #'+$slideshow.position.pprev.attr('data-ID'));
 	}
 }
 
 function update_history(){
-	if(!$slideshow.current.attr('data-permalink')){
+	if(!$slideshow.position.current.attr('data-permalink')){
 		return;
 	}
 
 	var currentURL = document.location.href;
 	var historyHTML = '<!DOCTYPE html><html>'+jQuery('html').html()+'</html>';
-	var historyTitle = $slideshow.current.attr('data-title')+$smallgallery.title.separator+$smallgallery.title.text;
-	var historyURL = $slideshow.current.attr('data-permalink');
+	var historyTitle = $slideshow.position.current.attr('data-title')+$smallgallery.title.separator+$smallgallery.title.text;
+	var historyURL = $slideshow.position.current.attr('data-permalink');
 
 	console.log('HISTORY: check '+currentURL+' (current) => '+historyURL+' (update)');
 	if(currentURL!=historyURL){
@@ -337,27 +345,30 @@ jQuery(document).ready(function(e){
 			$control.next.addClass('disabled');
 			console.log('CONTROL: [prev] button disabled');
 
-			// determine things to do
+			// redefine positions and determine things to do
 			$slideshow.direction = position;
-			_current = $slideshow[position];
+			_current = $slideshow.position[position];
 			switch(position){
 				case 'prev':
-					$slideshow.animation = $smallgallery.animation.name[$slideshow.current.attr('data-animation')];
-					_prev = $slideshow.pprev;
-					_nnext = $slideshow.next;
-					_next = $slideshow.current;
-					_garbage = $slideshow.nnext.addClass('expired').attr('data-ID');
+					$slideshow.animation = $smallgallery.animation.name[$slideshow.position.current.attr('data-animation')];
+					_prev = $slideshow.position.pprev;
+					_nnext = $slideshow.position.next;
+					_next = $slideshow.position.current;
+					_garbage = $slideshow.position.nnext.addClass('expired').attr('data-ID');
 				break;
 				case 'next':
-					$slideshow.animation = $smallgallery.animation.name[$slideshow.next.attr('data-animation')];
-					_next = $slideshow.nnext;
-					_pprev = $slideshow.prev;
-					_prev = $slideshow.current;
-					_garbage = $slideshow.pprev.addClass('expired').attr('data-ID');
+					$slideshow.animation = $smallgallery.animation.name[$slideshow.position.next.attr('data-animation')];
+					_next = $slideshow.position.nnext;
+					_pprev = $slideshow.position.prev;
+					_prev = $slideshow.position.current;
+					_garbage = $slideshow.position.pprev.addClass('expired').attr('data-ID');
 				break;
 				default:
 					_garbage = null;
 				break;
+			}
+			for(pos in $slideshow.position){
+				$slideshow.position[pos].attr('data-position',pos);
 			}
 
 			// do animation
@@ -372,18 +383,18 @@ jQuery(document).ready(function(e){
 
 			// reset classes
 			var classes_to_remove = 'pprev prev current next nnext';
-			$slideshow.current = _current.removeClass(classes_to_remove+' fresh').addClass('current');
+			$slideshow.position.current = _current.removeClass(classes_to_remove+' fresh').addClass('current');
 			if(_next){
-				$slideshow.next = _next.removeClass(classes_to_remove).addClass('next');
+				$slideshow.position.next = _next.removeClass(classes_to_remove).addClass('next');
 			}
 			if(_prev){
-				$slideshow.prev = _prev.removeClass(classes_to_remove).addClass('prev');
+				$slideshow.position.prev = _prev.removeClass(classes_to_remove).addClass('prev');
 			}
 			if(_nnext){
-				$slideshow.nnext = _nnext.removeClass(classes_to_remove).addClass('nnext');
+				$slideshow.position.nnext = _nnext.removeClass(classes_to_remove).addClass('nnext');
 			}
 			if(_pprev){
-				$slideshow.pprev = _pprev.removeClass(classes_to_remove).addClass('pprev');
+				$slideshow.position.pprev = _pprev.removeClass(classes_to_remove).addClass('pprev');
 			}
 
 			// init
