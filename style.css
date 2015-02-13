@@ -201,6 +201,11 @@ body {
 #navigation ul.menu.disabled {
   right: 0;
 }
+@media all and (max-width: 640px) {
+  #navigation ul.console li.item.toggle-fullscreen-container {
+    display: none;
+  }
+}
 #article {
   position: absolute;
   z-index: 1;
@@ -321,6 +326,9 @@ body.page #container {
   }
 }
 #footer {
+  display: none;
+}
+#intro-container {
   display: none;
 }
 section.entry {
@@ -452,17 +460,31 @@ section.entry.format-standard > .wrap .content ul {
 section.entry.format-standard.post > .wrap {
   overflow-y: auto;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 section.entry.format-standard.page,
 section.entry.format-standard.archive {
   overflow-y: auto;
 }
 @media all and (max-width: 960px) {
+  section.entry.format-standard {
+    overflow-y: auto;
+  }
+  section.entry.format-standard > .wrap {
+    overflow-y: hidden !important;
+  }
   section.entry.format-standard > .wrap .content {
     column-count: 1;
     -webkit-column-count: 1;
     -moz-column-count: 1;
+  }
+  section.entry.format-image > .wrap .feature img {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    border: 10px solid #000000;
+    box-shadow: 0 0 5px rgba(0,0,0,0.9);
   }
 }
 section.entry.archive > .wrap {
@@ -484,6 +506,40 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a {
 }
 section.entry.archive > .wrap ul.thumbnail-archives li.item a img {
   display: block;
+}
+.fancybox-overlay {
+  overflow: hidden !important;
+  background-image: none !important;
+  background-color: rgba(0,0,0,0.9) !important;
+}
+#intro {
+  width: 100%;
+  height: 100%;
+  min-width: 300px;
+  min-height: 300px;
+  background: transparent url(images/intro.svg) scroll no-repeat center center;
+  background-size: contain;
+}
+.fancybox-wrap.intro,
+.fancybox-wrap.intro * {
+  background-color: transparent;
+  box-shadow: none;
+}
+.fancybox-wrap.intro .fancybox-close {
+  width: 32px;
+  height: 32px;
+  background-image: none;
+}
+.fancybox-wrap.intro .fancybox-close:after {
+  content: '\F00D';
+  font-family: 'FontAwesome';
+  display: block;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+  font-size: 28px;
+  color: #FFFFFF;
 }
 @keyframes horizontal-prev {
   from {
@@ -565,16 +621,6 @@ section.entry.nnext {
 section.entry.nnext.expired {
   left: 300%;
 }
-::-webkit-scrollbar {
-  width: 0.5em;
-}
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-}
-::-webkit-scrollbar-thumb {
-  background-color: red;
-  outline: 1px solid slategrey;
-}
 #control {
   background: #707172 url(images/floor.jpg) repeat-x top left;
 }
@@ -591,4 +637,7 @@ section.entry.slide-weight-1 > .wrap > .caption > .author a {
   font-size: 0.7em;
   font-weight: normal;
   line-height: 1.1;
+}
+section.entry#entry-243 h2 {
+  text-align: center;
 }

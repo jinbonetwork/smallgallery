@@ -445,7 +445,7 @@ jQuery(document).ready(function(e){
     jQuery(document).keydown(function(e){
         var domain = e.target;
         var pressed = e.charCode || e.keyCode || e.which;
-        var is_popup = jQuery('.popup-content').length?true:false;
+        var is_popup = jQuery('.fancybox-overlay').length?true:false;
 
         if(domain=='input'||domain=='textarea'){
             return;
@@ -494,4 +494,12 @@ jQuery(document).ready(function(e){
 	bind_entry_events();
 	init_flags();
 	init();
+
+	jQuery.fancybox.open({
+		type: 'html',
+		wrapCSS: 'intro',
+		content: jQuery('#intro-container').html(),
+		scrolling: 'no'
+
+	});
 });
