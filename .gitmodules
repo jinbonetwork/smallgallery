@@ -13,3 +13,6 @@
 [submodule "contrib/imagesloaded"]
 	path = contrib/imagesloaded
 	url = https://github.com/desandro/imagesloaded.git
+[submodule "contrib/jquery-cookie"]
+	path = contrib/jquery-cookie
+	url = https://github.com/carhartl/jquery-cookie.git

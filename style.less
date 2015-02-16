@@ -24,14 +24,19 @@ Text Domain: smallgallery
 //-----------------------------------------------------------------------------
 //	Mixins, Rulsets, General classes
 //-----------------------------------------------------------------------------
+@sans-serif: "Apple SD Gothic Neo","AppleGothic","NanumGothic","Malgun Gothic","Dotum","Gulim",sans-serif;
+@serif: "NanumMyeongjo",@sans-serif;
 @narrow-width-point: 960px;
 @responsive-width-point: 640px;
 @slide-width: 60%;
 @ui-menu-height: 40px;
 @ui-control-height: 120px;
 @ui-font-size: 14px;
-@sans-serif: "Apple SD Gothic Neo","AppleGothic","NanumGothic","Malgun Gothic","Dotum","Gulim",sans-serif;
-@serif: "NanumMyeongjo",@sans-serif;
+@frame-border-color: black;
+@frame-background-color: white;
+@frame-shadow-color: rgba(0,0,0,0.5);
+@frame-border-hover-color: red;
+@frame-shadow-property: 3px 3px 5px @frame-shadow-color;
 
 .transition(@args) {
 	transform: @args;
@@ -114,7 +119,7 @@ body {
 	a {
 		.transition(opacity @ui-animation-duration @ui-animation-timing);
 		color: #FFFFFF;
-		opacity: 0.7;
+		opacity: 0.5;
 
 		&:hover {
 			opacity: 1;
@@ -166,20 +171,30 @@ body {
 		margin: 0;
 		padding: 0;
 		background-color: rgba(0,0,0,0.6);
+		text-align: right;
 
 		li.item {
+			display: inline-block;
 			margin: 0;
 			padding: 0;
 
 			a {
+				display: block;
+				width: auto;
+				height: @ui-menu-height;
+				margin: 0;
+				padding: 0 0.5em;
+				line-height: @ui-menu-height;
+				font-size: @ui-font-size;
 
 				&#toggle-navigation {
 					position: absolute;
 					top: 0;
 					left: 0px;
-					display: block;
 					width: @ui-menu-height;
 					height: @ui-menu-height;
+					margin: 0;
+					padding: 0;
 
 					span {
 						display: none;
@@ -206,18 +221,16 @@ body {
 					}
 				}
 
-				&#toggle-fullscreen {
-					position: absolute;
-					top: 0;
-					right: 0;
-					display: block;
-					width: auto;
-					height: @ui-menu-height;
-					margin: 0;
-					padding: 0 0.5em;
-					line-height: @ui-menu-height;
-					font-size: @ui-font-size;
+				&#toggle-help {
+					&:before {
+						content: '\F059';
+						font-family: 'FontAwesome';
+						display: inline;
+						margin-right: 0.25em;
+					}
+				}
 
+				&#toggle-fullscreen {
 					&:before {
 						content: '\F046';
 						font-family: 'FontAwesome';
@@ -245,9 +258,9 @@ body {
 		position: absolute;
 		z-index: 1;
 		top: 0;
-		right: -420px;
+		right: -320px;
 		display: block;
-		width: 420px;
+		width: 320px;
 		height: 100%;
 		margin: 0;
 		padding: 50px 0 0 0;
@@ -256,14 +269,27 @@ body {
 		li.menu-item {
 			display: block;
 			margin: 0;
-			padding: 7px 0;
-			border-bottom: 1px solid #919191;
+			padding: 0;
 
 			a {
+				box-sizing: border-box;
 				display: block;
+				width: 100%;
+				height: 20px;
+				line-height: 20px;
 				margin: 0;
-				padding: 0.3em 0.6em;
+				padding: 0 0.6em;
 				font-size: @ui-font-size;
+
+				&:before {
+					content: '\2022';
+					display: inline;
+					margin-right: 0.25em;
+				}
+			}
+
+			& + li.menu-item {
+				margin-top: 0.15em;
 			}
 		}
 
@@ -400,7 +426,7 @@ body {
 			}
 
 			&.disabled {
-				opacity: 0.3;
+				opacity: 0;
 			}
 		}
 	}
@@ -415,7 +441,7 @@ body {
 	display: none;
 }
 
-#intro-container {
+#help-container {
 	display: none;
 }
 
@@ -510,8 +536,9 @@ section.entry {
 					width: 100%;
 					height: auto;
 					padding: 15px;
-					border: 20px solid #000000;
-					box-shadow: 0 0 5px rgba(0, 0, 0, 0.9);
+					background-color: @frame-background-color;
+					border: 20px solid @frame-border-color;
+					box-shadow: @frame-shadow-property;
 				}
 			}
 
@@ -527,6 +554,7 @@ section.entry {
 						color: #FFFFFF;
 						font-size: 12px;
 						background: #3A383D;
+						box-shadow: @frame-shadow-property;
 					}
 				}
 			}
@@ -537,9 +565,22 @@ section.entry {
 
 		& > .wrap {
 
-			.title {
+			h1.title {
 				font-family: @serif;
-				font-size: 1.6em;
+				font-size: 2.2em;
+				margin-bottom: 50px;
+				line-height: 1.2;
+
+				span {
+					font-size: 0.6em;
+					color: #FFF;
+					background: #383838;
+				}
+
+			}
+			h2.title {
+				font-family: @serif;
+				font-size: 2em;
 				margin-bottom: 50px;
 			}
 
@@ -635,14 +676,38 @@ section.entry.archive {
 			margin: 0;
 			padding: 0;
 
+			&:after {
+				content: '';
+				display: block;
+				clear: both;
+			}
+
 			li.item {
 				float: left;
+				display: block;
+				width: 100px;
+				margin: 15px 15px 0 0;
+				padding: 0;
 
 				a {
+					.transition(all @ui-animation-duration @ui-animation-timing);
+					box-sizing: border-box;
 					display: block;
+					width: 100% !important;
+					border: 3px solid @frame-border-color;
+					box-shadow: @frame-shadow-property;
+					background-color: @frame-background-color;
 
 					img {
+						box-sizing: border-box;
 						display: block;
+						width: 100% !important;
+						height: auto;
+						border: 3px solid @frame-background-color;
+					}
+
+					&:hover {
+						.transform(scale(1.1,1.1));
 					}
 				}
 			}
@@ -658,21 +723,21 @@ section.entry.archive {
 	background-image: none !important;
 	background-color: rgba(0,0,0,0.9) !important;
 }
-#intro {
+#help {
 	width: 100%;
 	height: 100%;
 	min-width: 400px;
 	min-height: 400px;
-	background: transparent url(images/intro.svg) scroll no-repeat center center;
+	background: transparent url(images/help.svg) scroll no-repeat center center;
 	background-size: contain;
 }
 @media all and ( max-width: @responsive-width-point ) {
-	#intro {
+	#help {
 		min-width: 200px;
 		min-height: 200px;
 	}
 }
-.fancybox-wrap.intro {
+.fancybox-wrap.help {
 
 	&,
 	* {
@@ -740,7 +805,6 @@ section.entry {
 	.transform(translateZ(0));
 
 	&.pprev {
-		opacity: 0;
 		left: -200%;
 
 		&.fresh {
@@ -755,7 +819,7 @@ section.entry {
 		left: -100%;
 
 		&.fresh {
-			.animation(horizontal-prev @slide-animation-duration @slide-animation-timing);
+			//.animation(horizontal-prev @slide-animation-duration @slide-animation-timing);
 		}
 
 		&.expired {
@@ -767,7 +831,7 @@ section.entry {
 		left: 100%;
 
 		&.fresh {
-			.animation(horizontal-next @slide-animation-duration @slide-animation-timing);
+			//.animation(horizontal-next @slide-animation-duration @slide-animation-timing);
 		}
 
 		&.expired {
@@ -776,7 +840,6 @@ section.entry {
 	}
 
 	&.nnext {
-		opacity: 0;
 		left: 200%;
 
 		&.fresh {

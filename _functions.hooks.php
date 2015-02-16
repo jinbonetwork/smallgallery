@@ -20,6 +20,7 @@ function on_after_theme_setup(){
 add_action('after_setup_theme', 'on_after_theme_setup');
 
 function on_wp_enqueue_scripts(){
+	wp_enqueue_script('jquery-cookie',get_template_directory_uri().'/contrib/jquery-cookie/src/jquery.cookie.js',array('jquery'));
 	wp_enqueue_script('imagesloaded',get_template_directory_uri().'/contrib/imagesloaded/imagesloaded.pkgd.min.js',array('jquery'));
 	wp_enqueue_script('touchswipe',get_template_directory_uri().'/contrib/touchswipe/jquery.touchSwipe.min.js',array('jquery'));
 
@@ -29,7 +30,7 @@ function on_wp_enqueue_scripts(){
 	wp_enqueue_script('fancybox',get_template_directory_uri().'/contrib/fancybox/source/jquery.fancybox.pack.js',array('jquery'));
 
 	wp_enqueue_style('smallgallery',get_template_directory_uri().'/style.php',array('font-awesome'));
-	wp_enqueue_script('smallgallery',get_template_directory_uri().'/script.js',array('jquery','imagesloaded','fancybox','touchswipe'));
+	wp_enqueue_script('smallgallery',get_template_directory_uri().'/script.js',array('jquery','jquery-cookie','imagesloaded','fancybox','touchswipe'));
 }
 add_action('wp_enqueue_scripts','on_wp_enqueue_scripts');
 
@@ -269,10 +270,22 @@ function on_save_post($post_id){
 		return;
 	}
 
-	$menu_order = intval('1'.$_POST['slide_weight'].$_POST['slide_animation'].$_POST['slide_title'].$_POST['slide_content'].$_POST['slide_author'].$_POST['slide_date'].$_POST['slide_category'].$_POST['slide_tag']);
+	$slide_format = $_POST['post_format'];
+	$slide_format = $slide_format?$slide_format:'standard';
+	$slide_property_names = explode(':',SLIDE_PROPERTY_NAMES);
+	foreach($slide_property_names as $slide_property_name){
+		$slide_property_name = "slide_{$slide_property_name}";
+		$slide_constant_name = strtoupper("default_{$post->post_format}_{$slide_property_name}");
+		$slide_property_value = 0;
+		if(isset($_POST[$slide_property_name])){
+			$slide_property_value = $_POST[$slide_property_name];
+		}else if(defined($slide_constant_name)){
+			$slide_property_value = constant($slide_constant_name);
+		}
+		update_post_meta($post_id,$slide_property_name,$slide_property_value);
+	}
 
-	global $wpdb;
-	$wpdb->update($wpdb->posts,array('menu_order'=>$menu_order),array('ID'=>$post_id),array('%d'),array('%d'));
+	return;
 }
 add_action('save_post','on_save_post');
 

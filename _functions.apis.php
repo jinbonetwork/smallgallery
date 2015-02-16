@@ -15,37 +15,27 @@ function make_label($string=''){
 
 function get_properties($post){
 	$post = (object) $post;
-	$menu_order = $post->menu_order;
-	if($menu_order<100000000){
-		$menu_order = '1' // dummy
-			.DEFAULT_SLIDE_WEIGHT
-			.DEFAULT_SLIDE_ANIMATION
-			.DEFAULT_SLIDE_TITLE
-			.DEFAULT_SLIDE_CONTENT
-			.DEFAULT_SLIDE_AUTHOR
-			.DEFAULT_SLIDE_DATE
-			.DEFAULT_SLIDE_CATEGORY
-			.DEFAULT_SLIDE_TAG;
-		global $wpdb;
-		$wpdb->update($wpdb->posts,array('menu_order'=>$menu_order),array('ID'=>$post->ID),array('%d'),array('%d'));
+	$slide_format = get_post_format($post->ID);
+	$slide_format = $slide_format?$slide_format:'standard';
+	$slide_properties = array();
+	$slide_property_names = explode(':',SLIDE_PROPERTY_NAMES);
+	foreach($slide_property_names as $slide_property_name){
+		$slide_property_name = "slide_{$slide_property_name}";
+		$slide_property_value = get_post_meta($post->ID,$slide_property_name);
+		if(empty($slide_property_value)){
+			$slide_constant_name = strtoupper("default_{$slide_format}_{$slide_property_name}");
+			$slide_property_value = array(constant($slide_constant_name));
+			update_post_meta($post->ID,$slide_property_name,$slide_property_value[0]);
+		}
+		$slide_properties[$slide_property_name] = $slide_property_value[0];
 	}
-	$properties = str_split($menu_order);
-	$filtered = array(
-		'slide_weight' => $properties[1],
-		'slide_animation' => $properties[2],
-		'slide_title' => $properties[3],
-		'slide_content' => $properties[4],
-		'slide_author' => $properties[5],
-		'slide_date' => $properties[6],
-		'slide_category' => $properties[7],
-		'slide_tag' => $properties[8],
-	);
-	return $filtered;
+	return $slide_properties;
 }
 
 function rebuild_post($post){
 	global $wpdb;
 	$post->permalink = get_permalink($post->ID);
+	$post->author_url = get_author_posts_url($post->post_author);
 
 	if($post->post_type=='post'){
 		$post->pprev_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_date < '{$post->post_date}' ORDER BY post_date DESC LIMIT 1,1");
@@ -134,6 +124,7 @@ function rebuild_post($post){
 	$post->filtered_feature = get_the_post_thumbnail($post->ID,'medium');
 	$post->filtered_title = apply_filters('the_title',$post->post_title);
 	$post->filtered_content = apply_filters('the_content',$post->post_content);
+	$post->filtered_excerpt = apply_filters('get_the_excerpt',$post->post_excerpt);
 	ob_start();
 		the_post_thumbnail('medium');
 		$post->filtered_feature_medium = ob_get_contents();
@@ -145,6 +136,8 @@ function rebuild_post($post){
 	ob_end_clean();
 
 	$post->alt_title = esc_attr(strip_tags($post->filtered_title));
+	$post->alt_content = esc_attr(strip_tags($post->filtered_content));
+	$post->alt_excerpt = esc_attr(strip_tags($post->filtered_excerpt));
 
 	$post->div_edit_link = ($post->edit_link?"<div class='edit_link'><a href='{$post->edit_link}'><span>".__("Edit this {$post->post_type_label}",TEXTDOMAIN)."</span></a></div><!--/.edit_link-->":'');
 	$post->div_feature = ($post->slide_feature?"<div class='feature'>{$post->filtered_feature}</div>":'').'<!--/.feature-->';
@@ -214,7 +207,21 @@ EOT;
 
 	ob_start();
 	echo <<<EOT
-<section id="entry-{$post->ID}" class="current {$post->class}" data-ID="{$post->ID}" data-title="{$post->alt_title}" data-permalink="{$post->permalink}" data-animation="{$post->slide_animation}" data-pprev_permalink="{$post->pprev_permalink}" data-prev_permalink="{$post->prev_permalink}" data-next_permalink="{$post->next_permalink}" data-nnext_permalink="{$post->nnext_permalink}">
+<section id="entry-{$post->ID}" class="current {$post->class}"
+	data-ID="{$post->ID}"
+	data-format="{$post->format}"
+	data-animation="{$post->slide_animation}"
+	data-pprev_permalink="{$post->pprev_permalink}"
+	data-prev_permalink="{$post->prev_permalink}"
+	data-next_permalink="{$post->next_permalink}"
+	data-nnext_permalink="{$post->nnext_permalink}"
+	data-title="{$post->alt_title}"
+	data-permalink="{$post->permalink}"
+	data-description="{$post->alt_excerpt}"
+	data-time-published=""
+	data-time-modified=""
+	data-author-url="{$post->author_url}"
+>
 	<div class="wrap">
 		{$post->div_feature}
 		{$caption}
@@ -268,6 +275,18 @@ function build_archives($entries){
 	$markup = "<ul class='thumbnail-archives items'>{$markup}</ul>".PHP_EOL;
 
 	return $markup;
+}
+
+function rebuild_user($user){
+	$user->filtered_email = $user->user_email?str_replace('@',' at ',$user->user_email):'';
+	$user->filtered_url = strpos($user->user_url,'http')==0?$user->user_url:'http://'.$user->user_url;
+	$user->filtered_description = $user->description?wptexturize($user->description):'';
+
+	$user->div_email = $user->filtered_email?"<div class='email'>{$user->filtered_email}</div>":'';
+	$user->div_url = $user->filtered_url?"<div class='url'>{$user->filtered_url}</div>":'';
+	$user->div_description = $user->filtered_description?"<div class='description'>{$user->filtered_description}</div>":'';
+
+	return $user;
 }
 
 function build_feedback($message){

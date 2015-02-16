@@ -43,6 +43,7 @@
 			. '<h2 class="title a11y">'.__('Navigation',TEXTDOMAIN).'</h2>'.PHP_EOL
 			. '<ul class="console items">'.PHP_EOL
 			. '<li class="toggle-navigation-container toggle-container item"><a id="toggle-navigation" class="toggler" href="#menu" data-flag="'.DEFAULT_MENU_FLAG_STRING.'" data-flag-true-class="enabled" data-flag-false-class="disabled"><span>'.__('Toggle navigation',TEXTDOMAIN).'</span></a></li>'.PHP_EOL
+			. '<li class="toggle-help-container toggle-container item"><a id="toggle-help" class="toggler" href="#help" data-flag="'.DEFAULT_HELP_FLAG_STRING.'" data-flag-true-class="help-enabled" data-flag-false-class="help-disabled"><span>'.__('Help',TEXTDOMAIN).'</span></a></li>'.PHP_EOL
 			. '<li class="toggle-fullscreen-container toggle-container item"><a id="toggle-fullscreen" class="toggler" href="#body" data-flag="'.DEFAULT_FULLSCREEN_FLAG_STRING.'" data-flag-true-class="fullscreen-enabled" data-flag-false-class="fullscreen-disabled"><span>'.__('Fullscreen',TEXTDOMAIN).'</span></a></li>'.PHP_EOL
 			. '</ul><!--/.console-->'.PHP_EOL
 			. wp_nav_menu($navigation_options).PHP_EOL

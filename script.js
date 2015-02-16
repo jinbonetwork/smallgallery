@@ -1,6 +1,8 @@
 var $container = {};
 var $control = {};
 var $slideshow = {
+	domain: location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: ''),
+	open_help: true,
 	position: {
 		current: null,
 		pprev: null,
@@ -19,7 +21,7 @@ function init(){
 	$slideshow.position.current = jQuery('.entry.current');
 
 	// update browser informations
-	update_history();
+	update_page_meta();
 
 	// load prev/next entries
 	var _next_source = $slideshow.position.current.attr('data-next_permalink');
@@ -71,6 +73,7 @@ function resize(position,context){
     console.log('RESIZE: redrawing '+flag+(context?' ('+context+')':''));
 
 	jQuery(position).each(function(index){
+		var $resolution = jQuery(document).width()+'x'+jQuery(document).height();
 		var $entry = jQuery(this);
 		var $box = $entry.children('.wrap');
 		var $feature = $box.find('.feature');
@@ -127,12 +130,28 @@ function resize(position,context){
 	});
 }
 
+function build_url(url,attributes){
+	attributes = attributes || {};
+
+	var filtered = url;
+	var index = 0;
+	var glue = '';
+	for(key in attributes){
+		index ++;
+		glue = index>1&&url.search(/\?/)?'&':'?';
+		value = attributes[key];
+		filtered = filtered+glue+key+'='+value;
+	}
+
+	return filtered;
+}
+
 function load(source,position){
 	var flag = '['+position+']';
 	console.log('BEGIN: load '+flag+' item -- '+source);
 
 	if(!jQuery('[data-permalink="'+source+'"]').length){
-		source_filtered = source+(source.search(/\?/)>0?'&':'?')+'format=json';
+		source_filtered = build_url(source,{format:'json'});
 		console.log('_SOURCE FILTERED: '+flag+' using '+source+' => '+source_filtered);
 
 		var _markup;
@@ -238,31 +257,85 @@ function update_control(){
 	}
 }
 
-function update_history(){
+function update_page_meta(){
 	if(!$slideshow.position.current.attr('data-permalink')){
 		return;
 	}
 
-	var currentURL = document.location.href;
-	var historyHTML = '<!DOCTYPE html><html>'+jQuery('html').html()+'</html>';
-	var historyTitle = $slideshow.position.current.attr('data-title')+$smallgallery.title.separator+$smallgallery.title.text;
-	var historyURL = $slideshow.position.current.attr('data-permalink');
+	// update browser history
+	var current = {
+		url: document.location.href
+	};
+	var history = {
+		title: $slideshow.position.current.attr('data-title')+$smallgallery.title.separator+$smallgallery.title.text,
+		html: '<!DOCTYPE html><html>'+jQuery('html').html()+'</html>',
+		url: $slideshow.position.current.attr('data-permalink')
+	};
 
-	console.log('HISTORY: check '+currentURL+' (current) => '+historyURL+' (update)');
-	if(currentURL!=historyURL){
+	console.log('HISTORY: check '+current.url+' (current) => '+history.url+' (update)');
+	if(current.url!=history.url){
 		window.history.pushState(
 			{
-				'html': historyHTML,
-				'pageTitle': historyTitle
+				'html': history.html,
+				'pageTitle': history.title
 			},
-			historyTitle,
-			historyURL
+			history.title,
+			history.url
 		);
-		document.title = historyTitle; // fallback
-		console.log('HISTORY: (updated) '+historyTitle+' -- '+currentURL+' => '+historyURL);
+		document.title = history.title; // fallback
+		console.log('HISTORY: (updated) '+history.title+' -- '+current.url+' => '+history.url);
 	}else{
-		console.log('HISTORY: (unchanged) '+historyTitle+' -- '+currentURL+' => '+historyURL);
+		console.log('HISTORY: (unchanged) '+history.title+' -- '+current.url+' => '+history.url);
 	}
+
+	// update social metatags
+	var social = {
+		og: {},
+		twitter: {},
+		format: $slideshow.position.current.attr('data-format'),
+		title: history.title,
+		url: history.url,
+		description: $slideshow.position.current.attr('data-description'),
+		image: $slideshow.position.current.find('.feature img').length?$slideshow.position.current.find('.feature img').attr('src'):'',
+		time: {
+			published: $slideshow.position.current.attr('data-time-published'),
+			modified: $slideshow.position.current.attr('data-time-modified')
+		},
+		author: {
+			url: $slideshow.position.current.attr('data-author-url')
+		}
+	};
+	switch(social.format){
+		case 'image':
+			social.og.type = 'article';
+			social.twitter.card = 'photo';
+			social.twitter.imagetag = 'image';
+		break;
+		default:
+			social.og.type = 'article';
+			social.twitter.card = 'summary';
+			social.twitter.imagetag = 'image:src';
+		break;
+	}
+
+	// facebook open graph
+	jQuery('meta[property="og:type"]').attr('content',social.og.type);
+	jQuery('meta[property="og:title"]').attr('content',social.title);
+	jQuery('meta[property="og:url"]').attr('content',social.url);
+	jQuery('meta[property="og:description"]').attr('content',social.description);
+	jQuery('meta[property="og:image"]').attr('content',social.image);
+
+	jQuery('meta[property="article:published_time"]').attr('content',social.time.published);
+	jQuery('meta[property="article:modified_time"]').attr('content',social.time.modified);
+	jQuery('meta[property="article:author"]').attr('content',social.author.url);
+
+	// twitter cards
+	jQuery('meta[name="twitter:card"]').attr('content',social.twitter.card);
+	jQuery('meta[name="twitter:description"]').attr('content',social.description);
+	jQuery('meta[name="twitter:image"]').remove();
+	jQuery('meta[name="twitter:image:src"]').remove();
+	jQuery('<meta name="twitter:'+social.twitter.imagetag+'" content="'+social.image+'">').appendTo('head');
+
 }
 
 function cleanup(){
@@ -318,6 +391,30 @@ function is_fullscreen(){
 	return is_fullscreen;
 }
 	
+function open_help(flag){
+	if(typeof flag=='undefined'){
+		flag = jQuery.cookie('open_help');
+		if(typeof flag == 'undefined'){
+			jQuery.cookie('open_help','0',{expires:30,path:'/'});
+			flag = $slideshow.open_help;
+		}
+	}
+	if(typeof flag=='string'){
+		flag = parseInt(flag)?true:false;
+	}
+
+	if(flag){
+		jQuery.fancybox.open({
+			type: 'html',
+			wrapCSS: 'help',
+			content: jQuery('#help-container').html(),
+			scrolling: 'no'
+		});
+	}
+
+	//jQuery.removeCookie('open_help',{path:'/'});
+}
+
 jQuery(document).ready(function(e){
 	$container = jQuery('#container');
 	$control = jQuery('#control');
@@ -423,6 +520,10 @@ jQuery(document).ready(function(e){
 		if($trigger.attr('id')=='toggle-fullscreen'){
 			fullscreen(flag);
 		}
+
+		if($trigger.attr('id')=='toggle-help'){
+			open_help(true);
+		}
 	});
 
 	jQuery(document).on('fullscreenchange',function(e){fullscreenchange();});
@@ -447,11 +548,11 @@ jQuery(document).ready(function(e){
 		threadhold: 75
 	});
     jQuery(document).keydown(function(e){
-        var domain = e.target;
+        var context = e.target;
         var pressed = e.charCode || e.keyCode || e.which;
         var is_popup = jQuery('.fancybox-overlay').length?true:false;
 
-        if(domain=='input'||domain=='textarea'){
+        if(context=='input'||context=='textarea'){
             return;
         }
 
@@ -482,10 +583,30 @@ jQuery(document).ready(function(e){
                     jQuery('section.entry.current .popup_switch a').click();
                 }
             break;
+            case 72: // h
+            	open_help(true);
+            break;
             case 27: // esc
                 return false;
             break;
         }
+    });
+
+    jQuery('a').on('click',function(e){
+    	var $trigger = jQuery(this);
+    	var $href = $trigger.attr('href');
+
+    	if(
+    		!$trigger.attr('class')
+    		&& !$trigger.parent().attr('class')
+    		&& (
+    			$href.search('/')==0
+    			|| $href.search($slideshow.domain)==0
+    		)
+    	){
+			e.preventDefault();
+			window.location = $trigger.attr('href');
+		}
     });
 
 	if(is_fullscreen()){
@@ -499,11 +620,7 @@ jQuery(document).ready(function(e){
 	init_flags();
 	init();
 
-	jQuery.fancybox.open({
-		type: 'html',
-		wrapCSS: 'intro',
-		content: jQuery('#intro-container').html(),
-		scrolling: 'no'
-
-	});
+	if($slideshow.open_help){
+		open_help();
+	}
 });

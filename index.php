@@ -31,12 +31,13 @@ else:
 		$object = $wp_query->get_queried_object();
 
 		if(is_author()):
+			$object = rebuild_user($object);
 			$message->type = 'author';
 			$message->title = $object->display_name;
 			$message->description = "<ul class='profile'>".PHP_EOL
-				. ($object->user_email?"<li class='email'><dl><dt>".__('Email',TEXTDOMAIN)."</dt><dd>{$object->user_email}</dd></dl></li>".PHP_EOL:'')
-				. ($object->user_url?"<li class='url'><dl><dt>".__('Homepage',TEXTDOMAIN)."</dt><dd>{$object->user_url}</dd></dl></li>".PHP_EOL:'')
-				. ($object->description?"<li class='bio'><dl><dt>".__('About',TEXTDOMAIN)."</dt><dd>".wptexturize($object->description)."</dd></dl></li>".PHP_EOL:'')
+				. ($object->user_email?"<li class='email'><dl><dt>".__('Email',TEXTDOMAIN)."</dt><dd>{$object->div_email}</dd></dl></li>".PHP_EOL:'')
+				. ($object->user_url?"<li class='url'><dl><dt>".__('Homepage',TEXTDOMAIN)."</dt><dd>{$object->div_url}</dd></dl></li>".PHP_EOL:'')
+				. ($object->description?"<li class='bio'><dl><dt>".__('About',TEXTDOMAIN)."</dt><dd>{$object->div_description}</dd></dl></li>".PHP_EOL:'')
 				. "</ul>";
 		elseif(is_date()):
 			$message->type = 'date';
