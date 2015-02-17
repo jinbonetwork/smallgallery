@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: smallgallery\n"
 "POT-Creation-Date: 2015-02-11 10:02+0900\n"
-"PO-Revision-Date: 2015-02-11 10:43+0900\n"
+"PO-Revision-Date: 2015-02-17 12:11+0900\n"
 "Last-Translator: 진보네트워크센터 <jinbonetwork@gmail.com>\n"
 "Language-Team: jinbonet <jinbonetwork@gmail.com>\n"
 "Language: ko_KR\n"
@@ -41,6 +41,18 @@ msgstr "이 슬라이드 고치기"
 
 msgid "Edit this page"
 msgstr "이 페이지 고치기"
+
+msgid "Share with Twitter"
+msgstr "트위터로 공유하기"
+
+msgid "Share with Facebook"
+msgstr "페이스북으로 공유하기"
+
+msgid "Share with Google+"
+msgstr "구글+로 공유하기"
+
+msgid "Share with Kakaotalk"
+msgstr "카카오톡으로 공유하기"
 
 msgid "Email"
 msgstr "전자편지"

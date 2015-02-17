@@ -12,7 +12,6 @@ if(is_home()):
 			'description' => '',
 			'guide' => '',
 		);
-		print_r($message);
 		get_header();
 		get_feedback($message);
 		get_footer();

@@ -31,6 +31,10 @@ Text Domain: smallgallery
 
 @twitter-icon: '\F099';
 @twitter-color: #0084B4;
+@twitter-color-1: #00ACEC;
+@twitter-color-2: #1DCAFF;
+@twitter-color-3: #C0DEED;
+@twitter-color-4: #FFFFFF;
 
 @facebook-icon: '\F082';
 @facebook-color: #3B5998;
@@ -114,6 +118,34 @@ a:visited {
 	color: inherit;
 	text-decoration: none;
 	outline: none;
+}
+
+.edit_link {
+
+	a {
+		display: block;
+		width: @ui-icon-box-size;
+		height: @ui-icon-box-size;
+		line-height: @ui-icon-box-size;
+		font-size: @ui-icon-font-size;
+		color: @ui-font-color-dark;
+
+		span {
+			display: none;
+		}
+
+		&:after {
+			content: '\F013';
+			font-family: 'FontAwesome';
+			display: block;
+			width: inherit;
+			height: inherit;
+			text-align: center;
+			line-height: inherit;
+			font-size: inherit;
+			color: inherit;
+		}
+	}
 }
 
 .social {
@@ -208,6 +240,30 @@ a:visited {
 	}
 }
 
+#header,
+#navigation,
+#control,
+.social,
+.edit_link {
+	a {
+		.transition(opacity @ui-animation-duration @ui-animation-timing);
+		opacity: 0.4;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+#header,
+#navigation,
+#control {
+	a {
+		color: #FFFFFF;
+	}
+}
+
+
 //-----------------------------------------------------------------------------
 //	Layout
 //-----------------------------------------------------------------------------
@@ -228,22 +284,6 @@ body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-}
-
-#header,
-#navigation,
-#control,
-.social,
-.edit_link {
-	a {
-		.transition(opacity @ui-animation-duration @ui-animation-timing);
-		color: #FFFFFF;
-		opacity: 0.4;
-
-		&:hover {
-			opacity: 1;
-		}
-	}
 }
 
 #header {
@@ -602,38 +642,30 @@ section.entry {
 			z-index: 1;
 			top: -@ui-icon-box-size;
 			right: 0;
-
-			a {
-				position: relative;
-				display: block;
-				width: @ui-icon-box-size;
-				height: @ui-icon-box-size;
-				line-height: @ui-icon-box-size;
-				font-size: @ui-icon-font-size;
-				color: @ui-font-color-dark;
-
-				&:after {
-					content: '\F013';
-					font-family: 'FontAwesome';
-					display: block;
-					width: inherit;
-					height: inherit;
-					text-align: center;
-					line-height: inherit;
-					font-size: inherit;
-					color: inherit;
-				}
-
-				span {
-					display: none;
-				}
-			}
 		}
 
 		.social {
 			position: absolute;
+			z-index: 1;
 			top: -@ui-icon-box-size;
-			left: 0;
+			right: 0;
+		}
+
+		.edit_link + .social {
+			right: @ui-icon-box-size;
+		}
+
+		.edit_link,
+		.social {
+			opacity: 0;
+			.transition(all @ui-animation-duration @ui-animation-timing);
+		}
+
+		&:hover {
+			.edit_link,
+			.social {
+				opacity: 1;
+			}
 		}
 	}
 
@@ -682,6 +714,11 @@ section.entry {
 
 		& > .wrap {
 			//overflow: hidden;
+
+			.edit_link,
+			.social {
+				top: 0;
+			}
 
 			h1.title {
 				font-family: @serif;

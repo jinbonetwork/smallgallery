@@ -37,6 +37,28 @@ a:visited {
   text-decoration: none;
   outline: none;
 }
+.edit_link a {
+  display: block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  font-size: 18px;
+  color: #000000;
+}
+.edit_link a span {
+  display: none;
+}
+.edit_link a:after {
+  content: '\F013';
+  font-family: 'FontAwesome';
+  display: block;
+  width: inherit;
+  height: inherit;
+  text-align: center;
+  line-height: inherit;
+  font-size: inherit;
+  color: inherit;
+}
 .social {
   cursor: default;
 }
@@ -102,6 +124,30 @@ a:visited {
 .social ul.items li.item.kakaotalk a:after {
   content: '\F075';
 }
+#header a,
+#navigation a,
+#control a,
+.social a,
+.edit_link a {
+  transform: opacity 300ms linear;
+  -webkit-transition: opacity 300ms linear;
+  -moz-transition: opacity 300ms linear;
+  -ms-transition: opacity 300ms linear;
+  -o-transition: opacity 300ms linear;
+  opacity: 0.4;
+}
+#header a:hover,
+#navigation a:hover,
+#control a:hover,
+.social a:hover,
+.edit_link a:hover {
+  opacity: 1;
+}
+#header a,
+#navigation a,
+#control a {
+  color: #FFFFFF;
+}
 html,
 body {
   position: relative;
@@ -117,26 +163,6 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-#header a,
-#navigation a,
-#control a,
-.social a,
-.edit_link a {
-  transform: opacity 300ms linear;
-  -webkit-transition: opacity 300ms linear;
-  -moz-transition: opacity 300ms linear;
-  -ms-transition: opacity 300ms linear;
-  -o-transition: opacity 300ms linear;
-  color: #FFFFFF;
-  opacity: 0.4;
-}
-#header a:hover,
-#navigation a:hover,
-#control a:hover,
-.social a:hover,
-.edit_link a:hover {
-  opacity: 1;
 }
 #header {
   position: absolute;
@@ -453,33 +479,27 @@ section.entry > .wrap .edit_link {
   top: -24px;
   right: 0;
 }
-section.entry > .wrap .edit_link a {
-  position: relative;
-  display: block;
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  font-size: 18px;
-  color: #000000;
-}
-section.entry > .wrap .edit_link a:after {
-  content: '\F013';
-  font-family: 'FontAwesome';
-  display: block;
-  width: inherit;
-  height: inherit;
-  text-align: center;
-  line-height: inherit;
-  font-size: inherit;
-  color: inherit;
-}
-section.entry > .wrap .edit_link a span {
-  display: none;
-}
 section.entry > .wrap .social {
   position: absolute;
+  z-index: 1;
   top: -24px;
-  left: 0;
+  right: 0;
+}
+section.entry > .wrap .edit_link + .social {
+  right: 24px;
+}
+section.entry > .wrap .edit_link,
+section.entry > .wrap .social {
+  opacity: 0;
+  transform: all 300ms linear;
+  -webkit-transition: all 300ms linear;
+  -moz-transition: all 300ms linear;
+  -ms-transition: all 300ms linear;
+  -o-transition: all 300ms linear;
+}
+section.entry > .wrap:hover .edit_link,
+section.entry > .wrap:hover .social {
+  opacity: 1;
 }
 section.entry.format-image > .wrap .popup {
   display: none;
@@ -505,6 +525,10 @@ section.entry.format-image > .wrap .caption div.author a {
   font-size: 12px;
   background: #3A383D;
   box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+}
+section.entry.format-standard > .wrap .edit_link,
+section.entry.format-standard > .wrap .social {
+  top: 0;
 }
 section.entry.format-standard > .wrap h1.title {
   font-family: "NanumMyeongjo", "Apple SD Gothic Neo", "AppleGothic", "NanumGothic", "Malgun Gothic", "Dotum", "Gulim", sans-serif;

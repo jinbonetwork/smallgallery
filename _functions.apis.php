@@ -257,10 +257,10 @@ function build_social($post){
 	$markup;
 
 	if(USE_SOCIAL_SHARING){
-		$twitter = __('Twitter',TEXTDOMAIN);
-		$facebook = __('Facebook',TEXTDOMAIN);
-		$googleplus = __('Google+',TEXTDOMAIN);
-		$kakaotalk = __('Kakaotalk',TEXTDOMAIN);
+		$twitter = __('Share with Twitter',TEXTDOMAIN);
+		$facebook = __('Share with Facebook',TEXTDOMAIN);
+		$googleplus = __('Share with Google+',TEXTDOMAIN);
+		$kakaotalk = __('Share with Kakaotalk',TEXTDOMAIN);
 
 		ob_start();
 		echo <<<EOT
