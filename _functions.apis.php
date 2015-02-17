@@ -167,43 +167,12 @@ function rebuild_post($post){
 
 function build_post($post){
 	$markup = '';
-	$caption = '';
-	$popup = '';
 
-	if($post->popup_title||$post->popup_content||$post->popup_author||$post->popup_date||$post->popup_category||$post->popup_tag){
-		ob_start();
-		echo <<<EOT
-			<div id="entry-{$post->ID}-popup" class="popup">
-				{$post->popup_title}
-				{$post->popup_author}
-				{$post->popup_date}
-				{$post->popup_content}
-				{$post->popup_category}
-				{$post->popup_tag}
-			</div><!--/#entry-{$post->ID}-popup-->
-EOT;
-		$popup = ob_get_contents();
-		ob_end_clean();
-	}
-
-	if($post->caption_title||$post->caption_content||$post->caption_author||$post->caption_date||$post->caption_category||$post->caption_tag){
-		$popup_switch = $post->format=='image'&&$popup?"<div class='popup_switch'><a href='#entry-{$post->ID}-popup'><span>".__('Read more',TEXTDOMAIN)."</span></a></div>":'';
-		ob_start();
-		echo <<<EOT
-			<div id="entry-{$post->ID}-caption" class="caption">
-				{$popup_switch}
-				{$post->div_edit_link}
-				{$post->caption_title}
-				{$post->caption_author}
-				{$post->caption_date}
-				{$post->caption_content}
-				{$post->caption_category}
-				{$post->caption_tag}
-			</div><!--/#entry-{$post->ID}-caption-->
-EOT;
-		$caption = ob_get_contents();
-		ob_end_clean();
-	}
+	$edit_link = $post->div_edit_link;
+	$social_links = build_social($post);
+	$caption = build_caption($post);
+	$popup = build_popup($post);
+	$social = build_social($post);
 
 	ob_start();
 	echo <<<EOT
@@ -223,6 +192,8 @@ EOT;
 	data-author-url="{$post->author_url}"
 >
 	<div class="wrap">
+		{$edit_link}
+		{$social_links}
 		{$post->div_feature}
 		{$caption}
 		{$popup}
@@ -233,6 +204,79 @@ EOT;
 EOT;
 	$markup = ob_get_contents();
 	ob_end_clean();
+	return $markup;
+}
+
+function build_popup($post){
+	$markup;
+
+	if($post->popup_title||$post->popup_content||$post->popup_author||$post->popup_date||$post->popup_category||$post->popup_tag){
+		ob_start();
+		echo <<<EOT
+			<div id="entry-{$post->ID}-popup" class="popup">
+				{$post->popup_title}
+				{$post->popup_author}
+				{$post->popup_date}
+				{$post->popup_content}
+				{$post->popup_category}
+				{$post->popup_tag}
+			</div><!--/#entry-{$post->ID}-popup-->
+EOT;
+		$markup = ob_get_contents();
+		ob_end_clean();
+	}
+
+	return $markup;
+}
+
+function build_caption($post){
+	$markup;
+
+	if($post->caption_title||$post->caption_content||$post->caption_author||$post->caption_date||$post->caption_category||$post->caption_tag){
+		$popup_switch = $post->format=='image'&&$popup?"<div class='popup_switch'><a href='#entry-{$post->ID}-popup'><span>".__('Read more',TEXTDOMAIN)."</span></a></div>":'';
+		ob_start();
+		echo <<<EOT
+			<div id="entry-{$post->ID}-caption" class="caption">
+				{$popup_switch}
+				{$post->caption_title}
+				{$post->caption_author}
+				{$post->caption_date}
+				{$post->caption_content}
+				{$post->caption_category}
+				{$post->caption_tag}
+			</div><!--/#entry-{$post->ID}-caption-->
+EOT;
+		$markup = ob_get_contents();
+		ob_end_clean();
+	}
+
+	return $markup;
+}
+
+function build_social($post){
+	$markup;
+
+	if(USE_SOCIAL_SHARING){
+		$twitter = __('Twitter',TEXTDOMAIN);
+		$facebook = __('Facebook',TEXTDOMAIN);
+		$googleplus = __('Google+',TEXTDOMAIN);
+		$kakaotalk = __('Kakaotalk',TEXTDOMAIN);
+
+		ob_start();
+		echo <<<EOT
+<div class="social">
+	<ul class="items">
+		<li class="item twitter"><a href="https://twitter.com/share?u={$post->permalink}"><span>{$twitter}</span></a></li>
+		<li class="item facebook"><a href="https://facebook.com/sharer.php?u={$post->permalink}"><span>{$facebook}</span></a></li>
+		<li class="item googleplus"><a href="https://plus.google.com/share?url={$post->permalink}"><span>{$googleplus}</span></a></li>
+		<li class="item kakaotalk"><a href="{$post->permalink}"><span>{$kakaotalk}</span></a></li>
+	</ul>
+</div>
+EOT;
+		$markup = ob_get_contents();
+		ob_end_clean();
+	}
+
 	return $markup;
 }
 

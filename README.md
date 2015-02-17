@@ -38,7 +38,7 @@ smallgallery
     * <del>이 기능을 사용해서 아카이브 템플릿 작성</del>
 3. 기타 
     * <del>번역 파일 작성</del>
-    * SNS 공유 기능
+    * <del>SNS 공유 기능</del>
 	* 디자인 마감
 4. 오류
     * 내부 링크 AJAX 처리

@@ -7,6 +7,7 @@ define('TEXTDOMAIN','smallgallery');
 // Sitewide
 define('TITLE_TEXT',esc_attr(get_option('blogname')));
 define('TITLE_SEPARATOR',' | ');
+define('USE_SOCIAL_SHARING',true);
 
 // LESS variables
 define('SLIDE_PADDING','10%');

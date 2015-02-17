@@ -61,6 +61,23 @@ function init_flags(){
 	});
 }
 
+function toggle_flag($trigger,flag){
+	flag = flag || null;
+
+	if(flag==null){
+		flag = $trigger.attr('data-flag')!='true'?true:false;
+	}
+
+	if(flag){
+		$trigger.attr('data-flag','true');
+	}else{
+		$trigger.attr('data-flag','false');
+	}
+
+	init_flag($trigger);
+	return flag;
+}
+
 function resize(position,context){
 	position = position || '';
     position = 'section.entry'+(position!=''?'.'+position:'');
@@ -126,8 +143,21 @@ function resize(position,context){
 			height: 'auto',
 			maxHeight: $img.length?$entry.height():$box.availableHeight
 		});
+
+		/*
+		// update perfect-scrollbar
+		if($entry.is('.page')||$entry.is('.archive')){
+			$entry.perfectScrollbar();
+		}
+		if($entry.is('.post')){
+			$entry.children('.wrap').perfectScrollbar();
+		}
+		*/
+
 		console.log('RESIZE: '+flag+' => content resolution is '+$box.width()+'x'+$box.height());
 	});
+
+	fullscreenchange(); // over do for MSIE
 }
 
 function build_url(url,attributes){
@@ -188,13 +218,13 @@ function load(source,position){
 
 function bind_entry_events(id){
 	id = id || jQuery('section.entry.format-image.current').attr('id');
-	var $this = jQuery('#'+id);
+	var $entry = jQuery('#'+id);
 
-	$this.imagesLoaded(function(e){
-		resize($this.attr('data-position'),'imagesLoaded');
+	$entry.imagesLoaded(function(e){
+		resize($entry.attr('data-position'),'imagesLoaded');
 	});
 
-	$this.find('.popup_switch a').on('click',function(e){
+	$entry.find('.popup_switch a').on('click',function(e){
 		e.preventDefault();
 		var $trigger = jQuery(this);
 		var $content = jQuery($trigger.attr('href')).clone();
@@ -210,6 +240,21 @@ function bind_entry_events(id){
 			content: $popup
 		});
 	});
+
+	$entry.find('.social a').on('click',function(e){
+		e.preventDefault();
+		e.stopPropagation();
+		open_social(jQuery(this).attr('href'));
+	});
+
+	/*
+	if($entry.is('.page')||$entry.is('.archive')){
+		$entry.perfectScrollbar();
+	}
+	if($entry.is('.post')){
+		$entry.children('.wrap').perfectScrollbar();
+	}
+	*/
 
 }
 
@@ -352,6 +397,7 @@ function cleanup(){
 
 function fullscreen(flag){
 	var element = document.documentElement;
+	flag = flag || !is_fullscreen();
 	if(flag){
 		if(element.requestFullscreen) {
 			element.requestFullscreen();
@@ -369,24 +415,30 @@ function fullscreen(flag){
 			document.mozCancelFullScreen();
 		} else if(document.webkitExitFullscreen) {
 			document.webkitExitFullscreen();
+		} else if(document.msExitFullscreen){
+			document.msExitFullscreen();
 		}
 	}
 }
 
 function fullscreenchange(){
 	var $trigger = jQuery('#toggle-fullscreen');
-
-	if(is_fullscreen()){
-		$trigger.attr('data-flag','true');
-	}else{
-		$trigger.attr('data-flag','false');
-	}
-	init_flag($trigger);
+	var flag = is_fullscreen();
+	toggle_flag($trigger,flag);
 }
 
 function is_fullscreen(){
-	//var is_fullscreen = window.fullScreenApi.isFullScreen();
-	var is_fullscreen = !window.screenTop&&!window.screenY; // fallback
+	var is_fullscreen;
+
+	if(typeof document.fullscreen!='undefined'){
+		is_fullscreen = document.fullscreen;
+	}else if(typeof document.mozFullScreen!='undefined'){
+		is_fullscreen = document.mozFullScreen;
+	}else if(typeof document.webkitIsFullScreen!='undefined'){
+		is_fullscreen = document.webkitIsFullScreen;
+	}else{
+		is_fullscreen = Math.abs(screen.width-window.innerWidth)<10?true:false;
+	}
 
 	return is_fullscreen;
 }
@@ -413,6 +465,12 @@ function open_help(flag){
 	}
 
 	//jQuery.removeCookie('open_help',{path:'/'});
+}
+
+function open_social(url){
+	name = '_blank';
+	specs = 'width=500,height=350,menubar=no,resizable=yes,scrollable=no,status=no,titlebar=yes,toolbar=no';
+	window.open(url,name,specs);
 }
 
 jQuery(document).ready(function(e){
@@ -503,32 +561,28 @@ jQuery(document).ready(function(e){
 		resize();
 	});
 
+	/* messed up with MSIE
+	jQuery(document).on('fullscreenchange webkitfullscreenchange mozfullscreenchange MSFullscreenChange',function(e){
+		fullscreenchange();
+	});
+	*/
+
 	jQuery('.toggler').on('click',function(e){
 		e.preventDefault();
 		var $trigger = jQuery(this);
-		var flag = null;
 
-		if($trigger.attr('data-flag')=='true'){
-			$trigger.attr('data-flag','false');
-			flag = false;
-		}else{
-			$trigger.attr('data-flag','true');
-			flag = true;
-		}
-		init_flag($trigger);
-
-		if($trigger.attr('id')=='toggle-fullscreen'){
-			fullscreen(flag);
-		}
-
-		if($trigger.attr('id')=='toggle-help'){
-			open_help(true);
+		switch($trigger.attr('id')){
+			case 'toggle-navigation':
+				toggle_flag($trigger);
+			break;
+			case 'toggle-help':
+				open_help(true);
+			break;
+			case 'toggle-fullscreen':
+				fullscreen();
+			break;
 		}
 	});
-
-	jQuery(document).on('fullscreenchange',function(e){fullscreenchange();});
-	jQuery(document).on('webkitfullscreenchange',function(e){fullscreenchange();});
-	jQuery(document).on('mozfullscreenchange',function(e){fullscreenchange();});
 
 	jQuery('#container').swipe({
 		swipe:function(e,direction,distance,duration,fingerCount,fingerData){
@@ -574,7 +628,7 @@ jQuery(document).ready(function(e){
             case 40: // down
             break;
             case 70: // f
-                jQuery('#toggle-fullscreen').click();
+                fullscreen();
             break;
             case 80: // p
                 if(is_popup){

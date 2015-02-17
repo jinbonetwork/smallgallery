@@ -37,6 +37,71 @@ a:visited {
   text-decoration: none;
   outline: none;
 }
+.social {
+  cursor: default;
+}
+.social ul.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.social ul.items:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.social ul.items li.item {
+  display: block;
+  float: left;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+.social ul.items li.item a {
+  display: block;
+  width: inherit;
+  height: inherit;
+  line-height: inherit;
+  color: #000000;
+}
+.social ul.items li.item a span {
+  display: none;
+}
+.social ul.items li.item a:after {
+  content: '';
+  font-family: 'FontAwesome';
+  display: block;
+  width: inherit;
+  height: inherit;
+  text-align: center;
+  line-height: inherit;
+  font-size: 18px;
+  color: inherit;
+}
+.social ul.items li.item.twitter a:hover {
+  color: #0084B4;
+}
+.social ul.items li.item.twitter a:after {
+  content: '\F099';
+}
+.social ul.items li.item.facebook a:hover {
+  color: #3B5998;
+}
+.social ul.items li.item.facebook a:after {
+  content: '\F082';
+}
+.social ul.items li.item.googleplus a:hover {
+  color: #DF4A32;
+}
+.social ul.items li.item.googleplus a:after {
+  content: '\F0D4';
+}
+.social ul.items li.item.kakaotalk a:hover {
+  color: #FAE100;
+}
+.social ul.items li.item.kakaotalk a:after {
+  content: '\F075';
+}
 html,
 body {
   position: relative;
@@ -55,18 +120,22 @@ body {
 }
 #header a,
 #navigation a,
-#control a {
+#control a,
+.social a,
+.edit_link a {
   transform: opacity 300ms linear;
   -webkit-transition: opacity 300ms linear;
   -moz-transition: opacity 300ms linear;
   -ms-transition: opacity 300ms linear;
   -o-transition: opacity 300ms linear;
   color: #FFFFFF;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 #header a:hover,
 #navigation a:hover,
-#control a:hover {
+#control a:hover,
+.social a:hover,
+.edit_link a:hover {
   opacity: 1;
 }
 #header {
@@ -381,36 +450,17 @@ section.entry > .wrap .feature img {
 section.entry > .wrap .edit_link {
   position: absolute;
   z-index: 1;
-  top: 0;
+  top: -24px;
   right: 0;
 }
 section.entry > .wrap .edit_link a {
-  opacity: 0.3;
-  transform: all 300ms linear;
-  -webkit-transition: all 300ms linear;
-  -moz-transition: all 300ms linear;
-  -ms-transition: all 300ms linear;
-  -o-transition: all 300ms linear;
-  transform: rotate(0deg);
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
-  -ms-transform: rotate(0deg);
-  -o-transform: rotate(0deg);
   position: relative;
-  top: -24px;
   display: block;
   width: 24px;
   height: 24px;
   line-height: 24px;
-  font-size: 24px;
-}
-section.entry > .wrap .edit_link a:hover {
-  opacity: 1;
-  transform: rotate(180deg);
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
+  font-size: 18px;
+  color: #000000;
 }
 section.entry > .wrap .edit_link a:after {
   content: '\F013';
@@ -421,9 +471,15 @@ section.entry > .wrap .edit_link a:after {
   text-align: center;
   line-height: inherit;
   font-size: inherit;
+  color: inherit;
 }
 section.entry > .wrap .edit_link a span {
   display: none;
+}
+section.entry > .wrap .social {
+  position: absolute;
+  top: -24px;
+  left: 0;
 }
 section.entry.format-image > .wrap .popup {
   display: none;
@@ -555,11 +611,7 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a img {
   border: 3px solid white;
 }
 section.entry.archive > .wrap ul.thumbnail-archives li.item a:hover {
-  transform: scale(1.1,1.1);
-  -webkit-transform: scale(1.1,1.1);
-  -moz-transform: scale(1.1,1.1);
-  -ms-transform: scale(1.1,1.1);
-  -o-transform: scale(1.1,1.1);
+  border-color: red;
 }
 .fancybox-overlay {
   overflow: hidden !important;

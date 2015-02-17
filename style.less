@@ -26,17 +26,42 @@ Text Domain: smallgallery
 //-----------------------------------------------------------------------------
 @sans-serif: "Apple SD Gothic Neo","AppleGothic","NanumGothic","Malgun Gothic","Dotum","Gulim",sans-serif;
 @serif: "NanumMyeongjo",@sans-serif;
+
+@black: #000000;
+
+@twitter-icon: '\F099';
+@twitter-color: #0084B4;
+
+@facebook-icon: '\F082';
+@facebook-color: #3B5998;
+@facebook-color-1: #3b5998;
+@facebook-color-3: #8b9dc3;
+@facebook-color-4: #dfe3ee;
+@facebook-color-5: #f7f7f7;
+@facebook-color-6: #ffffff;
+
+@googleplus-icon: '\F0D4';
+@googleplus-color: #DF4A32;
+
+@kakaotalk-icon: '\F075';
+@kakaotalk-color: #FAE100;
+
 @narrow-width-point: 960px;
 @responsive-width-point: 640px;
 @slide-width: 60%;
+
 @ui-menu-height: 40px;
 @ui-control-height: 120px;
 @ui-font-size: 14px;
+@ui-icon-box-size: 24px;
+@ui-icon-font-size: 18px;
+@ui-font-color-dark: @black;
+
 @frame-border-color: black;
 @frame-background-color: white;
 @frame-shadow-color: rgba(0,0,0,0.5);
-@frame-border-hover-color: red;
 @frame-shadow-property: 3px 3px 5px @frame-shadow-color;
+@frame-hover-border-color: red;
 
 .transition(@args) {
 	transform: @args;
@@ -91,6 +116,98 @@ a:visited {
 	outline: none;
 }
 
+.social {
+	cursor: default;
+
+	ul.items {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		&:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+
+		li.item {
+			display: block;
+			float: left;
+			width: @ui-icon-box-size;
+			height: @ui-icon-box-size;
+			line-height: @ui-icon-box-size;
+
+			a {
+				display: block;
+				width: inherit;
+				height: inherit;
+				line-height: inherit;
+				color: @ui-font-color-dark;
+
+				span {
+					display: none;
+				}
+
+				&:after {
+					content: '';
+					font-family: 'FontAwesome';
+					display: block;
+					width: inherit;
+					height: inherit;
+					text-align: center;
+					line-height: inherit;
+					font-size: @ui-icon-font-size;
+					color: inherit;
+				}
+			}
+
+			&.twitter a {
+
+				&:hover {
+					color: @twitter-color;
+				}
+
+				&:after {
+					content: @twitter-icon;
+				}
+			}
+
+			&.facebook a {
+
+				&:hover {
+					color: @facebook-color;
+				}
+
+				&:after {
+					content: @facebook-icon;
+				}
+			}
+
+			&.googleplus a {
+
+				&:hover {
+					color: @googleplus-color;
+				}
+			
+				&:after {
+					content: @googleplus-icon;
+				}
+			}
+
+			&.kakaotalk a {
+			
+				&:hover {
+					color: @kakaotalk-color;
+				}
+				
+				&:after {
+					content: @kakaotalk-icon;
+				}
+			}
+		}
+	}
+}
+
 //-----------------------------------------------------------------------------
 //	Layout
 //-----------------------------------------------------------------------------
@@ -115,11 +232,13 @@ body {
 
 #header,
 #navigation,
-#control {
+#control,
+.social,
+.edit_link {
 	a {
 		.transition(opacity @ui-animation-duration @ui-animation-timing);
 		color: #FFFFFF;
-		opacity: 0.5;
+		opacity: 0.4;
 
 		&:hover {
 			opacity: 1;
@@ -481,26 +600,17 @@ section.entry {
 		.edit_link {
 			position: absolute;
 			z-index: 1;
-			top: 0;
+			top: -@ui-icon-box-size;
 			right: 0;
 
-
 			a {
-				opacity: 0.3;
-				.transition(all @ui-animation-duration @ui-animation-timing);
-				.transform(rotate(0deg));
 				position: relative;
-				top: -24px;
 				display: block;
-				width: 24px;
-				height: 24px;
-				line-height: 24px;
-				font-size: 24px;
-
-				&:hover {
-					opacity: 1;
-					.transform(rotate(180deg));
-				}
+				width: @ui-icon-box-size;
+				height: @ui-icon-box-size;
+				line-height: @ui-icon-box-size;
+				font-size: @ui-icon-font-size;
+				color: @ui-font-color-dark;
 
 				&:after {
 					content: '\F013';
@@ -511,12 +621,19 @@ section.entry {
 					text-align: center;
 					line-height: inherit;
 					font-size: inherit;
+					color: inherit;
 				}
 
 				span {
 					display: none;
 				}
 			}
+		}
+
+		.social {
+			position: absolute;
+			top: -@ui-icon-box-size;
+			left: 0;
 		}
 	}
 
@@ -564,6 +681,7 @@ section.entry {
 	&.format-standard {
 
 		& > .wrap {
+			//overflow: hidden;
 
 			h1.title {
 				font-family: @serif;
@@ -707,7 +825,8 @@ section.entry.archive {
 					}
 
 					&:hover {
-						.transform(scale(1.1,1.1));
+						border-color: @frame-hover-border-color;
+						//.transform(scale(1.1,1.1));
 					}
 				}
 			}
