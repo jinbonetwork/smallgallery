@@ -83,6 +83,7 @@ function rebuild_post($post){
 
 	$post->post_type_label = $post->post_type=='post'?'slide':$post->post_type;
 	$post->edit_link = current_user_can('edit_'.$post->post_type,$post->ID)?get_edit_post_link($post->ID):'';
+	$post->comment_link = get_comments_popup_link($post);
 
 	$properties = get_properties($post);
 	$post->slide_weight = $properties['slide_weight'];
@@ -177,7 +178,6 @@ function rebuild_post($post){
 function build_post($post){
 	$markup = '';
 
-	$post->div_comment_link = '';
 	switch($post->format){
 		case 'standard':
 			$post->div_popup_link = '';
@@ -246,9 +246,7 @@ EOT;
 
 function get_comments_popup_link($post){
 	$link = '';
-	global $wpcommentspopupfile, $wpcommentsjavascript;
-
-	$link = (empty($wpcommentspopupfile)?home_url():get_option('siteurl')).'/'.$wpcommentspopupfile.'?comments_popup='.$post->ID;
+	$link = home_url().'/'.$wpcommentspopupfile.'?comments_popup='.$post->ID;
 	$link = apply_filters('comments_popup_link_attributes',$link);
 	return $link;
 }

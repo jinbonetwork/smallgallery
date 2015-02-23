@@ -20,7 +20,10 @@ function on_after_theme_setup(){
 add_action('after_setup_theme', 'on_after_theme_setup');
 
 function on_wp_enqueue_scripts(){
-	wp_enqueue_script('comment-reply');
+	global $withcomments;
+	$withcomments = 1;
+
+	wp_enqueue_script('comments-reply');
 
 	wp_enqueue_script('jquery-cookie',get_template_directory_uri().'/contrib/jquery-cookie/src/jquery.cookie.js',array('jquery'));
 

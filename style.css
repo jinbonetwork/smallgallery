@@ -126,6 +126,7 @@ a:visited {
 }
 .popup_link a {
   display: block;
+  color: #000000;
 }
 .popup_link a span {
   display: none;
@@ -149,9 +150,7 @@ a:visited {
   float: left;
   position: relative;
   display: block;
-  background-color: #000000;
-  border-radius: 3px;
-  color: #FFFFFF;
+  color: #000000;
   font-size: 18px;
 }
 .comment_link a span {
@@ -544,12 +543,11 @@ section.entry > .wrap .social {
 section.entry > .wrap .wrap-inner {
   position: relative;
 }
-section.entry > .wrap .wrap-inner .comments {
-  overflow: hidden;
-  max-height: 0;
+section.entry > .wrap .wrap-inner .popup_link {
+  float: right;
 }
-section.entry > .wrap .wrap-inner .comments.active {
-  max-height: none;
+section.entry > .wrap .wrap-inner .comment_link {
+  float: right;
 }
 section.entry > .wrap:hover .edit_link,
 section.entry > .wrap:hover .social {
@@ -583,6 +581,10 @@ section.entry.format-image > .wrap .wrap-inner .caption div.author a {
 section.entry.format-standard > .wrap .edit_link,
 section.entry.format-standard > .wrap .social {
   top: 0;
+}
+section.entry.format-standard > .wrap .popup_link,
+section.entry.format-standard > .wrap .comment_link {
+  float: none;
 }
 section.entry.format-standard > .wrap h1.title {
   font-family: "NanumMyeongjo", "Apple SD Gothic Neo", "AppleGothic", "NanumGothic", "Malgun Gothic", "Dotum", "Gulim", sans-serif;
@@ -644,6 +646,9 @@ section.entry.format-standard.archive {
     border: 10px solid #000000;
     box-shadow: 0 0 5px rgba(0,0,0,0.9);
   }
+}
+.comments {
+  overflow: auto;
 }
 section.entry.archive > .wrap {
   max-width: 60%;
@@ -710,17 +715,17 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a:hover {
     min-height: 200px;
   }
 }
-.fancybox-wrap.help,
-.fancybox-wrap.help * {
+.fancybox-wrap.help-popup,
+.fancybox-wrap.help-popup * {
   background-color: transparent;
   box-shadow: none;
 }
-.fancybox-wrap.help .fancybox-close {
+.fancybox-wrap.help-popup .fancybox-close {
   width: 32px;
   height: 32px;
   background-image: none;
 }
-.fancybox-wrap.help .fancybox-close:after {
+.fancybox-wrap.help-popup .fancybox-close:after {
   content: '\F00D';
   font-family: 'FontAwesome';
   display: block;

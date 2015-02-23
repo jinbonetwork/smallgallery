@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: smallgallery\n"
 "POT-Creation-Date: 2015-02-11 10:02+0900\n"
-"PO-Revision-Date: 2015-02-17 12:11+0900\n"
+"PO-Revision-Date: 2015-02-23 16:42+0900\n"
 "Last-Translator: 진보네트워크센터 <jinbonetwork@gmail.com>\n"
 "Language-Team: jinbonet <jinbonetwork@gmail.com>\n"
 "Language: ko_KR\n"
@@ -62,6 +62,21 @@ msgstr "홈페이지"
 
 msgid "About"
 msgstr "소개"
+
+msgid "Comment navigation"
+msgstr "댓글 탐색"
+
+msgid "Older comments"
+msgstr "이전 페이지"
+
+msgid "Newer comments"
+msgstr "다음 페이지"
+
+msgid "Reply on <strong>%s</strong>"
+msgstr "<strong>%s</strong>에 댓글 달기"
+
+msgid "Comments are closed."
+msgstr "여기에는 댓글을 쓸 수 없습니다."
 
 msgid "Powered by <a href=\"http://jinbo.net\"><span>Jinbo.net</span></a>"
 msgstr "<a href=\"http://jinbo.net\"><span>진보넷</span></a>에서 만듦"

@@ -12,6 +12,17 @@ var $slideshow = {
 	},
 	direction: null,
 	animation: null,
+	popup: {
+		width: 800,
+		height: 600,
+		autoSize: false,
+		href: false,
+		content: false,
+		scrolling: 'no',
+		iframe: {
+			preload: false
+		}
+	},
 	garbage: []
 };
 
@@ -225,7 +236,7 @@ function load(source,position){
 }
 
 function bind_entry_events(id){
-	id = id || jQuery('section.entry.format-image.current').attr('id');
+	id = id || jQuery('section.entry.current').attr('id');
 	var $entry = jQuery('#'+id);
 
 	$entry.imagesLoaded(function(e){
@@ -237,33 +248,46 @@ function bind_entry_events(id){
 		var $trigger = jQuery(this);
 		var $content = jQuery($trigger.attr('href')).clone();
 		var $popup;
-
+		var $options;
 		if(!$content.length){
 			return;
 		}
 
 		$content.attr('id',$content.attr('id')+'-content');
 		$popup = jQuery('<div></div>').append($content).html();
-
-		jQuery.fancybox.open({
+		$options = jQuery.extend({},$slideshow.popup,{
 			type: 'html',
-			width: 800,
-			height: 600,
+			wrapCSS: 'content-popup',
 			content: $popup,
 			afterLoad:function(){
 				jQuery('.fancybox-inner').scrollTop($content.offset().top);
 			}
 		});
+		jQuery.fancybox.open($options);
 	});
 
 	$entry.find('.comment_link a').on('click',function(e){
 		e.preventDefault();
+		e.stopPropagation();
+		var $trigger = jQuery(this);
+		var $options;
+
+		$options = jQuery.extend({},$slideshow.popup,{
+			type: 'iframe',
+			wrapCSS: 'comment-popup',
+			href: $trigger.attr('href'),
+			afterClose: function(){
+				location.reload();
+			}
+		});
+		jQuery.fancybox.open($options);
 	});
 
 	$entry.find('.social a').on('click',function(e){
 		e.preventDefault();
 		e.stopPropagation();
-		open_social(jQuery(this).attr('href'));
+		var $trigger = jQuery(this);
+		open_social_link($trigger.attr('href'));
 	});
 
 	/*
@@ -358,9 +382,9 @@ function update_page_meta(){
 		twitter: {},
 		format: $slideshow.position.current.attr('data-format'),
 		title: history.title,
-		url: history.url,
+		url: encodeURI(history.url),
 		description: $slideshow.position.current.attr('data-description'),
-		image: $slideshow.position.current.find('.feature img').length?$slideshow.position.current.find('.feature img').attr('src'):'',
+		image: $slideshow.position.current.find('.feature img').length?encodeURI($slideshow.position.current.find('.feature img').attr('src')):'',
 		time: {
 			published: $slideshow.position.current.attr('data-time-published'),
 			modified: $slideshow.position.current.attr('data-time-modified')
@@ -398,8 +422,8 @@ function update_page_meta(){
 	jQuery('meta[name="twitter:description"]').attr('content',social.description);
 	jQuery('meta[name="twitter:image"]').remove();
 	jQuery('meta[name="twitter:image:src"]').remove();
-	jQuery('<meta name="twitter:'+social.twitter.imagetag+'" content="'+social.image+'">').appendTo('head');
 
+	jQuery('<meta name="twitter:'+social.twitter.imagetag+'" content="'+social.image+'">').appendTo('head');
 }
 
 function cleanup(){
@@ -463,6 +487,8 @@ function is_fullscreen(){
 }
 	
 function open_help(flag){
+	var $options;
+
 	if(typeof flag=='undefined'){
 		flag = jQuery.cookie('open_help');
 		if(typeof flag == 'undefined'){
@@ -475,21 +501,21 @@ function open_help(flag){
 	}
 
 	if(flag){
-		jQuery.fancybox.open({
+		$options = jQuery.extend({},$options,{
 			type: 'html',
-			wrapCSS: 'help',
+			wrapCSS: 'help-popup',
 			content: jQuery('#help-container').html(),
-			scrolling: 'no'
 		});
+		jQuery.fancybox.open($options);
 	}
 
 	//jQuery.removeCookie('open_help',{path:'/'});
 }
 
-function open_social(url){
-	name = '_blank';
-	specs = 'width=500,height=350,menubar=no,resizable=yes,scrollable=no,status=no,titlebar=yes,toolbar=no';
-	window.open(url,name,specs);
+function open_social_link(url){
+	var name = '_blank';
+	var options = 'width='+$slideshow.popup.width+',height='+$slideshow.popup.height+',menubar=no,resizable=yes,scrollable=no,status=no,titlebar=yes,toolbar=no';
+	window.open(url,name,options);
 }
 
 jQuery(document).ready(function(e){
@@ -649,15 +675,20 @@ jQuery(document).ready(function(e){
             case 70: // f
                 fullscreen();
             break;
+            case 67: // c
+                if(!is_popup){
+                    jQuery('section.entry.current .comment_link a').click();
+                }
+            break;
             case 80: // p
-                if(is_popup){
-                    jQuery.fancybox.close();
-                }else{
-                    jQuery('section.entry.current .popup_switch a').click();
+                if(!is_popup){
+                    jQuery('section.entry.current .popup_link a').click();
                 }
             break;
             case 72: // h
-            	open_help(true);
+				if(!is_popup){
+					open_help(true);
+				}
             break;
             case 27: // esc
                 return false;
