@@ -20,6 +20,8 @@ function on_after_theme_setup(){
 add_action('after_setup_theme', 'on_after_theme_setup');
 
 function on_wp_enqueue_scripts(){
+	wp_enqueue_script('comment-reply');
+
 	wp_enqueue_script('jquery-cookie',get_template_directory_uri().'/contrib/jquery-cookie/src/jquery.cookie.js',array('jquery'));
 
 	wp_enqueue_script('imagesloaded',get_template_directory_uri().'/contrib/imagesloaded/imagesloaded.pkgd.min.js',array('jquery'));

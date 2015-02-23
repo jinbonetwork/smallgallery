@@ -97,8 +97,11 @@ function resize(position,context){
 		var $img = $feature.find('img');
 
 		// get default size
-		$box.availableWidth = $entry.width();
-		$box.availableHeight = $entry.height();
+		$entry.availableWidth = $entry.width();
+		$entry.availableHeight = $entry.height();
+		$box.availableWidth = $entry.availableWidth;
+		$box.availableHeight = $entry.availableHeight;
+		console.log('RESIZE: '+flag+' is in the box => '+$box.availableWidth+'x'+$box.availableHeight);
 
 		// adjust size with given padding value
 		if(padding.search(/\%$/)>0){
@@ -112,11 +115,10 @@ function resize(position,context){
 
 		// consider feature image size
 		if($img.length){
-			console.log('RESIZE: '+flag+' has a featured image => '+$feature.width()+'x'+$feature.height());
-
 			// check natural size of image
 			$feature.givenWidth = $feature.width();
 			$feature.givenHeight = $feature.height();
+			console.log('RESIZE: '+flag+' has a featured image => '+$feature.givenWidth+'x'+$feature.givenHeight);
 
 			// check aspect ratios of image and container
 			$feature.ratio = $feature.givenWidth/$feature.givenHeight;
@@ -134,14 +136,20 @@ function resize(position,context){
 			$box.availableWidth = $feature.availableWidth;
 			$box.availableHeight = $feature.availableHeight;
 		}
-
-		// apply calculated size
         console.log('RESIZE: '+flag+' => available resolution is '+$box.availableWidth+'x'+$box.availableHeight);
+
+		// calculate size
+		$box.actualWidth = $box.availableWidth;
+		$box.actualHeight = $box.availableHeight;
+        console.log('RESIZE: '+flag+' => actual resolution is '+$box.actualWidth+'x'+$box.actualHeight);
+
+		// apply size
+		$box.cssWidth = Math.floor($box.actualWidth);
+		$box.cssHeight = Math.floor($img.length?$entry.availableHeight:$box.actualHeight);
 		$box.css({
-			width: $box.availableWidth,
-			//height: $img.length?'auto':$box.availableHeight,
+			width: $box.cssWidth,
 			height: 'auto',
-			maxHeight: $img.length?$entry.height():$box.availableHeight
+			maxHeight: $box.cssHeight
 		});
 
 		/*
@@ -224,11 +232,15 @@ function bind_entry_events(id){
 		resize($entry.attr('data-position'),'imagesLoaded');
 	});
 
-	$entry.find('.popup_switch a').on('click',function(e){
+	$entry.find('.popup_link a').on('click',function(e){
 		e.preventDefault();
 		var $trigger = jQuery(this);
 		var $content = jQuery($trigger.attr('href')).clone();
 		var $popup;
+
+		if(!$content.length){
+			return;
+		}
 
 		$content.attr('id',$content.attr('id')+'-content');
 		$popup = jQuery('<div></div>').append($content).html();
@@ -237,8 +249,15 @@ function bind_entry_events(id){
 			type: 'html',
 			width: 800,
 			height: 600,
-			content: $popup
+			content: $popup,
+			afterLoad:function(){
+				jQuery('.fancybox-inner').scrollTop($content.offset().top);
+			}
 		});
+	});
+
+	$entry.find('.comment_link a').on('click',function(e){
+		e.preventDefault();
 	});
 
 	$entry.find('.social a').on('click',function(e){
@@ -651,14 +670,13 @@ jQuery(document).ready(function(e){
     	var $href = $trigger.attr('href');
 
     	if(
-    		!$trigger.attr('class')
-    		&& !$trigger.parent().attr('class')
-    		&& (
-    			$href.search('/')==0
-    			|| $href.search($slideshow.domain)==0
-    		)
+    		!$trigger.attr('class')&&!$trigger.attr('id')
+    		&& !$trigger.parent().attr('class')&&!$trigger.parent().attr('id')
+    		&& ($href.search(/^\//)||$href.search($slideshow.domain))
+    		($href.search(/^\//)||$href.search($slideshow.domain))
     	){
 			e.preventDefault();
+			alert('ajax');
 			window.location = $trigger.attr('href');
 		}
     });

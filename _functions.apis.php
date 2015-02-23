@@ -36,6 +36,8 @@ function rebuild_post($post){
 	global $wpdb;
 	$post->permalink = get_permalink($post->ID);
 	$post->author_url = get_author_posts_url($post->post_author);
+	$post->comments_number = get_comments_number($post->ID);
+	$post->has_comment = $post->comments_number>0||$post->comment_status=='open'||$post->ping_status=='open'?true:false;
 
 	if($post->post_type=='post'){
 		$post->pprev_ID = $wpdb->get_var("SELECT ID FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish' AND post_date < '{$post->post_date}' ORDER BY post_date DESC LIMIT 1,1");
@@ -139,7 +141,6 @@ function rebuild_post($post){
 	$post->alt_content = esc_attr(strip_tags($post->filtered_content));
 	$post->alt_excerpt = esc_attr(strip_tags($post->filtered_excerpt));
 
-	$post->div_edit_link = ($post->edit_link?"<div class='edit_link'><a href='{$post->edit_link}'><span>".__("Edit this {$post->post_type_label}",TEXTDOMAIN)."</span></a></div><!--/.edit_link-->":'');
 	$post->div_feature = ($post->slide_feature?"<div class='feature'>{$post->filtered_feature}</div>":'').'<!--/.feature-->';
 	$post->div_title = ($post->slide_title?"<{$post->heading} class='title'>{$post->filtered_title}</{$post->heading}>":'').'<!--/.title-->';
 	$post->div_content = ($post->slide_content?"<div class='content'>{$post->filtered_content}</div>":'').'<!--/.content-->';
@@ -162,17 +163,26 @@ function rebuild_post($post){
 	$post->popup_category = $post->slide_category==2?$post->div_category:'';
 	$post->popup_tag = $post->slide_tag==2?$post->div_tag:'';
 
+	$post->div_caption = build_caption($post);
+	$post->div_popup = build_popup($post);
+
+	$post->div_edit_link = ($post->edit_link?"<div class='edit_link'><a href='{$post->edit_link}'><span>".__("Edit this {$post->post_type_label}",TEXTDOMAIN)."</span></a></div><!--/.edit_link-->":'');
+	$post->div_popup_link = $post->div_popup?"<div class='popup_link'><a href='#entry-{$post->ID}-popup'><span>".__("Open popup",TEXTDOMAIN)."</span></a></div>":'';
+	$post->div_comment_link = $post->has_comment?"<div class='comment_link'><a href='{$post->comment_link}'><span>{$post->comments_number}</span></a></div>":'';
+	$post->div_social_links = build_social($post);
+
 	return $post;
 }
 
 function build_post($post){
 	$markup = '';
 
-	$edit_link = $post->div_edit_link;
-	$social_links = build_social($post);
-	$caption = build_caption($post);
-	$popup = build_popup($post);
-	$social = build_social($post);
+	$post->div_comment_link = '';
+	switch($post->format){
+		case 'standard':
+			$post->div_popup_link = '';
+		break;
+	}
 
 	ob_start();
 	echo <<<EOT
@@ -192,11 +202,16 @@ function build_post($post){
 	data-author-url="{$post->author_url}"
 >
 	<div class="wrap">
-		{$edit_link}
-		{$social_links}
+		{$post->div_edit_link}
+		{$post->div_social_links}
 		{$post->div_feature}
-		{$caption}
-		{$popup}
+
+		<div class="wrap-inner">
+			{$post->div_popup_link}
+			{$post->div_comment_link}
+			{$post->div_caption}
+			{$post->div_popup}
+		</div>
 	</div>
 	<!--/#entry-{$post->ID}-->
 </section>
@@ -229,15 +244,22 @@ EOT;
 	return $markup;
 }
 
+function get_comments_popup_link($post){
+	$link = '';
+	global $wpcommentspopupfile, $wpcommentsjavascript;
+
+	$link = (empty($wpcommentspopupfile)?home_url():get_option('siteurl')).'/'.$wpcommentspopupfile.'?comments_popup='.$post->ID;
+	$link = apply_filters('comments_popup_link_attributes',$link);
+	return $link;
+}
+
 function build_caption($post){
 	$markup;
 
 	if($post->caption_title||$post->caption_content||$post->caption_author||$post->caption_date||$post->caption_category||$post->caption_tag){
-		$popup_switch = $post->format=='image'&&$popup?"<div class='popup_switch'><a href='#entry-{$post->ID}-popup'><span>".__('Read more',TEXTDOMAIN)."</span></a></div>":'';
 		ob_start();
 		echo <<<EOT
 			<div id="entry-{$post->ID}-caption" class="caption">
-				{$popup_switch}
 				{$post->caption_title}
 				{$post->caption_author}
 				{$post->caption_date}

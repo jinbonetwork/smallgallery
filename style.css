@@ -124,6 +124,51 @@ a:visited {
 .social ul.items li.item.kakaotalk a:after {
   content: '\F075';
 }
+.popup_link a {
+  display: block;
+}
+.popup_link a span {
+  display: none;
+}
+.popup_link a:after {
+  content: '\F14C';
+  display: block;
+  font-family: 'FontAwesome';
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  font-size: 18px;
+}
+.comment_link:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.comment_link a {
+  float: left;
+  position: relative;
+  display: block;
+  background-color: #000000;
+  border-radius: 3px;
+  color: #FFFFFF;
+  font-size: 18px;
+}
+.comment_link a span {
+  display: block;
+  min-width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  margin: 0;
+  padding: 0 0.3em;
+}
+.comment_link a span:before {
+  content: '\F075';
+  display: inline;
+  font-family: 'FontAwesome';
+  margin-right: 0.25em;
+}
 #header a,
 #navigation a,
 #control a,
@@ -447,7 +492,6 @@ section.entry {
   position: absolute;
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 section.entry.current {
   left: 0%;
@@ -497,6 +541,16 @@ section.entry > .wrap .social {
   -ms-transition: all 300ms linear;
   -o-transition: all 300ms linear;
 }
+section.entry > .wrap .wrap-inner {
+  position: relative;
+}
+section.entry > .wrap .wrap-inner .comments {
+  overflow: hidden;
+  max-height: 0;
+}
+section.entry > .wrap .wrap-inner .comments.active {
+  max-height: none;
+}
 section.entry > .wrap:hover .edit_link,
 section.entry > .wrap:hover .social {
   opacity: 1;
@@ -514,10 +568,10 @@ section.entry.format-image > .wrap .feature img {
   border: 20px solid black;
   box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
 }
-section.entry.format-image > .wrap .caption {
+section.entry.format-image > .wrap .wrap-inner {
   margin-top: 20px;
 }
-section.entry.format-image > .wrap .caption div.author a {
+section.entry.format-image > .wrap .wrap-inner .caption div.author a {
   display: inline-block;
   min-width: 80px;
   padding: 4px 8px;
