@@ -26,9 +26,10 @@ if(have_comments()):
 			'format' => '&page=%#%',
 			'total' => $pagination->total_pages,
 			'current' => $pagination->page,
+			'type' => 'list',
 			'echo' => false,
 		);
-		$pagination->markup = paginate_links($pagination_arguments);
+		$pagination->markup = str_replace('<a ','<a target="_self" ',paginate_links($pagination_arguments));
 
 		$default_comments_page = get_option('default_comments_page');
 		$comment_order = get_option('comment_order');
@@ -48,6 +49,7 @@ if(have_comments()):
 		$pagination->markup = '';
 	}
 
+	$pagination->markup = $pagination->markup?"<div class='pagination'>{$pagination->markup}</div><!--/.pagination-->":'';
 	echo $pagination->markup;
 	echo "<ol class='comments'>".PHP_EOL;
 	wp_list_comments($comments_walk_arguments,$comments);
@@ -68,7 +70,7 @@ if(comments_open()&&post_type_supports(get_post_type(),'comments')):
 	));
 	$comment_form = ob_get_contents();
 	ob_end_clean();
-	echo str_replace('<form','<form target="_self"',$comment_form);
+	echo str_replace('<form ','<form target="_self" ',$comment_form);
 else:
 	echo "<p class='comments-are-closed'>".__('Comments are closed.',TEXTDOMAIN)."</p>".PHP_EOL;
 endif;

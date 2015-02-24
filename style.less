@@ -29,6 +29,7 @@ Text Domain: smallgallery
 
 @white: #FFFFFF;
 @black: #000000;
+@grey: #999999;
 
 @twitter-icon: '\F099';
 @twitter-color: #0084B4;
@@ -922,6 +923,14 @@ body#comments-body {
 		margin: 0;
 		padding: 1em;
 
+		.pagination,
+		ol.comments > li.comment,
+		.comment-respond {
+			margin: @comment-item-margin 0 0 0;
+			padding: @comment-item-margin 0 0 0;
+			border-top: @comment-item-border;
+		}
+
 		h1.site-title {
 			display: none;
 		}
@@ -969,18 +978,66 @@ body#comments-body {
 			}
 		}
 
+		.pagination {
+			cursor: default;
+
+			ul.page-numbers {
+				list-style: none;
+				display: block;
+				margin: 0 auto;
+				padding: 0;
+
+				&:after {
+					content: '';
+					display: block;
+					clear: both;
+				}
+
+				li {
+					display: block;
+					float: left;
+
+					span,
+					a {
+						.transition(all @ui-animation-duration @ui-animation-timing);
+						box-sizing: border-box;
+						display: block;
+						width: auto;
+						min-width: 1.5em;
+						height: 1.5em;
+						text-align: center;
+						line-height: 1.5em;
+						margin: 0;
+						padding: 0 0.25em;
+						border-radius: 3px;
+						background-color: transparent;
+
+						&.current {
+							font-weight: bold;
+						}
+
+						&.dots {
+							color: @grey;
+						}
+
+						&.prev,
+						&.next {
+						}
+					}
+
+					a:hover {
+						background-color: rgba(0,0,0,0.3);
+					}
+				}
+			}
+		}
+
 		ol.comments {
 			list-style: none;
 			margin: 0;
 			padding: 0;
 
 			li.comment {
-				margin: 0 0 0 @comment-item-margin;
-				padding: @comment-item-margin 0 0 0;
-
-				& + li.comment {
-					border-top: @comment-item-border;
-				}
 
 				.comment-body {
 					position: relative;
@@ -1038,9 +1095,6 @@ body#comments-body {
 		}
 
 		.comment-respond {
-			margin: 0;
-			padding: @comment-item-margin 0 0 0;
-			border-top: @comment-item-border;
 			
 			h3.comment-reply-title {
 
