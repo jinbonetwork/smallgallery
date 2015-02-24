@@ -31,9 +31,10 @@ the_post();
 <html>
 <head>
 	<meta charset="<?php echo get_option('blog_charset'); ?>">
+	<base target="_blank">
 	<link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri().'/style.php'; ?>">
 	<?php
-	wp_head();
+		wp_head();
 	?>
 </head>
 <body>
@@ -64,5 +65,8 @@ the_post();
 ?>
 
 </div><!--.comments-->
+<?php
+	wp_footer();
+?>
 </body>
 </html>
