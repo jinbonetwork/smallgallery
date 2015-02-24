@@ -15,6 +15,7 @@ define('SLIDE_ANIMATION_DURATION','600');
 define('SLIDE_ANIMATION_TIMING','linear');
 define('UI_ANIMATION_DURATION','300');
 define('UI_ANIMATION_TIMING','linear');
+define('UI_PORTRAIT_SIZE',64);
 define('TEXT_PADDING','20px');
 
 // Editing options

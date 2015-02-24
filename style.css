@@ -118,6 +118,9 @@ a:visited {
 .social ul.items li.item.googleplus a:after {
   content: '\F0D4';
 }
+.social ul.items li.item.kakaotalk {
+  display: none;
+}
 .social ul.items li.item.kakaotalk a:hover {
   color: #FAE100;
 }
@@ -576,7 +579,6 @@ section.entry.format-image > .wrap .wrap-inner .caption div.author a {
   color: #FFFFFF;
   font-size: 12px;
   background: #3A383D;
-  box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
 }
 section.entry.format-standard > .wrap .edit_link,
 section.entry.format-standard > .wrap .social {
@@ -647,8 +649,123 @@ section.entry.format-standard.archive {
     box-shadow: 0 0 5px rgba(0,0,0,0.9);
   }
 }
-.comments {
+body#comments-body {
   overflow: auto;
+  margin: 0;
+  padding: 0;
+}
+body#comments-body .comments-container {
+  margin: 0;
+  padding: 1em;
+}
+body#comments-body .comments-container h1.site-title {
+  display: none;
+}
+body#comments-body .comments-container h1.entry-title {
+  display: none;
+}
+body#comments-body .comments-container section.entry {
+  position: static;
+}
+body#comments-body .comments-container section.entry > .wrap {
+  position: static;
+  transform: none;
+  -webkit-transform: none;
+  -moz-transform: none;
+  -ms-transform: none;
+  -o-transform: none;
+}
+body#comments-body .comments-container section.entry > .wrap .social {
+  display: none;
+}
+body#comments-body .comments-container section.entry > .wrap .wrap-inner .comment_link,
+body#comments-body .comments-container section.entry > .wrap .wrap-inner .popup_link {
+  display: none;
+}
+body#comments-body .comments-container section.entry > .wrap .wrap-inner .caption {
+  display: block;
+}
+body#comments-body .comments-container section.entry > .wrap .wrap-inner .popup {
+  display: block;
+}
+body#comments-body .comments-container ol.comments {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+body#comments-body .comments-container ol.comments li.comment {
+  margin: 0 0 0 1em;
+  padding: 1em 0 0 0;
+}
+body#comments-body .comments-container ol.comments li.comment + li.comment {
+  border-top: 1px solid #000000;
+}
+body#comments-body .comments-container ol.comments li.comment .comment-body {
+  position: relative;
+  margin: 0 0 0 64px;
+  padding: 0 0 0 1em;
+}
+body#comments-body .comments-container ol.comments li.comment .comment-body .comment-author img.avatar {
+  position: absolute;
+  top: 0;
+  left: -64px;
+  width: 64px;
+  height: auto;
+}
+body#comments-body .comments-container ol.comments li.comment .comment-body .comment-author cite.fn {
+  font-weight: bold;
+  font-style: normal;
+}
+body#comments-body .comments-container ol.comments li.comment ol.children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+body#comments-body .comments-container ol.comments li.comment ol.children li.comment {
+  margin: 0;
+  padding: 0 0 0 2em;
+  border-top: none;
+}
+body#comments-body .comments-container .comment-respond {
+  margin: 0;
+  padding: 1em 0 0 0;
+  border-top: 1px solid #000000;
+}
+body#comments-body .comments-container .comment-respond form.comment-form {
+  max-width: 400px;
+}
+body#comments-body .comments-container .comment-respond form.comment-form p {
+  clear: both;
+  margin: 0.5em 0 0 0;
+  padding: 0;
+}
+body#comments-body .comments-container .comment-respond form.comment-form p:first-child {
+  margin-top: 0;
+}
+body#comments-body .comments-container .comment-respond form.comment-form p.form-allowed-tags {
+  font-size: 0.8em;
+}
+body#comments-body .comments-container .comment-respond form.comment-form p label {
+  float: right;
+}
+body#comments-body .comments-container .comment-respond form.comment-form p input[type="text"],
+body#comments-body .comments-container .comment-respond form.comment-form p textarea {
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  padding: 0.1em;
+  border: 1px solid #000000;
+  background: #FFFFFF;
+}
+body#comments-body .comments-container .comment-respond form.comment-form p input[type="text"] {
+  width: 300px;
+}
+body#comments-body .comments-container .comment-respond form.comment-form p.comment-form-comment label {
+  display: none;
+}
+body#comments-body .comments-container .comment-respond form.comment-form p.comment-form-comment textarea {
+  resize: none;
+  width: 100%;
 }
 section.entry.archive > .wrap {
   max-width: 60%;

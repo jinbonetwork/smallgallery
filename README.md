@@ -31,6 +31,7 @@ smallgallery
 할일
 ----
 
+1. 카카오톡 공유 링크 -- 새 API 발표 후에 작업하기로 함 https://developers.kakao.com/
 1. 전체화면 전환 기능 -- 크로스 브라우징 문제로 구현 중지
 2. 내부 링크 AJAX 처리
 3. 코너링 애니메이션

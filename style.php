@@ -21,6 +21,7 @@ if(DEBUG_CSS||!file_exists(OUTPUT)||filemtime(SOURCE)>filemtime(OUTPUT)){
 			'slide-animation-timing' => SLIDE_ANIMATION_TIMING,
 			'ui-animation-duration' => UI_ANIMATION_DURATION.'ms',
 			'ui-animation-timing' => UI_ANIMATION_TIMING,
+			'ui-portrait-size' => UI_PORTRAIT_SIZE,
 			'text-padding' => TEXT_PADDING,
 		));
 		$less->setPreserveComments(true);

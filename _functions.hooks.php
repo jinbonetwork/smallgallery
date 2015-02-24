@@ -44,6 +44,7 @@ function on_wp_enqueue_scripts(){
 	wp_enqueue_script('smallgallery',get_template_directory_uri().'/script.js',array('jquery','jquery-cookie','imagesloaded','fancybox','touchswipe'));
 }
 add_action('wp_enqueue_scripts','on_wp_enqueue_scripts');
+add_action('wp_head','comments_popup_script');
 
 function shortcode_thumbnail_archives($options=array()){
 	$markup = '';

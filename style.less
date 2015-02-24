@@ -227,6 +227,9 @@ a:visited {
 				}
 			}
 
+			&.kakaotalk {
+				display: none;
+			}
 			&.kakaotalk a {
 			
 				&:hover {
@@ -774,7 +777,6 @@ section.entry {
 							color: #FFFFFF;
 							font-size: 12px;
 							background: #3A383D;
-							box-shadow: @frame-shadow-property;
 						}
 					}
 				}
@@ -902,8 +904,275 @@ section.entry {
 //-----------------------------------------------------------------------------
 //	Comment
 //-----------------------------------------------------------------------------
-.comments {
+@comment-children-margin: 2em;
+@comment-item-margin: 1em;
+@comment-item-border: 1px solid @black;
+@ui-portrait-width: unit(@ui-portrait-size,px);
+@ui-portrait-margin: 1em;
+@ui-form-field-margin: 0.5em;
+@ui-form-field-padding: 0.1em;
+@ui-form-field-border: 1px solid @black;
+@ui-form-field-background: @white;
+body#comments-body {
 	overflow: auto;
+	margin: 0;
+	padding: 0;
+
+	.comments-container {
+		margin: 0;
+		padding: 1em;
+
+		h1.site-title {
+			display: none;
+		}
+
+		h1.entry-title {
+			display: none;
+			
+			strong {
+			}
+		}
+
+		section.entry {
+			position: static;
+			
+			& > .wrap {
+				position: static;
+				.transform(none);
+
+				.social {
+					display: none;
+				}
+
+				.feature {
+
+					img {
+						
+					}
+				}
+
+				.wrap-inner {
+
+					.comment_link,
+					.popup_link {
+						display: none;
+					}
+
+					.caption {
+						display: block;
+					}
+
+					.popup {
+						display: block;
+					}
+				}
+			}
+		}
+
+		ol.comments {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+
+			li.comment {
+				margin: 0 0 0 @comment-item-margin;
+				padding: @comment-item-margin 0 0 0;
+
+				& + li.comment {
+					border-top: @comment-item-border;
+				}
+
+				.comment-body {
+					position: relative;
+					margin: 0 0 0 @ui-portrait-width;
+					padding: 0 0 0 @ui-portrait-margin;
+				
+					.comment-author {
+
+						img.avatar {
+							position: absolute;
+							top: 0;
+							left: -@ui-portrait-width;
+							width: @ui-portrait-width;
+							height: auto;
+						}
+
+						cite.fn {
+							font-weight: bold;
+							font-style: normal;
+						}
+
+						.says {
+						}
+					}
+
+					.comment-meta {
+
+						a {
+						}
+
+						a.comment-edit-link {
+						}
+					}
+
+					.reply {
+					
+						a.comment-reply-link {
+
+						}
+					}
+				}
+
+				ol.children {
+					list-style: none;
+					margin: 0;
+					padding: 0;
+
+					li.comment {
+						margin: 0;
+						padding: 0 0 0 @comment-children-margin;
+						border-top: none;	
+					}
+				}
+			}
+		}
+
+		.comment-respond {
+			margin: 0;
+			padding: @comment-item-margin 0 0 0;
+			border-top: @comment-item-border;
+			
+			h3.comment-reply-title {
+
+				small {
+
+					a#cancel-comment-reply-link {
+					}
+				}
+			}
+
+			form.comment-form {
+				max-width: 400px;
+
+				p {
+					clear: both;
+					margin: @ui-form-field-margin 0 0 0;
+					padding: 0;
+
+					&:first-child {
+						margin-top: 0;
+					}
+
+					&.logged-in-as {
+				
+						a {
+						}
+					}
+
+					&.form-allowed-tags {
+						font-size: 0.8em;
+					}
+
+					span.required {
+					}
+
+					label {
+						float: right;
+					}
+
+					input[type="text"],
+					textarea {
+						box-sizing: border-box;
+						display: block;
+						margin: 0;
+						padding: @ui-form-field-padding;
+						border: @ui-form-field-border;
+						background: @ui-form-field-background;
+
+					}
+
+					input[type="text"] {
+						width: 300px;
+					}
+
+					&.comment-notes {
+
+						span#email-notes {
+						}
+
+						span.required {
+						}
+					}
+
+					&.comment-form-author {
+					
+						label {
+						}
+
+						span.required {
+						}
+
+						input {
+						}
+					}
+
+					&.comment-form-email {
+					
+						label {
+						}
+
+						span.required {
+						}
+
+						input {
+						}
+					}
+
+					&.comment-form-url {
+					
+						label {
+						}
+
+						span.required {
+						}
+
+						input {
+						}
+					}
+
+					&.comment-form-author {
+					
+						label {
+						}
+
+						span.required {
+						}
+
+						input {
+						}
+					}
+
+					&.comment-form-comment {
+
+						label {
+							display: none;
+						}
+
+						textarea {
+							resize: none;
+							width: 100%;
+						}
+					}
+
+					&.form-submit {
+					
+						input.submit {
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------
