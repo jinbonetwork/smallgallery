@@ -303,6 +303,7 @@ a:visited {
 			line-height: @ui-icon-box-size;
 			margin: 0;
 			padding: 0 0.3em;
+			font-size: smaller;
 
 			&:before {
 				content: '\F075';
@@ -944,6 +945,9 @@ body#comments-body {
 			strong {
 			}
 		}
+		h3#comments-title {
+			display: none;
+		}
 
 		section.entry {
 			position: static;
@@ -982,6 +986,7 @@ body#comments-body {
 		}
 
 		.pagination {
+			font-size: 0.9em;
 			cursor: default;
 
 			ul.page-numbers {
@@ -1030,6 +1035,7 @@ body#comments-body {
 
 					a:hover {
 						background-color: rgba(0,0,0,0.3);
+						color: @white;
 					}
 				}
 			}
@@ -1067,6 +1073,11 @@ body#comments-body {
 					}
 
 					.comment-meta {
+						font-size: 0.8em;
+
+						.comment-date {
+							color: @grey;
+						}
 
 						a {
 						}
@@ -1075,12 +1086,8 @@ body#comments-body {
 						}
 					}
 
-					.reply {
-					
 						a.comment-reply-link {
-
 						}
-					}
 				}
 
 				ol.children {
@@ -1090,7 +1097,7 @@ body#comments-body {
 
 					li.comment {
 						margin: 0;
-						padding: 0 0 0 @comment-children-margin;
+						padding: @comment-item-margin 0 0 @comment-children-margin;
 						border-top: none;	
 					}
 				}

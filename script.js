@@ -91,7 +91,7 @@ function toggle_flag($trigger,flag){
 
 function resize(position,context){
 	position = position || '';
-    position = 'section.entry'+(position!=''?'.'+position:'');
+    position = '#body section.entry'+(position!=''?'.'+position:'');
     context = context || '';
 
     var flag = '['+position+']';
@@ -646,7 +646,13 @@ jQuery(document).ready(function(e){
 		allowPageScroll: 'vertical',
 		threadhold: 75
 	});
+
     jQuery(document).keydown(function(e){
+
+		if(jQuery('#comments-body').length){
+			return;
+		}
+
         var context = e.target;
         var pressed = e.charCode || e.keyCode || e.which;
         var is_popup = jQuery('.fancybox-overlay').length?true:false;
