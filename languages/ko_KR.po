@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: smallgallery\n"
 "POT-Creation-Date: 2015-02-11 10:02+0900\n"
-"PO-Revision-Date: 2015-02-25 11:52+0900\n"
+"PO-Revision-Date: 2015-02-25 15:09+0900\n"
 "Last-Translator: 진보네트워크센터 <jinbonetwork@gmail.com>\n"
 "Language-Team: jinbonet <jinbonetwork@gmail.com>\n"
 "Language: ko_KR\n"
@@ -57,6 +57,27 @@ msgstr "카카오톡으로 공유하기"
 msgid "About"
 msgstr "소개"
 
+msgid "Comments on <strong>%s</strong>"
+msgstr "<strong>%s</strong>에 붙은 댓글들"
+
+msgid " says,"
+msgstr " 말하길,"
+
+msgid " at "
+msgstr " "
+
+msgid "Reply"
+msgstr "응답"
+
+msgid "Edit"
+msgstr "편집"
+
+msgid "Your comment is awaiting moderation."
+msgstr "이 댓글은 승인대기 중입니다."
+
+msgid "There are no comments."
+msgstr "댓글이 없습니다."
+
 msgid "Comment navigation"
 msgstr "댓글 탐색"
 
@@ -68,9 +89,6 @@ msgstr "다음 댓글"
 
 msgid "Reply on <strong>%s</strong>"
 msgstr "<strong>%s</strong>에 댓글 달기"
-
-msgid "There are no comments."
-msgstr "댓글이 없습니다."
 
 msgid "Comments are closed."
 msgstr "여기에는 댓글을 쓸 수 없습니다."

@@ -799,6 +799,7 @@ body#comments-body .comments-container .comment-respond form.comment-form p text
   padding: 0.1em;
   border: 1px solid #b3b3b3;
   background: #FFFFFF;
+  color: #808080;
 }
 body#comments-body .comments-container .comment-respond form.comment-form p input[type="text"] {
   width: 300px;
@@ -854,7 +855,7 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a img {
   border: 3px solid white;
 }
 section.entry.archive > .wrap ul.thumbnail-archives li.item a:hover {
-  border-color: red;
+  border-color: #000000;
 }
 .fancybox-overlay {
   overflow: hidden !important;

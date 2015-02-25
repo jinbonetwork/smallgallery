@@ -22,7 +22,9 @@ function on_wp_enqueue_scripts(){
 	global $withcomments;
 	$withcomments = 1;
 
-	wp_enqueue_script('comment-reply');
+	if(get_option('thread_comments')){
+		wp_enqueue_script('comment-reply');
+	}
 
 	wp_enqueue_script('jquery-cookie',get_template_directory_uri().'/contrib/jquery-cookie/src/jquery.cookie.js',array('jquery'));
 

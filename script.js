@@ -696,6 +696,7 @@ jQuery(document).ready(function(e){
         }
     });
 
+	/*
     jQuery('a').on('click',function(e){
     	var $trigger = jQuery(this);
     	var $href = $trigger.attr('href');
@@ -711,6 +712,7 @@ jQuery(document).ready(function(e){
 			window.location = $trigger.attr('href');
 		}
     });
+	*/
 
 	if(is_fullscreen()){
 		jQuery('#toggle-fullscreen').attr('data-flag','true');

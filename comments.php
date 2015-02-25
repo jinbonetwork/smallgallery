@@ -7,8 +7,11 @@ global $post;
 
 if(have_comments()):
 	global $comments;
+
+	require_once TEMPLATEPATH.'/class.walker.comment.php';
 	$comments_walk_arguments = array(
-		'style'	=> 'ol',
+		'walker' => new Smallgallery_Walker_Comment,
+		'style' => 'ol',
 		'short_ping' => true,
 		'avatar_size' => UI_PORTRAIT_SIZE*2, // doubling for retina display
 	);
@@ -51,9 +54,7 @@ if(have_comments()):
 
 	$pagination->markup = $pagination->markup?"<div class='pagination'>{$pagination->markup}</div><!--/.pagination-->":'';
 	echo $pagination->markup;
-	echo "<ol class='comments'>".PHP_EOL;
 	wp_list_comments($comments_walk_arguments,$comments);
-	echo "</ol><!--/.comments-->".PHP_EOL;
 	echo $pagination->markup;
 else:
 	echo "<p class='there-are-no-comments'>".__('There are no comments.',TEXTDOMAIN)."</p>".PHP_EOL;

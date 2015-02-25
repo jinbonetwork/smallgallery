@@ -30,6 +30,7 @@ Text Domain: smallgallery
 @white: #FFFFFF;
 @black: #000000;
 @grey: #999999;
+@less-text: lighten(@black,70%);
 
 @twitter-icon: '\F099';
 @twitter-color: #0084B4;
@@ -63,11 +64,22 @@ Text Domain: smallgallery
 @ui-icon-font-size: 18px;
 @ui-font-color-dark: @black;
 
+@comment-children-margin: 2em;
+@comment-item-margin: 1em;
+@comment-item-border: 1px solid @less-text;
+@ui-portrait-width: unit(@ui-portrait-size,px);
+@ui-portrait-margin: 1em;
+@ui-form-field-margin: 0.5em;
+@ui-form-field-padding: 0.1em;
+@ui-form-field-border: 1px solid @less-text;
+@ui-form-field-background: @white;
+@ui-form-color: lighten(@black,50%);
+
 @frame-border-color: @black;
 @frame-background-color: white;
 @frame-shadow-color: rgba(0,0,0,0.5);
 @frame-shadow-property: 3px 3px 5px @frame-shadow-color;
-@frame-hover-border-color: red;
+@frame-hover-border-color: @black;
 
 .transition(@args) {
 	transform: @args;
@@ -905,15 +917,6 @@ section.entry {
 //-----------------------------------------------------------------------------
 //	Comment
 //-----------------------------------------------------------------------------
-@comment-children-margin: 2em;
-@comment-item-margin: 1em;
-@comment-item-border: 1px solid lighten(@black,70%);
-@ui-portrait-width: unit(@ui-portrait-size,px);
-@ui-portrait-margin: 1em;
-@ui-form-field-margin: 0.5em;
-@ui-form-field-padding: 0.1em;
-@ui-form-field-border: 1px solid lighten(@black,70%);
-@ui-form-field-background: @white;
 body#comments-body {
 	overflow: auto;
 	margin: 0;
@@ -1142,7 +1145,7 @@ body#comments-body {
 						padding: @ui-form-field-padding;
 						border: @ui-form-field-border;
 						background: @ui-form-field-background;
-
+						color: @ui-form-color;
 					}
 
 					input[type="text"] {

@@ -1,8 +1,8 @@
 <?php
-global $post;
-setup_postdata($post);
-$post = rebuild_post($post);
-the_post();
+	global $post;
+	setup_postdata($post);
+	$post = rebuild_post($post);
+	the_post();
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +14,7 @@ the_post();
 ?>
 <script>
 jQuery(document).ready(function(e){
-	jQuery('.comment-meta a').on('click',function(e){
+	jQuery('a.comment-date').on('click',function(e){
 		e.preventDefault();
 	});
 });
@@ -26,7 +26,7 @@ jQuery(document).ready(function(e){
 	<h1 class="entry-title"><?php printf(__('Reply on <strong>%s</strong>',TEXTDOMAIN),$post->filtered_title); ?></h1>
 <?php
 	define('CONTROL',false);
-	echo build_post($post);
+	//echo build_post($post);
 	comments_template();
 ?>
 </div><!--.comments-->
