@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: smallgallery\n"
 "POT-Creation-Date: 2015-02-11 10:02+0900\n"
-"PO-Revision-Date: 2015-02-23 16:42+0900\n"
+"PO-Revision-Date: 2015-02-25 11:52+0900\n"
 "Last-Translator: 진보네트워크센터 <jinbonetwork@gmail.com>\n"
 "Language-Team: jinbonet <jinbonetwork@gmail.com>\n"
 "Language: ko_KR\n"
@@ -54,12 +54,6 @@ msgstr "구글+로 공유하기"
 msgid "Share with Kakaotalk"
 msgstr "카카오톡으로 공유하기"
 
-msgid "Email"
-msgstr "전자편지"
-
-msgid "Homepage"
-msgstr "홈페이지"
-
 msgid "About"
 msgstr "소개"
 
@@ -67,16 +61,55 @@ msgid "Comment navigation"
 msgstr "댓글 탐색"
 
 msgid "Older comments"
-msgstr "이전 페이지"
+msgstr "이전 댓글"
 
 msgid "Newer comments"
-msgstr "다음 페이지"
+msgstr "다음 댓글"
 
 msgid "Reply on <strong>%s</strong>"
 msgstr "<strong>%s</strong>에 댓글 달기"
 
+msgid "There are no comments."
+msgstr "댓글이 없습니다."
+
 msgid "Comments are closed."
 msgstr "여기에는 댓글을 쓸 수 없습니다."
 
-msgid "Powered by <a href=\"http://jinbo.net\"><span>Jinbo.net</span></a>"
-msgstr "<a href=\"http://jinbo.net\"><span>진보넷</span></a>에서 만듦"
+msgid "You must be <a href='%s' target='_self'>logged in</a> to post a comment."
+msgstr "<a href='%s' target='_self'>로그인</a>한 뒤에 댓글을 달 수 있습니다."
+
+msgid "Logged in as <a href='%1$s'>%2$s</a>. <a href='%3$s' title='Log out of this account' target='_self'>Log out?</a>"
+msgstr "<a href='%1$s'>%2$s</a> 님으로 로그인했습니다. <a href='%3$s' title='Log out of this account' target='_self'>로그아웃</a>하시겠습니까?"
+
+msgid "Your email address will not be published."
+msgstr "전자편지 주소는 겉으로 드러나지 않습니다."
+
+msgid "Name"
+msgstr "이름"
+
+msgid "Your name here"
+msgstr "이름 또는 별명"
+
+msgid "Email"
+msgstr "전자편지"
+
+msgid "email@domain.com"
+msgstr "email@domain.com"
+
+msgid "Homepage"
+msgstr "홈페이지"
+
+msgid "http://homepage.domain.com"
+msgstr "http://homepage.domain.com"
+
+msgid "Comment"
+msgstr "댓글"
+
+msgid "Your comment here"
+msgstr "남기실 말씀"
+
+msgid "You may use these <abbr title='HyperText Markup Language'>HTML</abbr> tags and attributes: %s"
+msgstr "다음 <abbr title='HyperText Markup Language'>HTML</abbr> 태그들을 사용할 수 있습니다: %s"
+
+msgid "Powered by <a href='http://jinbo.net'><span>Jinbo.net</span></a>"
+msgstr "<a href='http://jinbo.net'><span>진보넷</span></a>에서 만듦"

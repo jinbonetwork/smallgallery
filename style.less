@@ -63,7 +63,7 @@ Text Domain: smallgallery
 @ui-icon-font-size: 18px;
 @ui-font-color-dark: @black;
 
-@frame-border-color: black;
+@frame-border-color: @black;
 @frame-background-color: white;
 @frame-shadow-color: rgba(0,0,0,0.5);
 @frame-shadow-property: 3px 3px 5px @frame-shadow-color;
@@ -907,12 +907,12 @@ section.entry {
 //-----------------------------------------------------------------------------
 @comment-children-margin: 2em;
 @comment-item-margin: 1em;
-@comment-item-border: 1px solid @black;
+@comment-item-border: 1px solid lighten(@black,70%);
 @ui-portrait-width: unit(@ui-portrait-size,px);
 @ui-portrait-margin: 1em;
 @ui-form-field-margin: 0.5em;
 @ui-form-field-padding: 0.1em;
-@ui-form-field-border: 1px solid @black;
+@ui-form-field-border: 1px solid lighten(@black,70%);
 @ui-form-field-background: @white;
 body#comments-body {
 	overflow: auto;

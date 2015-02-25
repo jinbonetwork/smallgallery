@@ -566,7 +566,7 @@ section.entry.format-image > .wrap .feature img {
   height: auto;
   padding: 15px;
   background-color: white;
-  border: 20px solid black;
+  border: 20px solid #000000;
   box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
 }
 section.entry.format-image > .wrap .wrap-inner {
@@ -663,7 +663,7 @@ body#comments-body .comments-container ol.comments > li.comment,
 body#comments-body .comments-container .comment-respond {
   margin: 1em 0 0 0;
   padding: 1em 0 0 0;
-  border-top: 1px solid #000000;
+  border-top: 1px solid #b3b3b3;
 }
 body#comments-body .comments-container h1.site-title {
   display: none;
@@ -797,7 +797,7 @@ body#comments-body .comments-container .comment-respond form.comment-form p text
   display: block;
   margin: 0;
   padding: 0.1em;
-  border: 1px solid #000000;
+  border: 1px solid #b3b3b3;
   background: #FFFFFF;
 }
 body#comments-body .comments-container .comment-respond form.comment-form p input[type="text"] {
@@ -842,7 +842,7 @@ section.entry.archive > .wrap ul.thumbnail-archives li.item a {
   box-sizing: border-box;
   display: block;
   width: 100% !important;
-  border: 3px solid black;
+  border: 3px solid #000000;
   box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
   background-color: white;
 }

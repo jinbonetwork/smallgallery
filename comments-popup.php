@@ -6,12 +6,19 @@ the_post();
 ?><!DOCTYPE html>
 <html>
 <head>
-	<meta charset="<?php echo get_option('blog_charset'); ?>">
-	<base target="_top">
-	<link rel="stylesheet" href="<?php echo get_stylesheet_directory_uri().'/style.php'; ?>">
-	<?php
-		wp_head();
-	?>
+<meta charset="<?php echo get_option('blog_charset'); ?>">
+<base target="_top">
+<?php
+	smallgallery_head();
+	wp_head();
+?>
+<script>
+jQuery(document).ready(function(e){
+	jQuery('.comment-meta a').on('click',function(e){
+		e.preventDefault();
+	});
+});
+</script>
 </head>
 <body id="comments-body">
 <div id="entry-<?php echo $post->ID; ?>-comments" class="comments-container">

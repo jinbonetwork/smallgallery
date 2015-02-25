@@ -7,22 +7,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
 	<title><?php wp_title(''); ?></title>
-	<script>
-        <?php if(!DEBUG_SCRIPT){ ?>console.log = function(){};<?php } ?>
-		var $smallgallery = {
-			title: {
-				text: '<?php echo TITLE_TEXT; ?>',
-				separator: '<?php echo TITLE_SEPARATOR; ?>'
-			},
-			padding: '<?php echo SLIDE_PADDING; ?>',
-			animation: {
-				name: [<?php echo "'".implode("','",explode(':',SLIDE_ANIMATION_NAMES))."'".PHP_EOL; ?>],
-				duration: '<?php echo SLIDE_ANIMATION_DURATION; ?>'
-			}
-		};
-	</script>
 <?php
 	ob_start();
+	smallgallery_head();
 	wp_head();
 	$head = ob_get_contents();
 	ob_end_clean();

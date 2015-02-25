@@ -1,5 +1,4 @@
 <?php
-
 add_filter('show_admin_bar', '__return_false');
 
 function on_init(){
@@ -45,6 +44,36 @@ function on_wp_enqueue_scripts(){
 }
 add_action('wp_enqueue_scripts','on_wp_enqueue_scripts');
 add_action('wp_head','comments_popup_script');
+
+function smallgallery_head(){
+	do_action('smallgallery_head');
+}
+function on_smallgallery_head(){
+	$purge_console = !DEBUG_SCRIPT?'console.log = function(){};'.PHP_EOL:'';
+	$title_text = TITLE_TEXT;
+	$title_separator = TITLE_SEPARATOR;
+	$slide_padding = SLIDE_PADDING;
+	$slide_animation_names = "'".implode("','",explode(':',SLIDE_ANIMATION_NAMES))."'";
+	$slide_animation_duration = SLIDE_ANIMATION_DURATION;
+	echo <<<HEAD
+<script>
+{$purge_console}
+var \$smallgallery = {
+	title: {
+		text: '{$title_text}',
+		separator: '{$title_separator}'
+	},
+	padding: '{$slide_padding}',
+	animation: {
+		name: [{$slide_animation_names}],
+		duration: '{$slide_animation_duration}'
+	}
+};
+</script>
+HEAD;
+}
+add_action('smallgallery_head','on_smallgallery_head');
+
 
 function shortcode_thumbnail_archives($options=array()){
 	$markup = '';
