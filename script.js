@@ -678,9 +678,11 @@ jQuery(document).ready(function(e){
             break;
             case 40: // down
             break;
+			/*
             case 70: // f
                 fullscreen();
             break;
+			*/
             case 67: // c
                 if(!is_popup){
                     jQuery('section.entry.current .comment_link a').click();
