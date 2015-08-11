@@ -1,8 +1,10 @@
 <?php
-// Developmental
-define('DEBUG_CSS',true);
-define('DEBUG_SCRIPT',false);
+// Development
 define('TEXTDOMAIN','smallgallery');
+define('DEBUG_CSS',false);
+define('DEBUG_SCRIPT',false);
+define('CSS_SOURCE',TEMPLATEPATH.'/style.less');
+define('CSS_OUTPUT',TEMPLATEPATH.'/style.css');
 
 // Sitewide
 define('TITLE_TEXT',esc_attr(get_option('blogname')));

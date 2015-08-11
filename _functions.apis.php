@@ -1,5 +1,26 @@
 <?php
 
+function check_stylesheet(){
+	$less = new lessc;
+	try{
+		$less->setVariables(array(
+			'slide-padding' => SLIDE_PADDING,
+			'slide-animation-duration' => SLIDE_ANIMATION_DURATION.'ms',
+			'slide-animation-timing' => SLIDE_ANIMATION_TIMING,
+			'ui-animation-duration' => UI_ANIMATION_DURATION.'ms',
+			'ui-animation-timing' => UI_ANIMATION_TIMING,
+			'ui-portrait-size' => UI_PORTRAIT_SIZE,
+			'text-padding' => TEXT_PADDING,
+		));
+		$less->setPreserveComments(true);
+		$less->checkedCompile(CSS_SOURCE,CSS_OUTPUT);
+		$result = true;
+	}catch(exception $e){
+		$result = $e->getMessage();
+	}
+	return $result;
+}
+
 function make_label($string=''){
 	$result = '';
 	$pattern = array(
@@ -131,6 +152,14 @@ function rebuild_post($post){
 	ob_start();
 		the_post_thumbnail('medium');
 		$post->filtered_feature_medium = ob_get_contents();
+		ob_clean();
+
+		the_category();
+		$post->filtered_category = ob_get_contents();
+		ob_clean();
+
+		the_tags();
+		$post->filtered_tag = ob_get_contents();
 		ob_clean();
 
 		the_author_posts_link();
